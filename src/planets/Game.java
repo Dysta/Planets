@@ -47,4 +47,8 @@ public class Game {
 	// Game instantiation 
 	// Game behavior
 	
+	public void handle(long arg0) {
+		
+	}
+	
 }

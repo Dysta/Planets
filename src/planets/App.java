@@ -1,5 +1,6 @@
 package planets;
 
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -17,8 +18,14 @@ public class App extends Application {
 		
 		// Create Game and start it
 		Game game = new Game();
-		
+		//ResourcesManager.initGameAssets(WIDTH, HEIGHT);
 		game.setStage(primaryStage, "Planets");
 		game.show(WIDTH, HEIGHT);
+		
+		new AnimationTimer() {
+			public void handle(long arg0) {
+				game.handle(arg0);
+			}
+		}.start();
 	}
 }
