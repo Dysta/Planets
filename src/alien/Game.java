@@ -27,7 +27,7 @@ public class Game extends Application {
 	private int score;
 	private final static int WIDTH = 600;
 	private final static int HEIGHT = 600;
-	private final static int NBPINAPPLES = 400;
+	private final static int NBPINAPPLES = 1000;
 
 	public static String getRessourcePathByName(String name) {
 		return Game.class.getResource('/' + name).toString();
@@ -131,7 +131,7 @@ public class Game extends Application {
 							mediaPlayerBoomFinalCopy.stop();
 							mediaPlayerBoomFinalCopy.play();
 						}
-						score += 100;
+						score += 1;
 					} else {
 						pinapple.render(gc);
 						if (Math.random() > 0.995) {
