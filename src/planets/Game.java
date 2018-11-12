@@ -35,6 +35,8 @@ public class Game {
 		Canvas canvas = new Canvas(WIDTH, HEIGHT);
 		root.getChildren().add(canvas);
 		
+		// Events
+		
 		gc = canvas.getGraphicsContext2D();
 		gc.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
 		gc.setFill(Color.BISQUE);
@@ -42,7 +44,12 @@ public class Game {
 		gc.setLineWidth(1);
 
 		stage.setScene(scene);
+		this.initEvents(scene);
 		stage.show();
+	}
+	
+	private void initEvents(Scene scene) {
+		
 	}
 	// Game instantiation 
 	// Game behavior
