@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.Media;
@@ -27,7 +28,13 @@ public class Game extends Application {
 	private int score;
 	private final static int WIDTH = 600;
 	private final static int HEIGHT = 600;
+<<<<<<< HEAD
 	private final static int NBPINAPPLES = 1000;
+=======
+	private final static int NBPINAPPLES = 400;
+	
+	private static Collection<Sprite> pineapples;
+>>>>>>> 81afabebd6ed24c9f9bd9364bb08550199fb9a08
 
 	public static String getRessourcePathByName(String name) {
 		return Game.class.getResource('/' + name).toString();
@@ -40,6 +47,15 @@ public class Game extends Application {
 	private void changeSpeed(Sprite pinapple) {
 		int max = 5;
 		pinapple.setSpeed(max * Math.random() - max / 2, max * Math.random() - max / 2);
+	}
+	
+	private static void spawnPineapples(int count) {
+		Sprite pinappleorig = new Sprite(getRessourcePathByName("images/pinapple.png"), 8, 12, WIDTH, HEIGHT);
+		for (int i = 0; i < NBPINAPPLES; i++) {
+			Sprite pinapple = new Sprite(pinappleorig);
+			pinapple.setPosition(WIDTH * Math.random(), HEIGHT * Math.random());
+			Game.pineapples.add(pinapple);
+		}
 	}
 
 	public void start(Stage stage) {
@@ -63,14 +79,8 @@ public class Game extends Application {
 		Sprite spaceship = new Sprite(getRessourcePathByName("images/alien.png"), 62, 36, WIDTH, HEIGHT);
 		spaceship.setPosition(WIDTH / 2 - spaceship.width() / 2, HEIGHT / 2 - spaceship.height() / 2);
 
-		Collection<Sprite> pinapples = new ArrayList<Sprite>();
-		Sprite pinappleorig = new Sprite(getRessourcePathByName("images/pinapple.png"), 8, 12, WIDTH, HEIGHT);
-		for (int i = 0; i < NBPINAPPLES; i++) {
-			Sprite pinapple = new Sprite(pinappleorig);
-			pinapple.setPosition(WIDTH * Math.random(), HEIGHT * Math.random());
-			changeSpeed(pinapple);
-			pinapples.add(pinapple);
-		}
+		Game.pineapples = new ArrayList<Sprite>();
+		Game.spawnPineapples(NBPINAPPLES);
 
 		stage.setScene(scene);
 		stage.show();
@@ -112,6 +122,10 @@ public class Game extends Application {
 					mediaPlayerFinalCopy.stop();
 					mediaPlayerFinalCopy.play();
 				}
+
+			    if (e.getCode() == KeyCode.A) {
+			        Game.spawnPineapples(10);
+			    }
 			}
 		});
 
@@ -121,7 +135,7 @@ public class Game extends Application {
 
 				spaceship.updatePosition();
 
-				Iterator<Sprite> it = pinapples.iterator();
+				Iterator<Sprite> it = Game.pineapples.iterator();
 				while (it.hasNext()) {
 					Sprite pinapple = it.next();
 					pinapple.updatePosition();
@@ -131,7 +145,11 @@ public class Game extends Application {
 							mediaPlayerBoomFinalCopy.stop();
 							mediaPlayerBoomFinalCopy.play();
 						}
+<<<<<<< HEAD
 						score += 1;
+=======
+						score += 10000;
+>>>>>>> 81afabebd6ed24c9f9bd9364bb08550199fb9a08
 					} else {
 						pinapple.render(gc);
 						if (Math.random() > 0.995) {
