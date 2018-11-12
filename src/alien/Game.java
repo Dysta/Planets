@@ -75,14 +75,8 @@ public class Game extends Application {
 		Sprite spaceship = new Sprite(getRessourcePathByName("images/alien.png"), 62, 36, WIDTH, HEIGHT);
 		spaceship.setPosition(WIDTH / 2 - spaceship.width() / 2, HEIGHT / 2 - spaceship.height() / 2);
 
-		this.pineapples = new ArrayList<Sprite>();
-		Sprite pinappleorig = new Sprite(getRessourcePathByName("images/pinapple.png"), 8, 12, WIDTH, HEIGHT);
-		for (int i = 0; i < NBPINAPPLES; i++) {
-			Sprite pinapple = new Sprite(pinappleorig);
-			pinapple.setPosition(WIDTH * Math.random(), HEIGHT * Math.random());
-			changeSpeed(pinapple);
-			this.pineapples.add(pinapple);
-		}
+		Game.pineapples = new ArrayList<Sprite>();
+		Game.spawnPineapples(NBPINAPPLES);
 
 		stage.setScene(scene);
 		stage.show();
