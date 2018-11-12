@@ -18,7 +18,7 @@ public class App extends Application {
 		
 		// Create Game and start it
 		Game game = new Game();
-		//ResourcesManager.initGameAssets(WIDTH, HEIGHT);
+		ResourcesManager.initGameAssets(WIDTH, HEIGHT);
 		game.setStage(primaryStage, "Planets");
 		game.show(WIDTH, HEIGHT);
 		
