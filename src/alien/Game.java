@@ -29,10 +29,10 @@ public class Game extends Application {
 	private final static int WIDTH = 600;
 	private final static int HEIGHT = 600;
 	private final static int NBPINAPPLES = 400;
-	
+
 	private static Collection<Sprite> pineapples;
 	private static Sprite pineappleorig;
-	
+
 	private static boolean ctrlPressed = false;
 
 	public static String getRessourcePathByName(String name) {
@@ -47,13 +47,13 @@ public class Game extends Application {
 		int max = 5;
 		pinapple.setSpeed(max * Math.random() - max / 2, max * Math.random() - max / 2);
 	}
-	
+
 	private static void spawnPineapple(double x, double y) {
 		Sprite pinapple = new Sprite(Game.pineappleorig);
-		pinapple.setPosition(x,y);
-		Game.pineapples.add(pinapple);		
+		pinapple.setPosition(x, y);
+		Game.pineapples.add(pinapple);
 	}
-	
+
 	private static void spawnPineapples(int count) {
 		for (int i = 0; i < NBPINAPPLES; i++) {
 			Game.spawnPineapple(WIDTH * Math.random(), HEIGHT * Math.random());
@@ -82,7 +82,7 @@ public class Game extends Application {
 		spaceship.setPosition(WIDTH / 2 - spaceship.width() / 2, HEIGHT / 2 - spaceship.height() / 2);
 
 		Game.pineappleorig = new Sprite(getRessourcePathByName("images/pineapple.png"), 8, 12, WIDTH, HEIGHT);
-		
+
 		Game.pineapples = new ArrayList<Sprite>();
 		Game.spawnPineapples(NBPINAPPLES);
 
@@ -91,8 +91,8 @@ public class Game extends Application {
 
 		EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
 			public void handle(MouseEvent e) {
-				
-				if(Game.ctrlPressed) {
+
+				if (Game.ctrlPressed) {
 					Game.spawnPineapple(e.getX(), e.getY());
 				} else {
 					spaceship.setSpeed(0, 0);
@@ -132,21 +132,21 @@ public class Game extends Application {
 					mediaPlayerFinalCopy.play();
 				}
 
-			    if (e.getCode() == KeyCode.A) {
-			        Game.spawnPineapples(10);
-			    }
+				if (e.getCode() == KeyCode.A) {
+					Game.spawnPineapples(10);
+				}
 
-			    if (e.getCode() == KeyCode.CONTROL) {
-			        Game.ctrlPressed = true;
-			    }
+				if (e.getCode() == KeyCode.CONTROL) {
+					Game.ctrlPressed = true;
+				}
 			}
 		});
 
 		scene.setOnKeyReleased(new EventHandler<KeyEvent>() {
 			public void handle(KeyEvent e) {
-			    if (e.getCode() == KeyCode.CONTROL) {
-			        Game.ctrlPressed = false;
-			    }
+				if (e.getCode() == KeyCode.CONTROL) {
+					Game.ctrlPressed = false;
+				}
 			}
 		});
 
