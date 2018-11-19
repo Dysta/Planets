@@ -112,14 +112,6 @@ public class Sprite {
 	public Image getImage() {
 		return this.image;
 	}
-
-	public double getWidth() {
-		return width;
-	}
-
-	public double getHeight() {
-		return height;
-	}
 	
 	public double getPosX() {
 		return this.x;
