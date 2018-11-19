@@ -10,22 +10,26 @@ public class Galaxy {
 
 	// Background : image
 
-	public static final double planetInfluenceZone = 40;
-	private final double minimumPlanetSize = 10;
-	private final double maximumPlanetSize = 35;
+	public static double planetInfluenceZone;
+	private double minimumPlanetSize;
+	private double maximumPlanetSize;
 	
 	private double width, height;
 	
 	private ArrayList<Planet> planets;
 	private ArrayList<Player> players;
 	
-	public Galaxy(double width, double height, int nbPlanets, int nbPlayers) {
+	public Galaxy(double width, double height, int nbPlanets, int nbPlayers, double planetInfluenceZone, double minimumPlanetSize, double maximumPlanetSize) {
 		Random r = new Random();
 
 		this.planets = new ArrayList<Planet>();
 		this.players = new ArrayList<Player>();
 		this.width = width;
 		this.height = height;
+		
+		Galaxy.planetInfluenceZone = planetInfluenceZone;
+		this.minimumPlanetSize = minimumPlanetSize;
+		this.maximumPlanetSize = maximumPlanetSize;
 		
 		Planet n;
 		for(int i = 0; i<nbPlanets;i++) {
@@ -44,7 +48,6 @@ public class Galaxy {
 			}
 			
 			if(tries<100) {
-			
 				this.planets.add(n);
 				System.out.println("New planet. x: "+n.getPosX()+" y: "+n.getPosY()+" size: "+n.getSize());
 			} else {
@@ -61,7 +64,7 @@ public class Galaxy {
 			int tries = 0;
 			int rInt = 0;
 			while(tries < this.planets.size() * 10 && !found) {
-				rInt = Galaxy.getRandomIntegerBetweenRange(0,this.planets.size());
+				rInt = Galaxy.getRandomIntegerBetweenRange(0,this.planets.size()-1);
 				target = this.planets.get(rInt);
 				found = !target.getOwner().isActive();
 				tries++;
@@ -70,6 +73,7 @@ public class Galaxy {
 			if(found) {
 				this.players.add(p);
 				target.setOwner(p);
+				target = (Planet) ResourcesManager.colorPlanet(target, p.getColor());
 				System.out.println("Gave him planet "+rInt+".");
 			} else {
 				System.out.println("Could not find a free planet for the player.");

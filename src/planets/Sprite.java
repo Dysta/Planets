@@ -128,5 +128,11 @@ public class Sprite {
 	public double getPosY() {
 		return this.y;	
 	}
+	
+	public void updateDimensions(String path, double width, double height) {
+		this.width = width;
+		this.height = height;
+		this.image = new Image(path, width, height, false, false);
+	}
 
 }

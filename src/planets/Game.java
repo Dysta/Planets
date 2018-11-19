@@ -55,7 +55,7 @@ public class Game {
 	}
 	
 	public void initGame(double width, double height) {
-		Galaxy galaxy = new Galaxy(width, height, 25, 2);
+		Galaxy galaxy = new Galaxy(width, height, 5, 2, 40, 80, 140);
 		this.galaxy = galaxy;
 	}
 	// Game instantiation 
@@ -67,6 +67,7 @@ public class Game {
 			for(Ship s : p.getShips()) {
 				s.render(this.gc);
 			}
+			
 		}
 	}
 	

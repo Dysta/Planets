@@ -8,12 +8,13 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
+import planets.Entities.Planet;
 
 public class ResourcesManager {
 	
-	private final static String BG_PATH = "images/background.png";
-	private final static String SHIP_PATH = "images/ship.png";	
-	private final static String PLANET_PATH = "images/planet.png";
+	public final static String BG_PATH = "images/background.png";
+	public final static String SHIP_PATH = "images/ship.png";	
+	public final static String PLANET_PATH = "images/planet.png";
 	
 	public static Sprite ship;
 	public static Sprite planet;
@@ -45,12 +46,16 @@ public class ResourcesManager {
 		ResourcesManager.planet = new Sprite(getRessourcePathByName(path), width, height, maxX, maxY);
 	}
 	
-	public static void colorPlanet(Sprite s, Color color) {
+	public static Planet colorPlanet(Planet s, Color color) {
+		Planet cpy = new Planet(s);
 		PixelReader pr = s.getImage().getPixelReader();
-		WritableImage pw = new WritableImage(s.getImage().getPixelReader(), (int) s.getWidth(), (int) s.getHeight());
+		WritableImage pw = new WritableImage(cpy.getImage().getPixelReader(), (int) cpy.width(), (int) cpy.height());
 		
-		for (int x = 0; x < ship.getWidth(); x++) {
-			for (int y = 0; y < ship.getHeight(); y++) { 
+
+		System.out.println("width: "+cpy.width()+" height: "+cpy.height());
+		for (int x = 0; x < (int) s.width(); x++) {
+			for (int y = 0; y < (int) s.height(); y++) { 
+				System.out.println(x+","+y);
 		        Color couleur = pr.getColor(x, y); 
 		        double b = couleur.getBlue();  
 		        double g = couleur.getGreen();  
@@ -64,6 +69,8 @@ public class ResourcesManager {
 				}
 			}
 		}
+		
+		return cpy;
 		
 		
 	}

@@ -3,10 +3,12 @@ package planets.Entities;
 import java.util.ArrayList;
 import java.util.Random;
 
+import planets.ResourcesManager;
 import planets.Sprite;
 
 public class Planet extends Sprite {
 	
+	private Sprite s;
 	private Player owner;
 	private double size;
 	
@@ -17,11 +19,18 @@ public class Planet extends Sprite {
 
 	public Planet(Sprite s, Player owner, double posX, double posY, double size) {
 		super(s);
+		this.s = s;
 		this.owner = owner;
 		this.setPosition(posX, posY);
+		this.updateDimensions(ResourcesManager.PLANET_PATH, size, size);
 		this.size = size;
 		this.owner = new Player();
 		this.ships = new ArrayList<Ship>();
+	}
+
+	public Planet(Planet s) {
+		this(s.getSprite(), s.getOwner(), s.getPosX(), s.getPosY(), s.getSize());
+		this.ships = s.getShips();
 	}
 	
 	private void produceShip(Sprite s) {
@@ -52,6 +61,8 @@ public class Planet extends Sprite {
 		return this.ships;
 	}
 	
-	
+	public Sprite getSprite() {
+		return this.s;
+	}
 
 }

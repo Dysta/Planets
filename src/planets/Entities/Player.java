@@ -23,5 +23,9 @@ public class Player {
 	public boolean isActive() {
 		return active;
 	}
+	
+	public Color getColor() {
+		return color;
+	}
 
 }
