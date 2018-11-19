@@ -107,5 +107,17 @@ public class Sprite {
 	public String toString() {
 		return "Sprite<" + x + ", " + y + ">";
 	}
+	
+	public Image getImage() {
+		return this.image;
+	}
+
+	public double getWidth() {
+		return width;
+	}
+
+	public double getHeight() {
+		return height;
+	}
 
 }
