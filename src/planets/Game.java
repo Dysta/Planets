@@ -51,6 +51,10 @@ public class Game {
 	private void initEvents(Scene scene) {
 		
 	}
+	
+	public void initGame(double width, double height) {
+		Galaxy galaxy = new Galaxy(width, height, 25, 2);
+	}
 	// Game instantiation 
 	// Game behavior
 	

@@ -108,6 +108,7 @@ public class Sprite {
 		return "Sprite<" + x + ", " + y + ">";
 	}
 	
+
 	public Image getImage() {
 		return this.image;
 	}
@@ -118,6 +119,14 @@ public class Sprite {
 
 	public double getHeight() {
 		return height;
+	}
+	
+	public double getPosX() {
+		return this.x;
+	}
+	
+	public double getPosY() {
+		return this.y;	
 	}
 
 }
