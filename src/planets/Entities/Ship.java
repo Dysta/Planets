@@ -6,11 +6,10 @@ public class Ship extends Sprite {
 	
 	private Player owner;
 	
-	private int posX, posY;
 
-	public Ship(Sprite s) {
+	public Ship(Sprite s, double posX, double posY) {
 		super(s);
-		
+		this.setPosition(posX, posY);
 	}
 
 }

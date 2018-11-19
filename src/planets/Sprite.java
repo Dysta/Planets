@@ -107,5 +107,13 @@ public class Sprite {
 	public String toString() {
 		return "Sprite<" + x + ", " + y + ">";
 	}
+	
+	public double getPosX() {
+		return this.x;
+	}
+	
+	public double getPosY() {
+		return this.y;
+	}
 
 }
