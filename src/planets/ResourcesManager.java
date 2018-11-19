@@ -50,7 +50,14 @@ public class ResourcesManager {
 		WritableImage pw = new WritableImage(s.getImage().getPixelReader(), (int) s.getWidth(), (int) s.getHeight());
 		
 		for (int x = 0; x < ship.getWidth(); x++) {
-			for (int y = 0; y < ship.getHei
+			for (int y = 0; y < ship.getHeight(); y++) { 
+		        Color couleur = pr.getColor(x, y); 
+		        double b = couleur.getBlue();  
+		        double g = couleur.getGreen();  
+		        double r = couleur.getRed(); 
+		        if (b == 1.0 && g == 1.0 && r == 1.0){ 
+		          //si couleur noir => ne rien faire 
+		        } 
 				else
 				{
 					pw.getPixelWriter().setColor(x, y, color);
