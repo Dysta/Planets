@@ -18,8 +18,13 @@ public class App extends Application {
 		
 		// Create Game and start it
 		Game game = new Game();
-		ResourcesManager.initGameAssets(WIDTH, HEIGHT);
+		try {
+			ResourcesManager.initGameAssets(WIDTH, HEIGHT);
+		} catch(Exception e) {
+			System.err.println("Xavier fait nimp: "+e);
+		}
 		game.setStage(primaryStage, "Planets");
+		game.initGame(WIDTH, HEIGHT);
 		game.show(WIDTH, HEIGHT);
 		
 		new AnimationTimer() {
