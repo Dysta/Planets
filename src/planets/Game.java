@@ -67,7 +67,7 @@ public class Game {
 			for(Ship s : p.getShips()) {
 				s.render(this.gc);
 			}
-			
+			p.productionTick();
 		}
 	}
 	

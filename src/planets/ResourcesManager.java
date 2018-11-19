@@ -30,8 +30,8 @@ public class ResourcesManager {
 
 	public static void initGameAssets(double width, double height) {
 		ResourcesManager.loadBackground(BG_PATH, width, height, false, false);
-		ResourcesManager.loadPlanet(PLANET_PATH, 200, 200, width, height);
-		ResourcesManager.loadShip(SHIP_PATH, 200, 200, width, height);
+		ResourcesManager.loadPlanet(PLANET_PATH, 435, 435, width, height);
+		ResourcesManager.loadShip(SHIP_PATH, 343, 383, width, height);
 	}
 	
 	private static void loadBackground(String path, double width, double height, boolean preserveRatio, boolean smooth) {
@@ -52,10 +52,8 @@ public class ResourcesManager {
 		WritableImage pw = new WritableImage(cpy.getImage().getPixelReader(), (int) cpy.width(), (int) cpy.height());
 		
 
-		System.out.println("width: "+cpy.width()+" height: "+cpy.height());
 		for (int x = 0; x < (int) s.width(); x++) {
 			for (int y = 0; y < (int) s.height(); y++) { 
-				System.out.println(x+","+y);
 		        Color couleur = pr.getColor(x, y); 
 		        double b = couleur.getBlue();  
 		        double g = couleur.getGreen();  
