@@ -45,10 +45,9 @@ public class ResourcesManager {
 		ResourcesManager.planet = new Sprite(getRessourcePathByName(path), width, height, maxX, maxY);
 	}
 	
-	public static void loadPlanet(Color color) {
-		Sprite cp = new Sprite(ship);
-		PixelReader pr = cp.getImage().getPixelReader();
-		WritableImage pw = new WritableImage(ship.getImage().getPixelReader(), (int) ship.getWidth(), (int) ship.getHeight());
+	public static void colorPlanet(Sprite s, Color color) {
+		PixelReader pr = s.getImage().getPixelReader();
+		WritableImage pw = new WritableImage(s.getImage().getPixelReader(), (int) s.getWidth(), (int) s.getHeight());
 		
 		for (int x = 0; x < ship.getWidth(); x++) {
 			for (int y = 0; y < ship.getHeight(); y++) {
