@@ -9,6 +9,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import planets.Entities.Galaxy;
+import planets.Entities.Planet;
+import planets.Entities.Ship;
 
 public class Game {
 	
@@ -59,7 +61,12 @@ public class Game {
 	// Game behavior
 	
 	public void handle(long arg0) {
-		
+		for(Planet p : this.galaxy.getPlanets()) {
+			p.render(this.gc);
+			for(Ship s : p.getShips()) {
+				s.render(this.gc);
+			}
+		}
 	}
 	
 }

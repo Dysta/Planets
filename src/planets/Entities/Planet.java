@@ -47,7 +47,9 @@ public class Planet extends Sprite {
 		this.size = size;
 	}
 	
-	
+	public ArrayList<Ship> getShips() {
+		return this.ships;
+	}
 	
 	
 

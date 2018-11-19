@@ -35,7 +35,7 @@ public class Galaxy {
 					this.minimumPlanetSize + (this.maximumPlanetSize - this.minimumPlanetSize) * r.nextDouble()); 
 			
 			int tries = 0;
-			while(tries < 10 && isColliding(n)) {
+			while(tries < 100 && isColliding(n)) {
 				n = new Planet(ResourcesManager.planet, new Player(),
 						this.width * r.nextDouble(), 
 						this.height * r.nextDouble(), 
@@ -43,7 +43,7 @@ public class Galaxy {
 				tries++;
 			}
 			
-			if(tries<10) {
+			if(tries<100) {
 				this.planets.add(n);
 				System.out.println("New planet. x: "+n.getPosX()+" y: "+n.getPosY()+" size: "+n.getSize());
 			} else {
@@ -60,9 +60,7 @@ public class Galaxy {
 			int tries = 0;
 			int rInt = 0;
 			while(tries < this.planets.size() * 10 && !found) {
-				System.out.println("Size : "+this.planets.size()+".");
 				rInt = Galaxy.getRandomIntegerBetweenRange(0,this.planets.size());
-				System.out.println("Trying to give him planet "+rInt+".");
 				target = this.planets.get(rInt);
 				found = !target.getOwner().isActive();
 				tries++;
@@ -93,5 +91,9 @@ public class Galaxy {
 		}
 		
 		return colliding;
+	}
+	
+	public ArrayList<Planet> getPlanets() {
+		return this.planets;
 	}
 }
