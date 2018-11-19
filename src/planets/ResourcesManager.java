@@ -45,20 +45,13 @@ public class ResourcesManager {
 		ResourcesManager.planet = new Sprite(getRessourcePathByName(path), width, height, maxX, maxY);
 	}
 	
-	public static void loadPlanet(Color color) {
+	public static void fuckyouPlanet(Color color) {
 		Sprite cp = new Sprite(ship);
 		PixelReader pr = cp.getImage().getPixelReader();
 		WritableImage pw = new WritableImage(ship.getImage().getPixelReader(), (int) ship.getWidth(), (int) ship.getHeight());
 		
 		for (int x = 0; x < ship.getWidth(); x++) {
-			for (int y = 0; y < ship.getHeight(); y++) {
-				Color couleur = pr.getColor(x, y);
-				double b = couleur.getBlue(); 
-				double g = couleur.getGreen(); 
-				double r = couleur.getRed();
-				if (b == 1.0 && g == 1.0 && r == 1.0){
-					//si couleur noir => ne rien faire
-				}
+			for (int y = 0; y < ship.getHei
 				else
 				{
 					pw.getPixelWriter().setColor(x, y, color);

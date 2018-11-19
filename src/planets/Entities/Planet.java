@@ -21,6 +21,7 @@ public class Planet extends Sprite {
 		this.setPosition(posX, posY);
 		this.size = size;
 		this.owner = new Player();
+		this.ships = new ArrayList<Ship>();
 	}
 	
 	private void produceShip(Sprite s) {

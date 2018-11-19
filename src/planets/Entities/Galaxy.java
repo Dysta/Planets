@@ -44,6 +44,7 @@ public class Galaxy {
 			}
 			
 			if(tries<100) {
+			
 				this.planets.add(n);
 				System.out.println("New planet. x: "+n.getPosX()+" y: "+n.getPosY()+" size: "+n.getSize());
 			} else {

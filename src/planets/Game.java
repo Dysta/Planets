@@ -56,6 +56,7 @@ public class Game {
 	
 	public void initGame(double width, double height) {
 		Galaxy galaxy = new Galaxy(width, height, 25, 2);
+		this.galaxy = galaxy;
 	}
 	// Game instantiation 
 	// Game behavior
