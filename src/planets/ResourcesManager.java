@@ -1,14 +1,18 @@
 package planets;
 
+
 import alien.Game;
+import javafx.scene.effect.Blend;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.ColorInput;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
 public class ResourcesManager {
 	
-	public final static String BG_PATH = "images/background.png";
+	public final static String BG_PATH = "images/background.jpg";
 	public final static String SHIP_PATH = "images/ship.png";	
 	public final static String PLANET_PATH = "images/planet.png";
 	
@@ -43,9 +47,10 @@ public class ResourcesManager {
 	}
 	
 	public static void colorImage(ImageView iv, Color color) {
-		ColorAdjust ca = new ColorAdjust();
-		ca.setHue(color.getHue());
-		iv.setEffect(ca);
+		ColorAdjust effect = new ColorAdjust();
+		
+		System.out.println("Color: "+color.toString() + " | Hue: "+color.getHue()+ " | Brightness: "+ color.getBrightness()+ " | Saturation: "+ color.getSaturation());
+		iv.setEffect(effect);
 	}
 }
 	

@@ -130,7 +130,7 @@ public class Sprite {
 	}
 
 	public ImageView getImageView() {
-		return this.iv;
+		return this.iv;	
 	}
 	
 	public double getPosX() {
@@ -142,11 +142,11 @@ public class Sprite {
 	}
 	
 	public double getPosXMiddle() {
-		return this.x + this.width;
+		return this.x + this.width / 2;
 	}
 	
 	public double getPosYMiddle() {
-		return this.y + this.height;	
+		return this.y + this.height / 2;	
 	}
 	
 	public void updateDimensions(String path, double width, double height) {
