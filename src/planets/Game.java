@@ -10,7 +10,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import planets.Entities.Galaxy;
 import planets.Entities.Planet;
-import planets.Entities.Ship;
+import ship.Ship;
 
 public class Game {
 	
@@ -44,6 +44,8 @@ public class Game {
 		gc.setFill(Color.BISQUE);
 		gc.setStroke(Color.RED);
 		gc.setLineWidth(1);
+		
+		gc.drawImage(ResourcesManager.background, 0, 0);
 
 		stage.setScene(scene);
 		this.initEvents(scene);

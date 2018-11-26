@@ -5,6 +5,7 @@ import java.util.Random;
 
 import javafx.scene.paint.Color;
 import planets.ResourcesManager;
+import ship.Ship;
 
 public class Galaxy {
 
@@ -33,14 +34,16 @@ public class Galaxy {
 		
 		Planet n;
 		for(int i = 0; i<nbPlanets;i++) {
-			n = new Planet(ResourcesManager.planet, new Player(), 
+			Player p = new Player();
+
+			n = new Planet(ResourcesManager.planet, p, 
 					this.width * r.nextDouble(), 
 					this.height * r.nextDouble(), 
 					this.minimumPlanetSize + (this.maximumPlanetSize - this.minimumPlanetSize) * r.nextDouble()); 
 			
 			int tries = 0;
 			while(tries < 100 && isColliding(n)) {
-				n = new Planet(ResourcesManager.planet, new Player(),
+				n = new Planet(ResourcesManager.planet, p,
 						this.width * r.nextDouble(), 
 						this.height * r.nextDouble(), 
 						this.minimumPlanetSize + (this.maximumPlanetSize - this.minimumPlanetSize) * r.nextDouble());

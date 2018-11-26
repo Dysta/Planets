@@ -134,5 +134,13 @@ public class Sprite {
 		this.height = height;
 		this.image = new Image(path, width, height, false, false);
 	}
+	
+	public void updateImage(Sprite s) {
+		image = s.image;
+		width = s.width;
+		height = s.height;
+		maxX = s.maxX;
+		maxY = s.maxY;
+	}
 
 }

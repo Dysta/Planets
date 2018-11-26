@@ -1,10 +1,12 @@
 package planets.Entities;
 
+
 import java.util.ArrayList;
 import java.util.Random;
 
 import planets.ResourcesManager;
 import planets.Sprite;
+import ship.Ship;
 
 public class Planet extends Sprite {
 	
@@ -14,7 +16,7 @@ public class Planet extends Sprite {
 	
 	private double shipsPerTick;	
 	private double productionProgression;
-	private Sprite production;
+	private String production;
 
 	private ArrayList<Ship> ships;
 
@@ -37,12 +39,19 @@ public class Planet extends Sprite {
 		this.ships = s.getShips();
 	}
 	
-	private void produceShip(Sprite s) {
+	private void produceShip(String s) {
 		double angle = Math.random()*Math.PI*2;
 		double radius = (this.size+(Galaxy.planetInfluenceZone-this.size)/2);
-		double x = (this.getPosX() + this.getSize()/2) + Math.cos(angle)*radius;
+		double x = ((this.getPosX() + this.getSize()/2) + Math.cos(angle)*radius);
 		double y = (this.getPosY() + this.getSize()/2) + Math.sin(angle)*radius;
-		this.ships.add(new Ship(s,x,y));
+		try {
+			Ship ship = (Ship) Class.forName(this.production).getConstructor(Sprite.class, double.class, double.class).newInstance(ResourcesManager.ship,x,y);
+			ship.changeOwner(this.owner);
+			ship.setPosition(ship.getPosX()-ship.width()/2, ship.getPosY()-ship.height()/2);
+			this.ships.add(ship);
+		} catch (Exception e) {
+			System.err.println("Error during ship initialization : "+e);
+		}
 	}
 
 	public Player getOwner() {

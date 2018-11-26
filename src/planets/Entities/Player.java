@@ -3,17 +3,18 @@ package planets.Entities;
 import javafx.scene.paint.Color;
 import planets.ResourcesManager;
 import planets.Sprite;
+import ship.Ship;
 
 public class Player {
 
 	private Color color;
 	private boolean active;
-	private Sprite ship;
+	private String shipType;
 	
 	public Player(Color color, boolean active) {
 		this.color = color;
 		this.active = active;
-		this.ship = ResourcesManager.ship;
+		this.shipType = "ship.Ship";
 	}
 	
 	public Player(Color color) {
@@ -32,8 +33,12 @@ public class Player {
 		return color;
 	}
 	
-	public Sprite getShipType() {
-		return this.ship;
+	public void setShipType(String shipType) {
+		this.shipType = shipType;
+	}
+	
+	public String getShipType() {
+		return this.shipType;
 	}
 
 }
