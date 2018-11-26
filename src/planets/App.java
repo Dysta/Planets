@@ -24,8 +24,8 @@ public class App extends Application {
 			System.err.println("Xavier fait nimp: "+e);
 		}
 		game.setStage(primaryStage, "Planets");
-		game.initGame(WIDTH, HEIGHT);
 		game.show(WIDTH, HEIGHT);
+		game.initGame(WIDTH, HEIGHT);
 		
 		new AnimationTimer() {
 			public void handle(long arg0) {

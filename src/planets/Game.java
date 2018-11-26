@@ -17,9 +17,11 @@ public class Game {
 	// Attributes
 	private Stage stage;
 	private GraphicsContext gc;
+	private Canvas canvas;
 	// Entities
 	private Galaxy galaxy;
 	// Constants
+	public static Group root;
 	
 	// Methods
 	
@@ -34,7 +36,7 @@ public class Game {
 	public void show(double WIDTH, double HEIGHT) {
 		Group root = new Group();
 		Scene scene = new Scene(root);
-		Canvas canvas = new Canvas(WIDTH, HEIGHT);
+		canvas = new Canvas(WIDTH, HEIGHT);
 		root.getChildren().add(canvas);
 		
 		// Events
@@ -47,6 +49,7 @@ public class Game {
 		
 		gc.drawImage(ResourcesManager.background, 0, 0);
 
+		Game.root = root;
 		stage.setScene(scene);
 		this.initEvents(scene);
 		stage.show();
@@ -59,15 +62,19 @@ public class Game {
 	public void initGame(double width, double height) {
 		Galaxy galaxy = new Galaxy(width, height, 5, 2, 40, 80, 140, 50);
 		this.galaxy = galaxy;
+
+		for(Planet p : this.galaxy.getPlanets()) {
+			p.initRender(Game.root);
+		}
 	}
 	// Game instantiation 
 	// Game behavior
 	
 	public void handle(long arg0) {
 		for(Planet p : this.galaxy.getPlanets()) {
-			p.render(this.gc);
+			//p.render(this.gc);
 			for(Ship s : p.getShips()) {
-				s.render(this.gc);
+				//s.render(this.gc);
 			}
 			p.productionTick();
 		}

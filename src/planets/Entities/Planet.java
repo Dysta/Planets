@@ -4,6 +4,7 @@ package planets.Entities;
 import java.util.ArrayList;
 import java.util.Random;
 
+import planets.Game;
 import planets.ResourcesManager;
 import planets.Sprite;
 import ship.Ship;
@@ -61,6 +62,7 @@ public class Planet extends Sprite {
 			Ship ship = (Ship) Class.forName(this.production).getConstructor(Sprite.class, double.class, double.class).newInstance(ResourcesManager.ship,x,y);
 			ship.changeOwner(this.owner);
 			ship.setPosition(ship.getPosX()-ship.width()/2, ship.getPosY()-ship.height()/2);
+			ship.initRender(Game.root);
 			this.ships.add(ship);
 		} catch (Exception e) {
 			System.err.println("Error during ship initialization : "+e);
@@ -73,7 +75,7 @@ public class Planet extends Sprite {
 
 	public void setOwner(Player owner) {
 		this.owner = owner;
-		this.setImage(ResourcesManager.colorImage(this, owner.getColor()));
+		ResourcesManager.colorImage(this.getImageView(), owner.getColor());
 	}
 
 	public double getSize() {

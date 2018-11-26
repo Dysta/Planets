@@ -43,12 +43,10 @@ public class ResourcesManager {
 		ResourcesManager.planet = new Sprite(getRessourcePathByName(path), width, height, maxX, maxY);
 	}
 	
-	public static Image colorImage(Image i, Color color) {
+	public static void colorImage(ImageView iv, Color color) {
 		ColorAdjust ca = new ColorAdjust();
 		ca.setHue(color.getHue());
-		ImageView iv = new ImageView(i);
 		iv.setEffect(ca);
-		return iv.getImage();
 	}
 }
 	

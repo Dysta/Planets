@@ -1,11 +1,15 @@
 package planets;
 
+import javafx.scene.Group;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 
 public class Sprite {
 	private Image image;
+	private ImageView iv;
 	private double x;
 	private double y;
 	private double xSpeed;
@@ -17,6 +21,7 @@ public class Sprite {
 
 	public Sprite(String path, double width, double height, double maxX, double maxY) {
 		image = new Image(path, width, height, false, false);
+		iv = new ImageView(this.image);
 		this.width = width;
 		this.height = height;
 		this.maxX = maxX;
@@ -25,6 +30,7 @@ public class Sprite {
 
 	public Sprite(Sprite s) {
 		image = s.image;
+		iv = new ImageView(this.image);
 		width = s.width;
 		height = s.height;
 		maxX = s.maxX;
@@ -61,15 +67,13 @@ public class Sprite {
 		this.x = x;
 		this.y = y;
 		validatePosition();
+		this.iv.setX(this.x);
+		this.iv.setY(this.y);
 	}
 
 	public void setSpeed(double xSpeed, double ySpeed) {
 		this.xSpeed = xSpeed;
 		this.ySpeed = ySpeed;
-	}
-	
-	public void setImage(Image img) {
-		this.image = img;
 	}
 
 	public void changeSpeed(KeyCode code) {
@@ -103,6 +107,14 @@ public class Sprite {
 		gc.drawImage(image, x, y);
 	}
 
+	public void initRender(Group root) {
+		this.iv.setX(this.x);
+		this.iv.setY(this.y);
+		this.iv.setFitHeight(this.height);
+		this.iv.setFitWidth(this.width);
+		root.getChildren().add(iv);
+	}
+
 	public boolean intersects(Sprite s) {
 		return ((x >= s.x && x <= s.x + s.width) || (s.x >= x && s.x <= x + width))
 				&& ((y >= s.y && y <= s.y + s.height) || (s.y >= y && s.y <= y + height));
@@ -111,10 +123,14 @@ public class Sprite {
 	public String toString() {
 		return "Sprite<" + x + ", " + y + ">";
 	}
-	
+
 
 	public Image getImage() {
 		return this.image;
+	}
+
+	public ImageView getImageView() {
+		return this.iv;
 	}
 	
 	public double getPosX() {
