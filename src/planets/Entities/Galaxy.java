@@ -14,13 +14,14 @@ public class Galaxy {
 	public static double planetInfluenceZone;
 	private double minimumPlanetSize;
 	private double maximumPlanetSize;
+	private double borderMargin;
 	
 	private double width, height;
 	
 	private ArrayList<Planet> planets;
 	private ArrayList<Player> players;
 	
-	public Galaxy(double width, double height, int nbPlanets, int nbPlayers, double planetInfluenceZone, double minimumPlanetSize, double maximumPlanetSize) {
+	public Galaxy(double width, double height, int nbPlanets, int nbPlayers, double planetInfluenceZone, double minimumPlanetSize, double maximumPlanetSize, double borderMargin) {
 		Random r = new Random();
 
 		this.planets = new ArrayList<Planet>();
@@ -31,35 +32,27 @@ public class Galaxy {
 		Galaxy.planetInfluenceZone = planetInfluenceZone;
 		this.minimumPlanetSize = minimumPlanetSize;
 		this.maximumPlanetSize = maximumPlanetSize;
+		this.borderMargin = borderMargin;
 		
 		Planet n;
 		for(int i = 0; i<nbPlanets;i++) {
 			Player p = new Player();
 
-			n = new Planet(ResourcesManager.planet, p, 
-					this.width * r.nextDouble(), 
-					this.height * r.nextDouble(), 
-					this.minimumPlanetSize + (this.maximumPlanetSize - this.minimumPlanetSize) * r.nextDouble()); 
-			
 			int tries = 0;
-			while(tries < 100 && isColliding(n)) {
-				n = new Planet(ResourcesManager.planet, p,
-						this.width * r.nextDouble(), 
-						this.height * r.nextDouble(), 
-						this.minimumPlanetSize + (this.maximumPlanetSize - this.minimumPlanetSize) * r.nextDouble());
+			
+			do {
+				n = new Planet(ResourcesManager.planet, p, this.width, this.height, this.minimumPlanetSize, this.maximumPlanetSize, this.borderMargin);
 				tries++;
-			}
+			} while ((tries < 100 && isColliding(n)));
 			
 			if(tries<100) {
 				this.planets.add(n);
-				System.out.println("New planet. x: "+n.getPosX()+" y: "+n.getPosY()+" size: "+n.getSize());
 			} else {
 				System.out.println("Could not put non colliding planet.");
 			}
 		}
 		
 		for(int i = 0; i < nbPlayers; i++) {
-			System.out.println("New player.");
 			Player p = new Player(Color.color(Math.random(), Math.random(), Math.random()));
 			
 			boolean found = false;
@@ -77,9 +70,8 @@ public class Galaxy {
 				this.players.add(p);
 				target.setOwner(p);
 				target = (Planet) ResourcesManager.colorPlanet(target, p.getColor());
-				System.out.println("Gave him planet "+rInt+".");
 			} else {
-				System.out.println("Could not find a free planet for the player.");
+				System.out.println("Could not find a free planet for the player "+i+".");
 			}
 			
 		}
@@ -93,7 +85,7 @@ public class Galaxy {
 	private boolean isColliding(Planet planet) {
 		boolean colliding = false;
 		for(Planet p: this.planets) {
-			if(Math.sqrt(Math.pow(p.getPosX() - planet.getPosX(),2)+Math.pow(p.getPosY() - planet.getPosY(),2)) < (this.planetInfluenceZone+p.getSize()+planet.getSize())) {
+			if(Math.sqrt(Math.pow(p.getPosXMiddle() - planet.getPosXMiddle(),2)+Math.pow(p.getPosYMiddle() - planet.getPosYMiddle(),2)) < (Galaxy.planetInfluenceZone+p.getSize()+planet.getSize())) {
 				colliding = true;
 			}
 		}

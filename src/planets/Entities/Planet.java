@@ -34,6 +34,19 @@ public class Planet extends Sprite {
 		this.production = owner.getShipType();
 	}
 
+	public Planet(Sprite s, Player owner, double boundaryX, double boundaryY, double minSize, double maxSize, double borderMargin) {
+		this(s,owner, 0, 0, 0);
+		
+		Random r = new Random();
+		double size = minSize + (maxSize - minSize) * r.nextDouble();
+		double posX = (boundaryX - 2 * borderMargin - size) * r.nextDouble() + borderMargin;
+		double posY = (boundaryY - 2 * borderMargin - size) * r.nextDouble() + borderMargin;
+
+		this.setPosition(posX, posY);
+		this.updateDimensions(ResourcesManager.PLANET_PATH, size, size);
+		this.size = size;
+	}
+
 	public Planet(Planet s) {
 		this(s.getSprite(), s.getOwner(), s.getPosX(), s.getPosY(), s.getSize());
 		this.ships = s.getShips();

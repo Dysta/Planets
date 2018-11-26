@@ -121,6 +121,14 @@ public class Sprite {
 		return this.y;	
 	}
 	
+	public double getPosXMiddle() {
+		return this.x + this.width;
+	}
+	
+	public double getPosYMiddle() {
+		return this.y + this.height;	
+	}
+	
 	public void updateDimensions(String path, double width, double height) {
 		this.width = width;
 		this.height = height;
