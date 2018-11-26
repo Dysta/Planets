@@ -77,6 +77,10 @@ public class Planet extends Sprite {
 		this.owner = owner;
 		ResourcesManager.colorImage(this.getImageView(), owner.getColor());
 	}
+	
+	public int getNbShips() {
+		return this.ships.size();
+	}
 
 	public double getSize() {
 		return size;
