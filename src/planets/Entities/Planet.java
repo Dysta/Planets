@@ -73,6 +73,7 @@ public class Planet extends Sprite {
 
 	public void setOwner(Player owner) {
 		this.owner = owner;
+		this.setImage(ResourcesManager.colorImage(this, owner.getColor()));
 	}
 
 	public double getSize() {
