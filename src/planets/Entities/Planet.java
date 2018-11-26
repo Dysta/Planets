@@ -4,6 +4,10 @@ package planets.Entities;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javafx.scene.Group;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import planets.Game;
 import planets.ResourcesManager;
 import planets.Sprite;
@@ -14,10 +18,13 @@ public class Planet extends Sprite {
 	private Sprite s;
 	private Player owner;
 	private double size;
+	private Text text;
 	
 	private double shipsPerTick;	
 	private double productionProgression;
 	private String production;
+	
+	private boolean printedStock;
 
 	private ArrayList<Ship> ships;
 
@@ -33,6 +40,9 @@ public class Planet extends Sprite {
 		this.productionProgression = 0;
 		this.shipsPerTick = 0.03;
 		this.production = owner.getShipType();
+		
+		this.text = new Text();
+		this.printedStock = false;
 	}
 
 	public Planet(Sprite s, Player owner, double boundaryX, double boundaryY, double minSize, double maxSize, double borderMargin) {
@@ -78,7 +88,27 @@ public class Planet extends Sprite {
 		ResourcesManager.colorImage(this.getImageView(), owner.getColor());
 	}
 	
-	public int getNbShips() {
+	public void printStock(GraphicsContext gc, Group root) {
+		this.text.setFont(gc.getFont());
+		this.text.setFill(this.owner.getColor());
+		this.text.setText("" + this.getNbShip());
+		
+		TextFlow tf = new TextFlow();
+		tf.setLayoutX(this.getPosXMiddle() - this.text.getLayoutBounds().getWidth() / 2);
+		tf.setLayoutY(this.getPosYMiddle() - this.text.getLayoutBounds().getHeight() / 2);
+		
+		if (!this.printedStock) {
+			tf.getChildren().add(this.text);
+			root.getChildren().add(tf);
+			this.printedStock = true;
+		} else {
+			tf.getChildren().remove(this.text);
+			root.getChildren().remove(tf);
+			this.printedStock = false;
+		}
+	}
+	
+	public int getNbShip() {
 		return this.ships.size();
 	}
 
