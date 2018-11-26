@@ -77,6 +77,7 @@ public class Game {
 				//s.render(this.gc);
 			}
 			p.productionTick();
+			p.printStock(gc, root);
 		}
 	}
 	
