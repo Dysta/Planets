@@ -67,6 +67,10 @@ public class Sprite {
 		this.xSpeed = xSpeed;
 		this.ySpeed = ySpeed;
 	}
+	
+	public void setImage(Image img) {
+		this.image = img;
+	}
 
 	public void changeSpeed(KeyCode code) {
 		switch (code) {
