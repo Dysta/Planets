@@ -7,6 +7,8 @@ import ship.Ship;
 
 public class Player {
 
+	private boolean mainPlayer;
+	
 	private Color color;
 	private boolean active;
 	private String shipType;
@@ -39,6 +41,10 @@ public class Player {
 	
 	public String getShipType() {
 		return this.shipType;
+	}
+	
+	public void setMainPlayer(boolean t) {
+		this.mainPlayer = t;
 	}
 
 }

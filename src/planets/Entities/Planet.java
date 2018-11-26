@@ -136,5 +136,13 @@ public class Planet extends Sprite {
 			this.productionProgression -= 1;
 		}
 	}
+	
+	public boolean isOn(double x, double y) {
+		boolean on = false;
+		
+		on = Math.pow((x - this.getPosXMiddle()),2) + Math.pow(y - this.getPosYMiddle(),2) < Math.pow(this.size/2,2);
+		
+		return on;
+	}
 
 }

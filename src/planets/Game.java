@@ -1,9 +1,11 @@
 package planets;
 
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -19,9 +21,12 @@ public class Game {
 	private GraphicsContext gc;
 	private Canvas canvas;
 	// Entities
-	private Galaxy galaxy;
+	public static Galaxy galaxy;
 	// Constants
 	public static Group root;
+	
+	// States
+	public static boolean primaryHeld;
 	
 	// Methods
 	
@@ -56,14 +61,47 @@ public class Game {
 	}
 	
 	private void initEvents(Scene scene) {
-		
+		EventHandler<MouseEvent> mouseHandler = new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent e) {
+				double mX = e.getX(); 
+				double mY = e.getY();
+
+				if(e.isPrimaryButtonDown()) {
+					// Mouse1 pressed
+					
+					if(!Game.primaryHeld) {
+						Game.primaryHeld = true;
+						// Mouse1 unique click
+
+						for(Planet p : Game.galaxy.getPlanets()) {
+							if(p.isOn(mX, mY)) {
+								System.out.println("Clicked on "+p.getPosX()+","+p.getPosY());
+							}
+						}
+					}
+				}
+			}
+		};
+		EventHandler<MouseEvent> mouseReleaseHandler = new EventHandler<MouseEvent>() {
+			public void handle(MouseEvent e) {
+				if(!e.isPrimaryButtonDown()) {
+					Game.primaryHeld = false;
+				}
+				
+			}
+		};
+
+		scene.setOnMouseDragged(mouseHandler);
+		scene.setOnMousePressed(mouseHandler);
+		scene.setOnMouseReleased(mouseReleaseHandler);
 	}
 	
 	public void initGame(double width, double height) {
 		Galaxy galaxy = new Galaxy(width, height, 5, 2, 40, 80, 140, 50);
-		this.galaxy = galaxy;
+		Game.galaxy = galaxy;
+		Game.primaryHeld = false;
 
-		for(Planet p : this.galaxy.getPlanets()) {
+		for(Planet p : Game.galaxy.getPlanets()) {
 			p.initRender(Game.root);
 		}
 	}
@@ -71,7 +109,7 @@ public class Game {
 	// Game behavior
 	
 	public void handle(long arg0) {
-		for(Planet p : this.galaxy.getPlanets()) {
+		for(Planet p : Game.galaxy.getPlanets()) {
 			//p.render(this.gc);
 			for(Ship s : p.getShips()) {
 				//s.render(this.gc);

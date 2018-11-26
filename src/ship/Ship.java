@@ -18,5 +18,8 @@ public class Ship extends Sprite {
 	public void changeOwner(Player owner) {
 		this.owner = owner;
 	}
-
+	
+	public void move(double x, double y) {
+		this.setPosition(this.getPosX() + x, this.getPosY() + y);
+	}
 }

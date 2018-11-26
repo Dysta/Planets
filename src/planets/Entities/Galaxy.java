@@ -52,6 +52,7 @@ public class Galaxy {
 			}
 		}
 		
+		boolean main = true;
 		for(int i = 0; i < nbPlayers; i++) {
 			Player p = new Player(Color.color(Math.random(), Math.random(), Math.random()));
 			
@@ -67,6 +68,8 @@ public class Galaxy {
 			}
 			
 			if(found) {
+				p.setMainPlayer(main);
+				main = false;
 				this.players.add(p);
 				target.setOwner(p);
 			} else {

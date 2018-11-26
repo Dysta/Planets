@@ -119,6 +119,15 @@ public class Sprite {
 		return ((x >= s.x && x <= s.x + s.width) || (s.x >= x && s.x <= x + width))
 				&& ((y >= s.y && y <= s.y + s.height) || (s.y >= y && s.y <= y + height));
 	}
+	
+	public boolean isOn(double x, double y) {
+		boolean on = false;
+		
+		on = x > this.x && x < this.x+this.width;
+		on = y > this.y && y < this.y+this.height;
+		
+		return on;
+	}
 
 	public String toString() {
 		return "Sprite<" + x + ", " + y + ">";
