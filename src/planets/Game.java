@@ -27,6 +27,7 @@ public class Game {
 	
 	// States
 	public static boolean primaryHeld;
+	public static Planet selectedPlanet;
 	
 	// Methods
 	
@@ -73,10 +74,22 @@ public class Game {
 						Game.primaryHeld = true;
 						// Mouse1 unique click
 
+						boolean clicked_a_planet = false;
 						for(Planet p : Game.galaxy.getPlanets()) {
 							if(p.isOn(mX, mY)) {
-								System.out.println("Clicked on "+p.getPosX()+","+p.getPosY());
+								clicked_a_planet = true;
+								if(p.getOwner().isMainPlayer()) {
+									Game.selectedPlanet = p;
+								} else {
+									if(Game.selectedPlanet != null) {
+										
+									}
+								}
 							}
+						}
+						
+						if(!clicked_a_planet) {
+							Game.selectedPlanet = null;
 						}
 					}
 				}

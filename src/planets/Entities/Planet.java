@@ -20,6 +20,7 @@ public class Planet extends Sprite {
 	private double size;
 	private Text text;
 	
+	
 	private double shipsPerTick;	
 	private double productionProgression;
 	private String production;
@@ -144,5 +145,29 @@ public class Planet extends Sprite {
 		
 		return on;
 	}
+	
+	public boolean inOrbit(Ship s) {
+		boolean on = false;
+		
+		on = Math.pow((s.getPosX() - this.getPosXMiddle()),2) + Math.pow(s.getPosY() - this.getPosYMiddle(),2) < Math.pow((this.size/2)+Galaxy.planetInfluenceZone,2);
+		
+		return on;
+	}
 
+	public boolean defend(ArrayList<Ship> attackers) {
+		boolean defeat = false;
+		
+		int c = 0;
+		int a = attackers.size();
+		int d = this.ships.size();
+		while(c<a && c <d) {
+			this.ships.remove(0);
+			attackers.remove(0);
+			c++;
+		}
+		defeat = c >= d;
+		
+		return defeat;
+	}
+	
 }

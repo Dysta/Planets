@@ -46,5 +46,9 @@ public class Player {
 	public void setMainPlayer(boolean t) {
 		this.mainPlayer = t;
 	}
+	
+	public boolean isMainPlayer() {
+		return this.mainPlayer;
+	}
 
 }
