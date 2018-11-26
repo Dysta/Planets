@@ -4,7 +4,7 @@ import alien.Game;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
+import javafx.scene.paint.Color;	
 import planets.Entities.Planet;
 
 public class ResourcesManager {
@@ -43,13 +43,11 @@ public class ResourcesManager {
 		ResourcesManager.planet = new Sprite(getRessourcePathByName(path), width, height, maxX, maxY);
 	}
 	
-	public static Image colorPlanet(Planet s, Color color) {
+	public static Image colorImage(Image i, Color color) {
 		ColorAdjust ca = new ColorAdjust();
-		//TODO: prendre en compte le paramètre couleur.
-		ca.setHue(-60);
-		ImageView iv = new ImageView(s.getImage());
+		ca.setHue(color.getHue());
+		ImageView iv = new ImageView(i);
 		iv.setEffect(ca);
-		
 		return iv.getImage();
 	}
 }

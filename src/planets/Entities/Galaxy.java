@@ -69,7 +69,7 @@ public class Galaxy {
 			if(found) {
 				this.players.add(p);
 				target.setOwner(p);
-				target.setImage(ResourcesManager.colorPlanet(target, p.getColor()));
+				target.setImage(ResourcesManager.colorImage(target.getImage(), p.getColor()));
 			} else {
 				System.out.println("Could not find a free planet for the player "+i+".");
 			}
