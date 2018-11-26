@@ -4,11 +4,7 @@ import alien.Game;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
 import planets.Entities.Planet;
 
 public class ResourcesManager {
