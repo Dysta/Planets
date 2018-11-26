@@ -1,13 +1,10 @@
 package planets;
 
 import alien.Game;
-
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.PixelWriter;
-import javafx.scene.image.WritableImage;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
 import planets.Entities.Planet;
 
 public class ResourcesManager {
@@ -46,31 +43,14 @@ public class ResourcesManager {
 		ResourcesManager.planet = new Sprite(getRessourcePathByName(path), width, height, maxX, maxY);
 	}
 	
-	public static Planet colorPlanet(Planet s, Color color) {
-		Planet cpy = new Planet(s);
-		PixelReader pr = s.getImage().getPixelReader();
-		WritableImage pw = new WritableImage(cpy.getImage().getPixelReader(), (int) cpy.width(), (int) cpy.height());
+	public static Image colorPlanet(Planet s, Color color) {
+		ColorAdjust ca = new ColorAdjust();
+		//TODO: prendre en compte le paramètre couleur.
+		ca.setHue(-60);
+		ImageView iv = new ImageView(s.getImage());
+		iv.setEffect(ca);
 		
-
-		for (int x = 0; x < (int) s.width(); x++) {
-			for (int y = 0; y < (int) s.height(); y++) { 
-		        Color couleur = pr.getColor(x, y); 
-		        double b = couleur.getBlue();  
-		        double g = couleur.getGreen();  
-		        double r = couleur.getRed(); 
-		        if (b == 1.0 && g == 1.0 && r == 1.0){ 
-		          //si couleur noir => ne rien faire 
-		        } 
-				else
-				{
-					pw.getPixelWriter().setColor(x, y, color);
-				}
-			}
-		}
-		
-		return cpy;
-		
-		
+		return iv.getImage();
 	}
 }
 	
