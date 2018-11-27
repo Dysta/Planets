@@ -1,2 +1,8 @@
 
 *.class
+/nbproject/private/
+/build/
+/dist/
+nbproject/
+
+lib/

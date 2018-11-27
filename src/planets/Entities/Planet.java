@@ -87,6 +87,12 @@ public class Planet extends Sprite {
 	public void setOwner(Player owner) {
 		this.owner = owner;
 		ResourcesManager.colorImage(this.getImageView(), owner.getColor());
+                
+                if(this.owner.isActive()) {
+                    this.shipsPerTick *= 2;
+                } else {
+                    this.shipsPerTick /= 2;
+                }
 	}
 	
 	public void printStock(GraphicsContext gc, Group root) {
@@ -149,7 +155,7 @@ public class Planet extends Sprite {
 	public boolean inOrbit(Ship s) {
 		boolean on = false;
 		
-		on = Math.pow((s.getPosX() - this.getPosXMiddle()),2) + Math.pow(s.getPosY() - this.getPosYMiddle(),2) < Math.pow((this.size/2)+Galaxy.planetInfluenceZone,2);
+		on = Math.pow((s.getPosXMiddle() - this.getPosXMiddle()),2) + Math.pow(s.getPosYMiddle() - this.getPosYMiddle(),2) < Math.pow((this.size/2)+Galaxy.planetInfluenceZone,2);
 		
 		return on;
 	}
@@ -161,8 +167,11 @@ public class Planet extends Sprite {
 		int a = attackers.size();
 		int d = this.ships.size();
 		while(c<a && c <d) {
+                        this.ships.get(0).die();
 			this.ships.remove(0);
+                        attackers.get(0).die();
 			attackers.remove(0);
+                        
 			c++;
 		}
 		defeat = c >= d;

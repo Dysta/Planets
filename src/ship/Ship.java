@@ -22,4 +22,8 @@ public class Ship extends Sprite {
 	public void move(double x, double y) {
 		this.setPosition(this.getPosX() + x, this.getPosY() + y);
 	}
+        
+        public void die() {
+            this.getImageView().setImage(null);
+        }
 }
