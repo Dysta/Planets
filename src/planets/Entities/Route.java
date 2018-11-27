@@ -29,13 +29,13 @@ public class Route {
     public void move_ships() {
         ArrayList<Ship> attackers = new ArrayList<Ship>();
         
-        int temp_speed = 150;
-        
         int c = 0;
         while (c < ships.size()) {
             Ship s = this.ships.get(c);
             // TODO: fixed speed
-            s.move((this.destination.getPosXMiddle() - this.origin.getPosXMiddle()) / temp_speed, (this.destination.getPosYMiddle() - this.origin.getPosYMiddle()) / temp_speed);
+            double angle = Math.atan2(this.destination.getPosXMiddle() - this.origin.getPosXMiddle(),this.destination.getPosYMiddle() - this.origin.getPosYMiddle());
+            s.gaz();
+            s.move(Math.sin(angle) * s.getVelocity(), Math.cos(angle) * s.getVelocity());
             
             if (destination.inOrbit(s)) {
                 attackers.add(s);

@@ -39,7 +39,7 @@ public class Planet extends Sprite {
 		this.owner = new Player();
 		this.ships = new ArrayList<Ship>();
 		this.productionProgression = 0;
-		this.shipsPerTick = 0.03;
+		this.shipsPerTick = 0.3;
 		this.production = owner.getShipType();
 		
 		this.text = new Text();
