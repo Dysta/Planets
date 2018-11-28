@@ -13,8 +13,10 @@ public class Route {
 
     private Planet origin;
     private Planet destination;
+    
+    private String mission;
 
-    public Route(Planet p1, Planet p2, ArrayList<Ship> ships) {
+    public Route(Planet p1, Planet p2, ArrayList<Ship> ships, String mission) {
         this.ships = new ArrayList<Ship>();
 
         int c = 0;
@@ -31,10 +33,11 @@ public class Route {
         this.origin = p1;
         this.destination = p2;
         this.viewDistance = Galaxy.planetSecurityZone;
+        this.mission = mission;
     }
 
     public void move_ships() {
-        ArrayList<Ship> attackers = new ArrayList<Ship>();
+        ArrayList<Ship> arrivers = new ArrayList<Ship>();
 
         int c = 0;
         while (c < ships.size()) {
@@ -73,22 +76,46 @@ public class Route {
             s.move(dir_x * s.getVelocity(), dir_y * s.getVelocity());
 
             if (destination.inOrbit(s)) {
-                attackers.add(s);
+                arrivers.add(s);
             }
 
             c++;
         }
 
         c = 0;
-        while (c < attackers.size()) {
-            this.ships.remove(attackers.get(c));
+        while (c < arrivers.size()) {
+            this.ships.remove(arrivers.get(c));
             c++;
         }
         
-        if(this.destination.defend(attackers)) {
-            this.destination.setOwner(this.origin.getOwner());
-            this.destination.addShips(this.ships);
-            this.ships.clear();
+        switch(this.mission) {
+            case "ATTACK":
+                if(this.origin.getOwner() == this.destination.getOwner()) {
+                    // The planet will gladly receive the ships, 
+                    // as it's been conquered since the order to attack was given
+                    this.mission = "CONVOY";
+                }
+                break;
+            case "CONVOY":
+                if(this.origin.getOwner() != this.destination.getOwner()) {
+                    // Abort escort mission ! Units will have to fight
+                    this.mission = "ATTACK";
+                }
+                break;
+        }
+        
+        switch(this.mission) {
+            case "ATTACK":
+                if(this.destination.defend(arrivers)) {
+                    this.destination.setOwner(this.origin.getOwner());
+                    this.destination.addShips(this.ships);
+                    this.ships.clear();
+                }                
+                break;
+            case "CONVOY":
+                this.destination.addShips(arrivers);    
+                arrivers.clear();
+                break;
         }
     }
 

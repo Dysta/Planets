@@ -80,9 +80,20 @@ public class Game {
                             if (p.isOn(mX, mY)) {
                                 clicked_a_planet = true;
                                 if (p.getOwner().isMainPlayer()) {
-                                    if(Game.selectedPlanet != p) {
-                                        // Select this planet for the next action
-                                        Game.selectedPlanet = p;
+                                    if (Game.selectedPlanet != p) {
+                                        if (Game.selectedPlanet == null) {
+                                            // Select this planet for the next action
+                                            Game.selectedPlanet = p;
+                                        } else {
+                                            // This is an friendly planet, send ships from the selected planet
+                                            ArrayList<Ship> convoy = new ArrayList<>();
+
+                                            convoy.addAll(Game.selectedPlanet.getShips());
+                                            Game.selectedPlanet.getShips().clear();
+
+                                            Route r = new Route(Game.selectedPlanet, p, convoy, "CONVOY");
+                                            Game.routes.add(r);
+                                        }
                                     } else {
                                         // Deselect this planet
                                         Game.selectedPlanet = null;
@@ -91,11 +102,11 @@ public class Game {
                                     if (Game.selectedPlanet != null) {
                                         // This is an enemy planet, send ships from the selected planet
                                         ArrayList<Ship> attackers = new ArrayList<>();
-                                        
+
                                         attackers.addAll(Game.selectedPlanet.getShips());
                                         Game.selectedPlanet.getShips().clear();
-                                        
-                                        Route r = new Route(Game.selectedPlanet,p,attackers);
+
+                                        Route r = new Route(Game.selectedPlanet, p, attackers, "ATTACK");
                                         Game.routes.add(r);
                                     } else {
                                         // No planet selected but clicked on enemy planet
@@ -129,7 +140,7 @@ public class Game {
         // Galaxy(double width, double height, int nbPlanets, int nbPlayers, 
         // double planetInfluenceZone, double planetSecurityZone, 
         // double minimumPlanetSize, double maximumPlanetSize, double borderMargin)
-        
+
         Galaxy galaxy = new Galaxy(width, height, 9, 2, 40, 50, 60, 110, 50);
         Game.routes = new ArrayList<>();
         Game.galaxy = galaxy;
@@ -151,7 +162,7 @@ public class Game {
             p.productionTick();
             p.printStock(gc, root);
         }
-        for(Route r : Game.routes) {
+        for (Route r : Game.routes) {
             r.move_ships();
         }
         Game.routes.removeIf((Route r) -> r.isEmpty());
