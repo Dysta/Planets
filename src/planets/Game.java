@@ -80,9 +80,16 @@ public class Game {
                             if (p.isOn(mX, mY)) {
                                 clicked_a_planet = true;
                                 if (p.getOwner().isMainPlayer()) {
-                                    Game.selectedPlanet = p;
+                                    if(Game.selectedPlanet != p) {
+                                        // Select this planet for the next action
+                                        Game.selectedPlanet = p;
+                                    } else {
+                                        // Deselect this planet
+                                        Game.selectedPlanet = null;
+                                    }
                                 } else {
                                     if (Game.selectedPlanet != null) {
+                                        // This is an enemy planet, send ships from the selected planet
                                         ArrayList<Ship> attackers = new ArrayList<>();
                                         
                                         attackers.addAll(Game.selectedPlanet.getShips());
@@ -90,6 +97,8 @@ public class Game {
                                         
                                         Route r = new Route(Game.selectedPlanet,p,attackers);
                                         Game.routes.add(r);
+                                    } else {
+                                        // No planet selected but clicked on enemy planet
                                     }
                                 }
                             }
@@ -117,7 +126,7 @@ public class Game {
     }
 
     public void initGame(double width, double height) {
-        Galaxy galaxy = new Galaxy(width, height, 5, 2, 40, 80, 140, 50);
+        Galaxy galaxy = new Galaxy(width, height, 5, 2, 40, 50, 80, 140, 50);
         Game.routes = new ArrayList<>();
         Game.galaxy = galaxy;
         Game.primaryHeld = false;

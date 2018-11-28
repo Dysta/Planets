@@ -12,13 +12,20 @@ import javafx.scene.paint.Color;
 
 public class ResourcesManager {
 	
+        // Common
 	public final static String BG_PATH = "images/background.jpg";
-	public final static String SHIP_PATH = "images/ship.png";	
 	public final static String PLANET_PATH = "images/planet.png";
-	
-	public static Sprite ship;
+        // Common Sprites
 	public static Sprite planet;
 	public static Image background;	
+        
+        // Ships        
+	public final static String BASESHIP_PATH = "images/ships/BaseShip.png";	
+	public final static String DESTROYER_PATH = "images/ships/Destroyer.png";
+        // Ships Sprites
+	public static Sprite baseShip;
+	public static Sprite destroyer;	
+	
 	
 	/* =================== */
 	
@@ -31,15 +38,22 @@ public class ResourcesManager {
 	public static void initGameAssets(double width, double height) {
 		ResourcesManager.loadBackground(BG_PATH, width, height, false, false);
 		ResourcesManager.loadPlanet(PLANET_PATH, 435, 435, width, height);
-		ResourcesManager.loadShip(SHIP_PATH, 20, 35, width, height);
+                
+                // Ships
+		ResourcesManager.loadBaseShip(BASESHIP_PATH, 20, 20, width, height);
+		ResourcesManager.loadDestroyer(DESTROYER_PATH, 20, 20, width, height);
 	}
 	
 	private static void loadBackground(String path, double width, double height, boolean preserveRatio, boolean smooth) {
 		ResourcesManager.background = new Image(getRessourcePathByName(path), width, height, preserveRatio, smooth);
 	}
 	
-	private static void loadShip(String path, int width, int height, double maxX, double maxY) {
-		ResourcesManager.ship = new Sprite(getRessourcePathByName(path), width, height, maxX, maxY);
+	private static void loadBaseShip(String path, int width, int height, double maxX, double maxY) {
+		ResourcesManager.baseShip = new Sprite(getRessourcePathByName(path), width, height, maxX, maxY);
+	}
+	
+	private static void loadDestroyer(String path, int width, int height, double maxX, double maxY) {
+		ResourcesManager.destroyer = new Sprite(getRessourcePathByName(path), width, height, maxX, maxY);
 	}
 	
 	private static void loadPlanet(String path, int width, int height, double maxX, double maxY) {

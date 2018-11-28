@@ -4,21 +4,19 @@ import planets.ResourcesManager;
 import planets.Sprite;
 import planets.Entities.Player;
 
-public class Ship extends Sprite {
+public abstract class Ship extends Sprite {
 
     private Player owner;
-    protected double baseSpeed;
     protected double currentSpeed;
     protected double acceleration;
     protected double speedCap;
 
-    public Ship(Sprite s, double posX, double posY) {
+    public Ship(Sprite s, double posX, double posY, double speedCap, double acceleration) {
         super(s);
         this.setPosition(posX, posY);
-        this.baseSpeed = 0.5;
-        this.speedCap = 10;
+        this.speedCap = speedCap;
+        this.acceleration = acceleration;
         this.currentSpeed = 0;
-        this.acceleration = 0.15;
     }
 
     public void changeOwner(Player owner) {
@@ -38,13 +36,8 @@ public class Ship extends Sprite {
     }
 
     public void gaz() {
-        if(this.currentSpeed >= this.baseSpeed) {
+        if(this.currentSpeed < this.speedCap) {
             this.currentSpeed += this.acceleration;
-        } else {
-            this.currentSpeed = this.baseSpeed;
-        }
-        if(this.currentSpeed >= this.speedCap) {
-            this.currentSpeed = this.speedCap;
         }
     }
 

@@ -33,7 +33,7 @@ public class Route {
         while (c < ships.size()) {
             Ship s = this.ships.get(c);
             // TODO: fixed speed
-            double angle = Math.atan2(this.destination.getPosXMiddle() - this.origin.getPosXMiddle(),this.destination.getPosYMiddle() - this.origin.getPosYMiddle());
+            double angle = Math.atan2(this.destination.getPosXMiddle() - s.getPosXMiddle(),this.destination.getPosYMiddle() - s.getPosYMiddle());
             s.gaz();
             s.move(Math.sin(angle) * s.getVelocity(), Math.cos(angle) * s.getVelocity());
             

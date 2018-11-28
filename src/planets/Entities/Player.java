@@ -16,7 +16,7 @@ public class Player {
 	public Player(Color color, boolean active) {
 		this.color = color;
 		this.active = active;
-		this.shipType = "ship.Ship";
+		this.setShipType("BaseShip");
 	}
 	
 	public Player(Color color) {
@@ -36,7 +36,7 @@ public class Player {
 	}
 	
 	public void setShipType(String shipType) {
-		this.shipType = shipType;
+		this.shipType = "ship."+shipType;
 	}
 	
 	public String getShipType() {

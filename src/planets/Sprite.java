@@ -63,7 +63,7 @@ public class Sprite {
 		}
 	}
 
-	public void setPosition(double x, double y) {
+	public final void setPosition(double x, double y) {
 		this.x = x;
 		this.y = y;
 		validatePosition();
@@ -134,11 +134,11 @@ public class Sprite {
 	}
 
 
-	public Image getImage() {
+	public final Image getImage() {
 		return this.image;
 	}
 
-	public ImageView getImageView() {
+	public final ImageView getImageView() {
 		return this.iv;	
 	}
 	

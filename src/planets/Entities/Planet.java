@@ -23,7 +23,6 @@ public class Planet extends Sprite {
 	
 	private double shipsPerTick;	
 	private double productionProgression;
-	private String production;
 	
 	private boolean printedStock;
 
@@ -39,8 +38,7 @@ public class Planet extends Sprite {
 		this.owner = new Player();
 		this.ships = new ArrayList<Ship>();
 		this.productionProgression = 0;
-		this.shipsPerTick = 0.3;
-		this.production = owner.getShipType();
+		this.shipsPerTick = 0.01;
 		
 		this.text = new Text();
 		this.printedStock = false;
@@ -70,7 +68,7 @@ public class Planet extends Sprite {
 		double x = ((this.getPosX() + this.getSize()/2) + Math.cos(angle)*radius);
 		double y = (this.getPosY() + this.getSize()/2) + Math.sin(angle)*radius;
 		try {
-			Ship ship = (Ship) Class.forName(this.production).getConstructor(Sprite.class, double.class, double.class).newInstance(ResourcesManager.ship,x,y);
+			Ship ship = (Ship) Class.forName(s).getConstructor(Sprite.class, double.class, double.class).newInstance(ResourcesManager.baseShip,x,y);
 			ship.changeOwner(this.owner);
 			ship.setPosition(ship.getPosX()-ship.width()/2, ship.getPosY()-ship.height()/2);
 			ship.initRender(Game.root);
@@ -139,7 +137,7 @@ public class Planet extends Sprite {
 		this.productionProgression += this.shipsPerTick;
 		
 		while(this.productionProgression >= 1) {
-			this.produceShip(this.production);
+			this.produceShip(this.owner.getShipType());
 			this.productionProgression -= 1;
 		}
 	}
