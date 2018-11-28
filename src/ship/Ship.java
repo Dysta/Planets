@@ -14,6 +14,7 @@ public abstract class Ship extends Sprite {
     protected double speedCap;
     
     private double blindForward;
+    private double lastDir;
     
 
     public Ship(Sprite s, double posX, double posY, double speedCap, double acceleration) {
@@ -23,6 +24,7 @@ public abstract class Ship extends Sprite {
         this.acceleration = acceleration;
         this.currentSpeed = 0;
         this.blindForward = 0;
+        this.lastDir = 0;
     }
 
     public void changeOwner(Player owner) {
@@ -64,5 +66,13 @@ public abstract class Ship extends Sprite {
     
     public void setBlindForward(double n) {
         this.blindForward = n;
+    }
+    
+    public void setLastDir(double d) {
+        this.lastDir = d;
+    }
+    
+    public double getLastDir() {
+        return this.lastDir;
     }
 }

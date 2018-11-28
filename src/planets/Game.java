@@ -93,6 +93,7 @@ public class Game {
 
                                             Route r = new Route(Game.selectedPlanet, p, convoy, "CONVOY");
                                             Game.routes.add(r);
+                                            Game.selectedPlanet = null;
                                         }
                                     } else {
                                         // Deselect this planet
@@ -108,6 +109,7 @@ public class Game {
 
                                         Route r = new Route(Game.selectedPlanet, p, attackers, "ATTACK");
                                         Game.routes.add(r);
+                                            Game.selectedPlanet = null;
                                     } else {
                                         // No planet selected but clicked on enemy planet
                                     }
@@ -158,6 +160,7 @@ public class Game {
             //p.render(this.gc);
             for (Ship s : p.getShips()) {
                 //s.render(this.gc);
+                s.getImageView().setVisible(false);
             }
             p.productionTick();
             p.printStock(gc, root);
