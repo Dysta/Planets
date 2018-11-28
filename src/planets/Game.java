@@ -126,12 +126,16 @@ public class Game {
     }
 
     public void initGame(double width, double height) {
-        Galaxy galaxy = new Galaxy(width, height, 5, 2, 40, 50, 80, 140, 50);
+        // Galaxy(double width, double height, int nbPlanets, int nbPlayers, 
+        // double planetInfluenceZone, double planetSecurityZone, 
+        // double minimumPlanetSize, double maximumPlanetSize, double borderMargin)
+        
+        Galaxy galaxy = new Galaxy(width, height, 9, 2, 40, 50, 60, 110, 50);
         Game.routes = new ArrayList<>();
         Game.galaxy = galaxy;
         Game.primaryHeld = false;
 
-        for (Planet p : Game.galaxy.getPlanets()) {
+        for (Planet p : Galaxy.getPlanets()) {
             p.initRender(Game.root);
         }
     }

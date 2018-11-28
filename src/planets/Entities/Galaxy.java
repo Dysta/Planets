@@ -18,8 +18,8 @@ public class Galaxy {
 
     private double width, height;
 
-    private ArrayList<Planet> planets;
-    private ArrayList<Player> players;
+    private static ArrayList<Planet> planets;
+    private static ArrayList<Player> players;
 
     public Galaxy(double width, double height, int nbPlanets, int nbPlayers, double planetInfluenceZone, double planetSecurityZone, double minimumPlanetSize, double maximumPlanetSize, double borderMargin) {
         Random r = new Random();
@@ -99,7 +99,7 @@ public class Galaxy {
         return colliding;
     }
 
-    public ArrayList<Planet> getPlanets() {
-        return this.planets;
+    public static ArrayList<Planet> getPlanets() {
+        return Galaxy.planets;
     }
 }

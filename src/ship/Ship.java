@@ -1,5 +1,7 @@
 package ship;
 
+import planets.Entities.Galaxy;
+import planets.Entities.Planet;
 import planets.ResourcesManager;
 import planets.Sprite;
 import planets.Entities.Player;
@@ -10,6 +12,9 @@ public abstract class Ship extends Sprite {
     protected double currentSpeed;
     protected double acceleration;
     protected double speedCap;
+    
+    private double blindForward;
+    
 
     public Ship(Sprite s, double posX, double posY, double speedCap, double acceleration) {
         super(s);
@@ -17,13 +22,14 @@ public abstract class Ship extends Sprite {
         this.speedCap = speedCap;
         this.acceleration = acceleration;
         this.currentSpeed = 0;
+        this.blindForward = 0;
     }
 
     public void changeOwner(Player owner) {
         this.owner = owner;
     }
 
-    public void move(double x, double y) {
+    public void move(double x, double y) {        
         double dir = Math.atan2(y,x);
         this.getImageView().setRotate(90 + Math.toDegrees(dir));
         this.setPosition(this.getPosX() + x, this.getPosY() + y);
@@ -45,5 +51,14 @@ public abstract class Ship extends Sprite {
 
     public void slowdown() {
         this.currentSpeed -= this.acceleration;
+    }
+    
+    public double getBlindForward() {
+        return this.blindForward;
+    }
+    
+    
+    public void setBlindForward(double n) {
+        this.blindForward = n;
     }
 }
