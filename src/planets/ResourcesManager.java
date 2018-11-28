@@ -62,8 +62,6 @@ public class ResourcesManager {
 	
 	public static void colorImage(ImageView iv, Color color) {
 		ColorAdjust effect = new ColorAdjust();
-		
-		System.out.println("Color: "+color.toString() + " | Hue: "+color.getHue()+ " | Brightness: "+ color.getBrightness()+ " | Saturation: "+ color.getSaturation());
 		iv.setEffect(effect);
 	}
 }

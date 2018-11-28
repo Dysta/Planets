@@ -32,7 +32,7 @@ public class Route {
 
         this.origin = p1;
         this.destination = p2;
-        this.viewDistance = Galaxy.planetSecurityZone / 1.5;
+        this.viewDistance = Galaxy.planetSecurityZone;
         this.mission = mission;
     }
 
