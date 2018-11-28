@@ -20,8 +20,11 @@ public class Route {
         int c = 0;
         int t = ships.size();
         while (c < t) {
-            this.ships.add(ships.get(0));
-            ships.remove(0);
+            Ship s = ships.get(0);
+            this.ships.add(s);
+            ships.remove(s);
+            
+            s.getImageView().setVisible(true);
             c++;
         }
 

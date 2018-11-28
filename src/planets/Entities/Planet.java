@@ -35,7 +35,7 @@ public class Planet extends Sprite {
         this.size = size;
         this.owner = new Player();
         this.ships = new ArrayList<Ship>();
-        this.productionProgression = 0;
+        this.productionProgression = 20;
         this.shipsPerTick = 0.01;
 
         this.text = new Text();
@@ -70,6 +70,7 @@ public class Planet extends Sprite {
             ship.changeOwner(this.owner);
             ship.setPosition(ship.getPosX() - ship.width() / 2, ship.getPosY() - ship.height() / 2);
             ship.initRender(Game.root);
+            ship.getImageView().setVisible(false);
             this.ships.add(ship);
         } catch (Exception e) {
             System.err.println("Error during ship initialization : " + e);
@@ -132,7 +133,9 @@ public class Planet extends Sprite {
     }
 
     public void productionTick() {
-        this.productionProgression += this.shipsPerTick;
+        if (this.owner.isActive()) {
+            this.productionProgression += this.shipsPerTick;
+        }
 
         while (this.productionProgression >= 1) {
             this.produceShip(this.owner.getShipType());
