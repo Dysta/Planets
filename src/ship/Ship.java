@@ -42,6 +42,10 @@ public abstract class Ship extends Sprite {
     public double getVelocity() {
         return this.currentSpeed;
     }
+    
+    public void stop() {
+        this.currentSpeed = 0;
+    }
 
     public void gaz() {
         if(this.currentSpeed < this.speedCap) {

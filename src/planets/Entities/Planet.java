@@ -189,5 +189,22 @@ public class Planet extends Sprite {
 
         return defeat;
     }
+    
+    public void addShips(ArrayList<Ship> ships) {
+        for(Ship s: ships) {
+            double angle = Math.random() * Math.PI * 2;
+            double radius = (this.size + (Galaxy.planetInfluenceZone - this.size) / 2);
+            double x = ((this.getPosX() + this.getSize() / 2) + Math.cos(angle) * radius);
+            double y = (this.getPosY() + this.getSize() / 2) + Math.sin(angle) * radius;
+            try {
+                s.stop();
+                s.setPosition(x - s.width() / 2, y - s.height() / 2);
+                s.getImageView().setVisible(false);
+                this.ships.add(s);
+            } catch (Exception e) {
+                System.err.println("Error during ship transfer : " + e);
+            }
+        }
+    }
 
 }

@@ -84,7 +84,12 @@ public class Route {
             this.ships.remove(attackers.get(c));
             c++;
         }
-        this.destination.defend(attackers);
+        
+        if(this.destination.defend(attackers)) {
+            this.destination.setOwner(this.origin.getOwner());
+            this.destination.addShips(this.ships);
+            this.ships.clear();
+        }
     }
 
     public boolean isEmpty() {
