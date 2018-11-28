@@ -24,6 +24,8 @@ public abstract class Ship extends Sprite {
     }
 
     public void move(double x, double y) {
+        double dir = Math.atan2(y,x);
+        this.getImageView().setRotate(90 + Math.toDegrees(dir));
         this.setPosition(this.getPosX() + x, this.getPosY() + y);
     }
 
