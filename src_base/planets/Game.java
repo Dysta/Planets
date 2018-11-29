@@ -2,6 +2,7 @@ package planets;
 
 import java.util.ArrayList;
 import javafx.event.EventHandler;
+import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -46,6 +47,9 @@ public class Game {
         Scene scene = new Scene(root);
         canvas = new Canvas(WIDTH, HEIGHT);
         root.getChildren().add(canvas);
+        
+        root.setCache(true);
+        root.setCacheHint(CacheHint.SPEED);
 
         // Events
         gc = canvas.getGraphicsContext2D();

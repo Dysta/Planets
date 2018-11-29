@@ -15,6 +15,7 @@ public abstract class Ship extends Sprite {
     
     private double blindForward;
     private double lastDir;
+    private boolean straightLine;
     
 
     public Ship(Sprite s, double posX, double posY, double speedCap, double acceleration) {
@@ -25,6 +26,7 @@ public abstract class Ship extends Sprite {
         this.currentSpeed = 0;
         this.blindForward = 0;
         this.lastDir = 0;
+        this.straightLine = false;
     }
 
     public void changeOwner(Player owner) {
@@ -74,5 +76,13 @@ public abstract class Ship extends Sprite {
     
     public double getLastDir() {
         return this.lastDir;
+    }
+    
+    public boolean goesInStraightLine() {
+        return this.straightLine;
+    }
+    
+    public void setStraightLine(boolean t) {
+        this.straightLine = t;
     }
 }

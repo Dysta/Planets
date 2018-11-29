@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.scene.paint.Color;
+import planets.utils.GameUtils;
 import planets.ResourcesManager;
 import ship.Ship;
 
@@ -62,7 +63,7 @@ public class Galaxy {
             int tries = 0;
             int rInt = 0;
             while (tries < this.planets.size() * 10 && !found) {
-                rInt = Galaxy.getRandomIntegerBetweenRange(0, this.planets.size() - 1);
+                rInt = GameUtils.getRandomIntegerBetweenRange(0, this.planets.size() - 1);
                 target = this.planets.get(rInt);
                 found = !target.getOwner().isActive();
                 tries++;
@@ -83,10 +84,7 @@ public class Galaxy {
         }
     }
 
-    public static int getRandomIntegerBetweenRange(int min, int max) {
-        int x = (int) ((Math.random() * ((max - min) + 1)) + min);
-        return x;
-    }
+
 
     private boolean isColliding(Planet planet) {
         boolean colliding = false;
