@@ -36,7 +36,7 @@ public class Planet extends Sprite {
         this.owner = new Player();
         this.ships = new ArrayList<Ship>();
         this.productionProgression = 20;
-        this.shipsPerTick = 0.01;
+        this.shipsPerTick = 0.03;
 
         this.text = new Text();
         this.printedStock = false;
@@ -84,12 +84,6 @@ public class Planet extends Sprite {
     public void setOwner(Player owner) {
         this.owner = owner;
         ResourcesManager.colorImage(this.getImageView(), owner.getColor());
-
-        if (this.owner.isActive()) {
-            this.shipsPerTick *= 2;
-        } else {
-            this.shipsPerTick /= 2;
-        }
     }
 
     public void printStock(GraphicsContext gc, Group root) {
@@ -190,7 +184,7 @@ public class Planet extends Sprite {
         return defeat;
     }
     
-    public void addShips(ArrayList<Ship> ships) {
+    public void landShips(ArrayList<Ship> ships) {
         for(Ship s: ships) {
             double angle = Math.random() * Math.PI * 2;
             double radius = (this.size + (Galaxy.planetInfluenceZone - this.size) / 2);
@@ -199,12 +193,25 @@ public class Planet extends Sprite {
             try {
                 s.stop();
                 s.setPosition(x - s.width() / 2, y - s.height() / 2);
-                s.getImageView().setVisible(false);
+                s.getImageView().setImage(null);
                 this.ships.add(s);
             } catch (Exception e) {
                 System.err.println("Error during ship transfer : " + e);
             }
         }
+    }
+    
+    public ArrayList<Ship> flyShips(int effectives) {
+        ArrayList<Ship> mobilized = new ArrayList<>();
+        for(int i = 0; i < effectives; i++) {
+            Ship calledShip = this.ships.get(0);
+            mobilized.add(calledShip);
+            this.ships.remove(calledShip);
+            
+            calledShip.getImageView().setImage(calledShip.getImage());
+        }
+        
+        return mobilized;
     }
 
 }

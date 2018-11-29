@@ -7,6 +7,9 @@ import planets.utils.Point;
 import ship.Ship;
 
 public class Route {
+    
+    public static final String ATTACK = "ATTACK";
+    public static final String CONVOY = "CONVOY";
 
     private ArrayList<Ship> ships;
 
@@ -57,41 +60,36 @@ public class Route {
 
             if (destination.inOrbit(s)) {
                 arrivers.add(s);
+                this.ships.remove(s);
             }
 
             c++;
         }
 
-        c = 0;
-        while (c < arrivers.size()) {
-            this.ships.remove(arrivers.get(c));
-            c++;
-        }
-
         switch (this.mission) {
-            case "ATTACK":
+            case Route.ATTACK:
                 if (this.origin.getOwner() == this.destination.getOwner()) {
                     // The planet will gladly receive the ships, 
                     // as it's been conquered since the order to attack was given
-                    this.mission = "CONVOY";
+                    this.mission = Route.CONVOY;
                 }
                 break;
-            case "CONVOY":
+            case Route.CONVOY:
                 if (this.origin.getOwner() != this.destination.getOwner()) {
                     // Abort escort mission ! Units will have to fight
-                    this.mission = "ATTACK";
+                    this.mission = Route.ATTACK;
                 }
                 break;
         }
 
         switch (this.mission) {
-            case "ATTACK":
+            case Route.ATTACK:
                 if (this.destination.defend(arrivers)) {
                     this.destination.setOwner(this.origin.getOwner());
                 }
                 break;
-            case "CONVOY":
-                this.destination.addShips(arrivers);
+            case Route.CONVOY:
+                this.destination.landShips(arrivers);
                 arrivers.clear();
                 break;
         }

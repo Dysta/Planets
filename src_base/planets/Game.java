@@ -47,7 +47,7 @@ public class Game {
         Scene scene = new Scene(root);
         canvas = new Canvas(WIDTH, HEIGHT);
         root.getChildren().add(canvas);
-        
+
         root.setCache(true);
         root.setCacheHint(CacheHint.SPEED);
 
@@ -90,13 +90,7 @@ public class Game {
                                             Game.selectedPlanet = p;
                                         } else {
                                             // This is an friendly planet, send ships from the selected planet
-                                            ArrayList<Ship> convoy = new ArrayList<>();
-
-                                            convoy.addAll(Game.selectedPlanet.getShips());
-                                            Game.selectedPlanet.getShips().clear();
-
-                                            Route r = new Route(Game.selectedPlanet, p, convoy, "CONVOY");
-                                            Game.routes.add(r);
+                                            Game.startMission(Game.selectedPlanet, p, Game.selectedPlanet.getNbShip(), Route.CONVOY);
                                             Game.selectedPlanet = null;
                                         }
                                     } else {
@@ -106,13 +100,7 @@ public class Game {
                                 } else {
                                     if (Game.selectedPlanet != null) {
                                         // This is an enemy planet, send ships from the selected planet
-                                        ArrayList<Ship> attackers = new ArrayList<>();
-
-                                        attackers.addAll(Game.selectedPlanet.getShips());
-                                        Game.selectedPlanet.getShips().clear();
-
-                                        Route r = new Route(Game.selectedPlanet, p, attackers, "ATTACK");
-                                        Game.routes.add(r);
+                                            Game.startMission(Game.selectedPlanet, p, Game.selectedPlanet.getNbShip(), Route.ATTACK);
                                             Game.selectedPlanet = null;
                                     } else {
                                         // No planet selected but clicked on enemy planet
@@ -158,6 +146,13 @@ public class Game {
     }
     // Game instantiation 
     // Game behavior
+
+    public static void startMission(Planet origin, Planet destination, int effectives, String mission) {
+        ArrayList<Ship> ships = origin.flyShips(effectives);
+
+        Route r = new Route(origin, destination, ships, mission);
+        Game.routes.add(r);
+    }
 
     public void handle(long arg0) {
         for (Planet p : Game.galaxy.getPlanets()) {
