@@ -1,7 +1,5 @@
 package planets;
 
-
-import alien.Game;
 import javafx.scene.effect.Blend;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.ColorAdjust;
