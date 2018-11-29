@@ -1,11 +1,11 @@
-package ship;
+package planets.entities.ship;
 
 import java.util.ArrayList;
-import planets.Entities.Galaxy;
-import planets.Entities.Planet;
+import planets.entities.Galaxy;
+import planets.entities.Planet;
 import planets.ResourcesManager;
 import planets.Sprite;
-import planets.Entities.Player;
+import planets.entities.Player;
 import planets.utils.GameUtils;
 import planets.utils.Point;
 

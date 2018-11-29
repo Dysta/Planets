@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package planets.Entities;
+package planets.entities;
 
 import java.util.ArrayList;
 import planets.utils.Point;
 import planets.utils.Polygon;
-import ship.Ship;
+import planets.entities.ship.Ship;
 
 /**
  *
@@ -16,12 +16,14 @@ import ship.Ship;
  */
 public class Squad {
 
+    private Mission parent;
     private Planet origin;
     private Planet destination;
     
     private ArrayList<Ship> ships;
     
-    public Squad(Planet p1, Planet p2, ArrayList<Ship> ships) {
+    public Squad(Planet p1, Planet p2, ArrayList<Ship> ships, Mission parent) {
+        this.parent = parent;
         this.origin = p1;
         this.destination = p2;
         this.ships = ships;
@@ -82,5 +84,15 @@ public class Squad {
     
     public boolean isEmpty() {
         return this.ships.size() <= 0;
+    }
+    
+    public Mission getMission() {
+        return this.parent;
+    }
+    
+    public void reaffectSquad(Mission newMission) {
+        this.destination = newMission.getDestinationPlanet();
+        this.parent.cancelSquad(this);
+        this.parent = newMission;
     }
 }

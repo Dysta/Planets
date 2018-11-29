@@ -13,11 +13,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import planets.Entities.Galaxy;
-import planets.Entities.Planet;
-import planets.Entities.Mission;
+import planets.entities.EmergencyMission;
+import planets.entities.Galaxy;
+import planets.entities.Planet;
+import planets.entities.Mission;
+import planets.entities.Squad;
 import planets.utils.DebugUtils;
-import ship.Ship;
+import planets.entities.ship.Ship;
 
 public class Game {
 
@@ -30,11 +32,12 @@ public class Game {
     public static ArrayList<Mission> missions;
     // Constants
     public static Group root;
-    
+
     // States
     public static boolean primaryHeld;
     public static boolean ctrlHeld;
     public static ArrayList<Planet> selectedPlanets;
+    public static ArrayList<Squad> selectedSquads;
     public static int ticks;
 
     // Methods
@@ -84,14 +87,21 @@ public class Game {
                         // Mouse1 unique click
 
                         boolean clicked_a_planet = false;
+                        boolean clicked_a_squad = false;
+
                         for (Planet p : Game.galaxy.getPlanets()) {
                             if (p.isOn(mX, mY)) {
                                 clicked_a_planet = true;
                                 if (p.getOwner().isMainPlayer()) {
                                     if (!Game.selectedPlanets.contains(p)) {
                                         if (Game.selectedPlanets.isEmpty()) {
-                                            // Select this planet for the next action
-                                            Game.selectedPlanets.add(p);
+                                            if (Game.selectedSquads.isEmpty()) {
+                                                // Select this planet
+                                                Game.selectedPlanets.add(p);
+                                            } else {
+                                                // Squads are selected, redirect them
+                                                changeMission(Game.selectedSquads, p, Mission.CONVOY);
+                                            }
                                         } else {
                                             // This is an friendly planet
                                             if (e.isControlDown()) {
@@ -124,6 +134,10 @@ public class Game {
                                         Game.selectedPlanets.clear();
                                     } else {
                                         // No planet selected but clicked on enemy planet
+                                        if (!Game.selectedSquads.isEmpty()) {
+                                            // Squads are selected, redirect them
+                                            changeMission(Game.selectedSquads, p, Mission.ATTACK);
+                                        }
                                     }
                                 }
                             }
@@ -131,6 +145,39 @@ public class Game {
 
                         if (!clicked_a_planet) {
                             Game.selectedPlanets.clear();
+
+                            for (Mission m : Game.missions) {
+                                for (Squad s : m.getSquads()) {
+                                    if (s.isOn(mX, mY)) {
+                                        clicked_a_squad = true;
+                                        System.out.println("Clicked a squad !");
+                                        // Cannot select enemy squads
+                                        if (m.getOriginPlanet().getOwner().isMainPlayer()) {
+                                            if (!Game.selectedSquads.contains(s)) {
+                                                if (Game.selectedSquads.isEmpty()) {
+                                                    // Select this Squad
+                                                    Game.selectedSquads.add(s);
+                                                } else {
+                                                    if (e.isControlDown()) {
+                                                        // Select this squad too
+                                                        Game.selectedSquads.add(s);
+                                                    } else {
+                                                        // Select this squad instead
+                                                        Game.selectedSquads.clear();
+                                                        Game.selectedSquads.add(s);
+                                                    }
+                                                }
+                                            } else {
+                                                // Do nothing
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        
+                        if(!clicked_a_squad) {
+                            Game.selectedSquads.clear();
                         }
                     }
                 }
@@ -164,11 +211,11 @@ public class Game {
         double borderMargin = 50;
         int nbPlanets = 10;
         int nbPlayers = 2;
-        
 
         Game.galaxy = new Galaxy(width, height, nbPlanets, nbPlayers, planetInfluenceZone, planetSecurityZone, minimumPlanetSize, maximumPlanetSize, borderMargin);
         Game.missions = new ArrayList<>();
         Game.selectedPlanets = new ArrayList<>();
+        Game.selectedSquads = new ArrayList<>();
         Game.primaryHeld = false;
         Game.ctrlHeld = false;
 
@@ -181,6 +228,16 @@ public class Game {
 
     public static void startMission(Planet origin, Planet destination, int effectives, int squadSize, String mission) {
         Mission r = new Mission(origin, destination, effectives, squadSize, mission);
+        Game.missions.add(r);
+    }
+
+    public static void changeMission(ArrayList<Squad> squads, Planet destination, String newOrder) {
+        Mission r = new EmergencyMission(destination, newOrder);
+
+        for (Squad s : squads) {
+            s.reaffectSquad(r);
+        }
+
         Game.missions.add(r);
     }
 

@@ -1,4 +1,4 @@
-package planets.Entities;
+package planets.entities;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -6,7 +6,7 @@ import java.util.Random;
 import javafx.scene.paint.Color;
 import planets.utils.GameUtils;
 import planets.ResourcesManager;
-import ship.Ship;
+import planets.entities.ship.Ship;
 
 public class Galaxy {
 

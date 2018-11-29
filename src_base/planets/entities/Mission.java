@@ -1,10 +1,10 @@
-package planets.Entities;
+package planets.entities;
 
 import java.util.ArrayList;
 import planets.utils.GameUtils;
 import planets.utils.Point;
 
-import ship.Ship;
+import planets.entities.ship.Ship;
 
 public class Mission {
 
@@ -47,7 +47,7 @@ public class Mission {
                 }
 
                 ArrayList<Ship> squadMembers = this.origin.flyShips(mobilize);
-                this.squads.add(new Squad(this.origin, this.destination, squadMembers));
+                this.squads.add(new Squad(this.origin, this.destination, squadMembers, this));
                 this.addQueue -= mobilize;
             }
         }
@@ -95,6 +95,12 @@ public class Mission {
     
     public ArrayList<Squad> getSquads() {
         return this.squads;
+    }
+    
+    public void cancelSquad(Squad s) {
+        if(this.squads.contains(s)) {
+            this.squads.remove(s);
+        }
     }
 
     public Planet getOriginPlanet() {

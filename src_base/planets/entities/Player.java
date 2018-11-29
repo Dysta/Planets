@@ -1,9 +1,9 @@
-package planets.Entities;
+package planets.entities;
 
 import javafx.scene.paint.Color;
 import planets.ResourcesManager;
 import planets.Sprite;
-import ship.Ship;
+import planets.entities.ship.Ship;
 
 public class Player {
 

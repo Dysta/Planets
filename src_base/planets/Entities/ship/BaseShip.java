@@ -1,4 +1,4 @@
-package ship;
+package planets.entities.ship;
 
 import planets.ResourcesManager;
 import planets.Sprite;

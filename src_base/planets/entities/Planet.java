@@ -1,4 +1,4 @@
-package planets.Entities;
+package planets.entities;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -10,7 +10,7 @@ import javafx.scene.text.TextFlow;
 import planets.Game;
 import planets.ResourcesManager;
 import planets.Sprite;
-import ship.Ship;
+import planets.entities.ship.Ship;
 
 public class Planet extends Sprite {
 
