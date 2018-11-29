@@ -14,7 +14,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import planets.Entities.Galaxy;
 import planets.Entities.Planet;
-import planets.Entities.Route;
+import planets.Entities.Mission;
 import ship.Ship;
 
 public class Game {
@@ -25,7 +25,7 @@ public class Game {
     private Canvas canvas;
     // Entities
     public static Galaxy galaxy;
-    public static ArrayList<Route> routes;
+    public static ArrayList<Mission> routes;
     // Constants
     public static Group root;
 
@@ -90,7 +90,7 @@ public class Game {
                                             Game.selectedPlanet = p;
                                         } else {
                                             // This is an friendly planet, send ships from the selected planet
-                                            Game.startMission(Game.selectedPlanet, p, Game.selectedPlanet.getNbShip(), Route.CONVOY);
+                                            Game.startMission(Game.selectedPlanet, p, Game.selectedPlanet.getNbShip(), Mission.CONVOY);
                                             Game.selectedPlanet = null;
                                         }
                                     } else {
@@ -100,7 +100,7 @@ public class Game {
                                 } else {
                                     if (Game.selectedPlanet != null) {
                                         // This is an enemy planet, send ships from the selected planet
-                                            Game.startMission(Game.selectedPlanet, p, Game.selectedPlanet.getNbShip(), Route.ATTACK);
+                                            Game.startMission(Game.selectedPlanet, p, Game.selectedPlanet.getNbShip(), Mission.ATTACK);
                                             Game.selectedPlanet = null;
                                     } else {
                                         // No planet selected but clicked on enemy planet
@@ -150,7 +150,7 @@ public class Game {
     public static void startMission(Planet origin, Planet destination, int effectives, String mission) {
         ArrayList<Ship> ships = origin.flyShips(effectives);
 
-        Route r = new Route(origin, destination, ships, mission);
+        Mission r = new Mission(origin, destination, ships, mission);
         Game.routes.add(r);
     }
 
@@ -164,10 +164,10 @@ public class Game {
             p.productionTick();
             p.printStock(gc, root);
         }
-        for (Route r : Game.routes) {
+        for (Mission r : Game.routes) {
             r.move_ships();
         }
-        Game.routes.removeIf((Route r) -> r.isEmpty());
+        Game.routes.removeIf((Mission r) -> r.isEmpty());
     }
 
 }
