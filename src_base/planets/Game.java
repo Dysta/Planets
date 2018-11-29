@@ -30,7 +30,7 @@ public class Game {
     public static ArrayList<Mission> missions;
     // Constants
     public static Group root;
-
+    
     // States
     public static boolean primaryHeld;
     public static boolean ctrlHeld;
@@ -100,7 +100,7 @@ public class Game {
                                             } else {
                                                 // Start a convoy
                                                 for (Planet o : Game.selectedPlanets) {
-                                                    Game.startMission(o, p, o.getNbShip(), 10, Mission.CONVOY);
+                                                    Game.startMission(o, p, o.getNbShip(), o.getMaxLaunchShips(), Mission.CONVOY);
                                                 }
                                                 Game.selectedPlanets.clear();
                                             }
@@ -119,7 +119,7 @@ public class Game {
                                     if (!Game.selectedPlanets.isEmpty()) {
                                         // Send ships from the selected planets
                                         for (Planet o : Game.selectedPlanets) {
-                                            Game.startMission(o, p, o.getNbShip(), 10, Mission.ATTACK);
+                                            Game.startMission(o, p, o.getNbShip(), o.getMaxLaunchShips(), Mission.ATTACK);
                                         }
                                         Game.selectedPlanets.clear();
                                     } else {
@@ -157,11 +157,16 @@ public class Game {
     }
 
     public void initGame(double width, double height) {
-        // Galaxy(double width, double height, int nbPlanets, int nbPlayers, 
-        // double planetInfluenceZone, double planetSecurityZone, 
-        // double minimumPlanetSize, double maximumPlanetSize, double borderMargin)
+        double planetInfluenceZone = 40;
+        double planetSecurityZone = 50;
+        double minimumPlanetSize = 50;
+        double maximumPlanetSize = 150;
+        double borderMargin = 50;
+        int nbPlanets = 10;
+        int nbPlayers = 2;
+        
 
-        Game.galaxy = new Galaxy(width, height, 9, 2, 40, 50, 60, 110, 50);
+        Game.galaxy = new Galaxy(width, height, nbPlanets, nbPlayers, planetInfluenceZone, planetSecurityZone, minimumPlanetSize, maximumPlanetSize, borderMargin);
         Game.missions = new ArrayList<>();
         Game.selectedPlanets = new ArrayList<>();
         Game.primaryHeld = false;

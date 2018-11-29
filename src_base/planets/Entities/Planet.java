@@ -35,10 +35,11 @@ public class Planet extends Sprite {
         this.size = size;
         this.owner = new Player();
         this.ships = new ArrayList<Ship>();
-        this.productionProgression = 20;
-        this.shipsPerTick = 0.09;
-        this.shipCapacity = 250;
+        this.productionProgression = 20; // Base ships on any planet (will produce those ships instantly)
+        this.shipsPerTick = 0.02; // Minimum production
+        this.shipCapacity = 50; // Minimum storage
 
+        // Components displaying current ships capacity
         this.text = new Text();
         this.tf = new TextFlow();
     }
@@ -50,6 +51,9 @@ public class Planet extends Sprite {
         double size = minSize + (maxSize - minSize) * r.nextDouble();
         double posX = (boundaryX - 2 * borderMargin - size) * r.nextDouble() + borderMargin;
         double posY = (boundaryY - 2 * borderMargin - size) * r.nextDouble() + borderMargin;
+        
+        this.shipsPerTick *= 1 + (size / (Galaxy.maximumPlanetSize * 2)); // The biggest planets can produce up to 50% more then smallest ones
+        this.shipCapacity *= 1 + (size / (Galaxy.maximumPlanetSize * 1.2)); // The biggest planets can store up to 83% more then smallest ones
 
         this.setPosition(posX, posY);
         this.updateDimensions(ResourcesManager.PLANET_PATH, size, size);
@@ -103,6 +107,13 @@ public class Planet extends Sprite {
 
     public int getNbShip() {
         return this.ships.size();
+    }
+    
+    public int getMaxLaunchShips() {
+        if(this.ships.isEmpty()) {
+            return 0;
+        }
+        return (int) ((this.size)*Math.PI / this.ships.get(0).width());
     }
 
     public double getSize() {

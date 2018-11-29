@@ -13,9 +13,9 @@ public class Galaxy {
     // Background : image
     public static double planetInfluenceZone;
     public static double planetSecurityZone;
-    private double minimumPlanetSize;
-    private double maximumPlanetSize;
-    private double borderMargin;
+    public static double minimumPlanetSize;
+    public static double maximumPlanetSize;
+    public static double borderMargin;
 
     private double width, height;
 
@@ -25,16 +25,16 @@ public class Galaxy {
     public Galaxy(double width, double height, int nbPlanets, int nbPlayers, double planetInfluenceZone, double planetSecurityZone, double minimumPlanetSize, double maximumPlanetSize, double borderMargin) {
         Random r = new Random();
 
-        this.planets = new ArrayList<Planet>();
-        this.players = new ArrayList<Player>();
+        Galaxy.planets = new ArrayList<Planet>();
+        Galaxy.players = new ArrayList<Player>();
         this.width = width;
         this.height = height;
 
         Galaxy.planetInfluenceZone = planetInfluenceZone;
         Galaxy.planetSecurityZone = planetSecurityZone;
-        this.minimumPlanetSize = minimumPlanetSize;
-        this.maximumPlanetSize = maximumPlanetSize;
-        this.borderMargin = borderMargin;
+        Galaxy.minimumPlanetSize = minimumPlanetSize;
+        Galaxy.maximumPlanetSize = maximumPlanetSize;
+        Galaxy.borderMargin = borderMargin;
 
         Planet n;
         for (int i = 0; i < nbPlanets; i++) {
@@ -43,7 +43,7 @@ public class Galaxy {
             int tries = 0;
 
             do {
-                n = new Planet(ResourcesManager.planet, p, this.width, this.height, this.minimumPlanetSize, this.maximumPlanetSize, this.borderMargin);
+                n = new Planet(ResourcesManager.planet, p, this.width, this.height, Galaxy.minimumPlanetSize, Galaxy.maximumPlanetSize, Galaxy.borderMargin);
                 tries++;
             } while ((tries < 100 && isColliding(n)));
 
