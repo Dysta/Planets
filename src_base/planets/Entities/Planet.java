@@ -18,7 +18,9 @@ public class Planet extends Sprite {
     private Player owner;
     private double size;
     private Text text;
+    private TextFlow tf;
 
+    private int shipCapacity;
     private double shipsPerTick;
     private double productionProgression;
 
@@ -37,8 +39,10 @@ public class Planet extends Sprite {
         this.ships = new ArrayList<Ship>();
         this.productionProgression = 20;
         this.shipsPerTick = 0.03;
+        this.shipCapacity = 50;
 
         this.text = new Text();
+        this.tf = new TextFlow();
         this.printedStock = false;
     }
 
@@ -91,19 +95,13 @@ public class Planet extends Sprite {
         this.text.setFill(this.owner.getColor());
         this.text.setText("" + this.getNbShip());
 
-        TextFlow tf = new TextFlow();
         tf.setLayoutX(this.getPosXMiddle() - this.text.getLayoutBounds().getWidth() / 2);
         tf.setLayoutY(this.getPosYMiddle() - this.text.getLayoutBounds().getHeight() / 2);
 
-        if (!this.printedStock) {
-            tf.getChildren().add(this.text);
-            root.getChildren().add(tf);
-            this.printedStock = true;
-        } else {
-            tf.getChildren().remove(this.text);
-            root.getChildren().remove(tf);
-            this.printedStock = false;
-        }
+        tf.getChildren().remove(this.text);
+        root.getChildren().remove(tf);
+        tf.getChildren().add(this.text);
+        root.getChildren().add(tf);
     }
 
     public int getNbShip() {
@@ -127,7 +125,7 @@ public class Planet extends Sprite {
     }
 
     public void productionTick() {
-        if (this.owner.isActive()) {
+        if (this.owner.isActive() && this.shipCapacity > this.getNbShip()) {
             this.productionProgression += this.shipsPerTick;
         }
 
@@ -183,9 +181,9 @@ public class Planet extends Sprite {
 
         return defeat;
     }
-    
+
     public void landShips(ArrayList<Ship> ships) {
-        for(Ship s: ships) {
+        for (Ship s : ships) {
             double angle = Math.random() * Math.PI * 2;
             double radius = (this.size + (Galaxy.planetInfluenceZone - this.size) / 2);
             double x = ((this.getPosX() + this.getSize() / 2) + Math.cos(angle) * radius);
@@ -200,17 +198,17 @@ public class Planet extends Sprite {
             }
         }
     }
-    
+
     public ArrayList<Ship> flyShips(int effectives) {
         ArrayList<Ship> mobilized = new ArrayList<>();
-        for(int i = 0; i < effectives; i++) {
+        for (int i = 0; i < effectives; i++) {
             Ship calledShip = this.ships.get(0);
             mobilized.add(calledShip);
             this.ships.remove(calledShip);
-            
+
             calledShip.getImageView().setImage(calledShip.getImage());
         }
-        
+
         return mobilized;
     }
 

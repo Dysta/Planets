@@ -13,8 +13,6 @@ public class Mission {
 
     private ArrayList<Ship> ships;
 
-    private final double viewDistance;
-
     private Planet origin;
     private Planet destination;
 
@@ -36,7 +34,6 @@ public class Mission {
 
         this.origin = p1;
         this.destination = p2;
-        this.viewDistance = Galaxy.planetSecurityZone;
         this.mission = mission;
     }
 
@@ -111,8 +108,8 @@ public class Mission {
             if (s.getBlindForward() <= 0) {
                 for (Planet p : intersections) {
                     if (p != this.destination) {
-                        while (p.inOrbit(s.getPosX() + dir.x * this.viewDistance, s.getPosY() + dir.y * this.viewDistance)
-                                && p.inOrbit(s.getPosX() + sec_dir_x * this.viewDistance, s.getPosY() + sec_dir_y * this.viewDistance)) {
+                        while (p.inOrbit(s.getPosX() + dir.x * Galaxy.planetSecurityZone, s.getPosY() + dir.y * Galaxy.planetSecurityZone)
+                                && p.inOrbit(s.getPosX() + sec_dir_x * Galaxy.planetSecurityZone, s.getPosY() + sec_dir_y * Galaxy.planetSecurityZone)) {
                             angle += 0.1;
                             sec_angle -= 0.1;
 
@@ -122,7 +119,7 @@ public class Mission {
                             sec_dir_y = Math.cos(sec_angle);
                         }
 
-                        if (p.inOrbit(s.getPosX() + dir.x * this.viewDistance, s.getPosY() + dir.y * this.viewDistance)) {
+                        if (p.inOrbit(s.getPosX() + dir.x * Galaxy.planetSecurityZone, s.getPosY() + dir.y * Galaxy.planetSecurityZone)) {
                             dir.x = sec_dir_x;
                             dir.y = sec_dir_y;
                             angle = sec_angle;
@@ -130,7 +127,7 @@ public class Mission {
                         s.setLastDir(angle);
                     }
                 }
-                s.setBlindForward(this.viewDistance / 2 + 1);
+                s.setBlindForward(Galaxy.planetSecurityZone / 4 + 1);
             } else {
                 angle = s.getLastDir();
                 dir.x = Math.sin(angle);

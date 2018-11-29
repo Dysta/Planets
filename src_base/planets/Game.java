@@ -15,6 +15,7 @@ import javafx.stage.Stage;
 import planets.Entities.Galaxy;
 import planets.Entities.Planet;
 import planets.Entities.Mission;
+import planets.utils.DebugUtils;
 import ship.Ship;
 
 public class Game {
@@ -32,6 +33,7 @@ public class Game {
     // States
     public static boolean primaryHeld;
     public static Planet selectedPlanet;
+    public static int ticks;
 
     // Methods
     // Stage options are defined by the game
@@ -155,19 +157,26 @@ public class Game {
     }
 
     public void handle(long arg0) {
+        Game.ticks++;
+        int tShips = 0;
+        
         for (Planet p : Game.galaxy.getPlanets()) {
             //p.render(this.gc);
             for (Ship s : p.getShips()) {
                 //s.render(this.gc);
-                s.getImageView().setVisible(false);
             }
             p.productionTick();
             p.printStock(gc, root);
+            tShips += p.getNbShip();
         }
         for (Mission r : Game.routes) {
             r.move_ships();
         }
         Game.routes.removeIf((Mission r) -> r.isEmpty());
+        System.out.println("-------------- Tick n°"+Game.ticks+" --------------");
+        System.out.println("Planets : "+Galaxy.getPlanets().size());
+        System.out.println("Ships : "+tShips);
+        System.out.println("Nodes : "+DebugUtils.getAllNodes(root).size());
     }
 
 }
