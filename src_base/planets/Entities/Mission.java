@@ -7,60 +7,57 @@ import planets.utils.Point;
 import ship.Ship;
 
 public class Mission {
-    
+
     public static final String ATTACK = "ATTACK";
     public static final String CONVOY = "CONVOY";
 
-    private ArrayList<Ship> ships;
+    private ArrayList<Squad> squads;
 
-    private Planet origin;
-    private Planet destination;
+    private int addQueue;
+    private final Planet origin;
+    private final Planet destination;
 
     private String mission;
 
-    public Mission(Planet p1, Planet p2, ArrayList<Ship> ships, String mission) {
-        this.ships = new ArrayList<Ship>();
+    private int squadSize;
 
-        int c = 0;
-        int t = ships.size();
-        while (c < t) {
-            Ship s = ships.get(0);
-            this.ships.add(s);
-            ships.remove(s);
-
-            s.getImageView().setVisible(true);
-            c++;
-        }
-
+    public Mission(Planet p1, Planet p2, int addQueue, int squadSize, String mission) {
+        this.addQueue = addQueue;
+        this.squads = new ArrayList<>();
         this.origin = p1;
         this.destination = p2;
         this.mission = mission;
+        this.squadSize = squadSize;
     }
 
-    public void move_ships() {
-        ArrayList<Ship> arrivers = new ArrayList<Ship>();
+    public void handle() {
+        this.send_squad();
+        this.move_squads();
+        this.clearSquads();
+    }
 
-        int c = 0;
-        while (c < ships.size()) {
-            Ship s = this.ships.get(c);
+    public void send_squad() {
+        int squadsCount = this.squads.size();
+        if (squadsCount == 0 || this.squads.get(squadsCount - 1).isGone()) {
+            if (this.addQueue > 0) {
+                int mobilize = this.squadSize;
 
-            double angle = Math.atan2(this.destination.getPosXMiddle() - s.getPosXMiddle(), this.destination.getPosYMiddle() - s.getPosYMiddle());
-            s.gaz();
+                if (this.addQueue < this.squadSize) {
+                    mobilize = this.addQueue;
+                }
 
-            Point p = new Point(Math.sin(angle), Math.cos(angle));
-            
-            if (!s.goesInStraightLine()) {
-                this.correctTrajectory(s,p, angle);
+                ArrayList<Ship> squadMembers = this.origin.flyShips(mobilize);
+                this.squads.add(new Squad(this.origin, this.destination, squadMembers));
+                this.addQueue -= mobilize;
             }
+        }
+    }
 
-            s.move(p.x * s.getVelocity(), p.y * s.getVelocity());
+    public void move_squads() {
+        ArrayList<Ship> arrivers = new ArrayList<>();
 
-            if (destination.inOrbit(s)) {
-                arrivers.add(s);
-                this.ships.remove(s);
-            }
-
-            c++;
+        for (Squad s : this.squads) {
+            arrivers.addAll(s.progress());
         }
 
         switch (this.mission) {
@@ -92,55 +89,11 @@ public class Mission {
         }
     }
 
-    private void correctTrajectory(Ship s, Point dir, double angle) {
-        double sec_angle = angle;
-        double sec_dir_x = dir.x;
-        double sec_dir_y = dir.y;
-
-        ArrayList<Planet> intersections = new ArrayList<Planet>();
-        for (Planet p : Galaxy.getPlanets()) {
-            if (p != this.destination && GameUtils.lineCrossingCircle(s.getPosX(), s.getPosY(), p.getPosX(), p.getPosY(), p.getPosX(), p.getPosY(), Galaxy.planetInfluenceZone)) {
-                intersections.add(p);
-            }
-        }
-
-        if (intersections.size() > 0) {
-            if (s.getBlindForward() <= 0) {
-                for (Planet p : intersections) {
-                    if (p != this.destination) {
-                        while (p.inOrbit(s.getPosX() + dir.x * Galaxy.planetSecurityZone, s.getPosY() + dir.y * Galaxy.planetSecurityZone)
-                                && p.inOrbit(s.getPosX() + sec_dir_x * Galaxy.planetSecurityZone, s.getPosY() + sec_dir_y * Galaxy.planetSecurityZone)) {
-                            angle += 0.1;
-                            sec_angle -= 0.1;
-
-                            dir.x = Math.sin(angle);
-                            dir.y = Math.cos(angle);
-                            sec_dir_x = Math.sin(sec_angle);
-                            sec_dir_y = Math.cos(sec_angle);
-                        }
-
-                        if (p.inOrbit(s.getPosX() + dir.x * Galaxy.planetSecurityZone, s.getPosY() + dir.y * Galaxy.planetSecurityZone)) {
-                            dir.x = sec_dir_x;
-                            dir.y = sec_dir_y;
-                            angle = sec_angle;
-                        }
-                        s.setLastDir(angle);
-                    }
-                }
-                s.setBlindForward(Galaxy.planetSecurityZone / 4 + 1);
-            } else {
-                angle = s.getLastDir();
-                dir.x = Math.sin(angle);
-                dir.y = Math.cos(angle);
-            }
-            s.setBlindForward(s.getBlindForward() - 1);
-        } else {
-            s.setStraightLine(true);
-        }
-
+    public void clearSquads() {
+        this.squads.removeIf((Squad s) -> s.isEmpty());
     }
 
     public boolean isEmpty() {
-        return this.ships.size() <= 0;
+        return this.squads.size() <= 0;
     }
 }

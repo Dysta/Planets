@@ -7,7 +7,7 @@ public class BaseShip extends Ship {
 
     public BaseShip(Sprite s, double posX, double posY) {
         // Ship , posX, posY, acceleration, capSpeed
-        super(s, posX, posY, 0.02, 10);
+        super(s, posX, posY, 0.01, 3);
         this.getImageView().setImage(ResourcesManager.baseShip.getImage());
     }
 }

@@ -24,8 +24,6 @@ public class Planet extends Sprite {
     private double shipsPerTick;
     private double productionProgression;
 
-    private boolean printedStock;
-
     private ArrayList<Ship> ships;
 
     public Planet(Sprite s, Player owner, double posX, double posY, double size) {
@@ -38,12 +36,11 @@ public class Planet extends Sprite {
         this.owner = new Player();
         this.ships = new ArrayList<Ship>();
         this.productionProgression = 20;
-        this.shipsPerTick = 0.03;
-        this.shipCapacity = 50;
+        this.shipsPerTick = 0.09;
+        this.shipCapacity = 250;
 
         this.text = new Text();
         this.tf = new TextFlow();
-        this.printedStock = false;
     }
 
     public Planet(Sprite s, Player owner, double boundaryX, double boundaryY, double minSize, double maxSize, double borderMargin) {
@@ -136,19 +133,11 @@ public class Planet extends Sprite {
     }
 
     public boolean isOn(double x, double y) {
-        boolean on = false;
-
-        on = Math.pow((x - this.getPosXMiddle()), 2) + Math.pow(y - this.getPosYMiddle(), 2) < Math.pow(this.size / 2, 2);
-
-        return on;
+        return Math.pow((x - this.getPosXMiddle()), 2) + Math.pow(y - this.getPosYMiddle(), 2) < Math.pow(this.size / 2, 2);
     }
 
     public boolean inOrbit(double x, double y) {
-        boolean on = false;
-
-        on = Math.pow((x - this.getPosXMiddle()), 2) + Math.pow(y - this.getPosYMiddle(), 2) < Math.pow((this.size / 2) + Galaxy.planetInfluenceZone, 2);
-
-        return on;
+        return Math.pow((x - this.getPosXMiddle()), 2) + Math.pow(y - this.getPosYMiddle(), 2) < Math.pow((this.size / 2) + Galaxy.planetInfluenceZone, 2);
     }
 
     public boolean inOrbit(Ship s) {
@@ -156,16 +145,10 @@ public class Planet extends Sprite {
     }
 
     public boolean inSecurityZone(double x, double y) {
-        boolean on = false;
-
-        on = Math.pow((x - this.getPosXMiddle()), 2) + Math.pow(y - this.getPosYMiddle(), 2) < Math.pow((this.size / 2) + Galaxy.planetSecurityZone, 2);
-
-        return on;
+        return Math.pow((x - this.getPosXMiddle()), 2) + Math.pow(y - this.getPosYMiddle(), 2) < Math.pow((this.size / 2) + Galaxy.planetSecurityZone, 2);
     }
 
     public boolean defend(ArrayList<Ship> attackers) {
-        boolean defeat = false;
-
         int c = 0;
         int a = attackers.size();
         int d = this.ships.size();
@@ -177,9 +160,7 @@ public class Planet extends Sprite {
 
             c++;
         }
-        defeat = c >= d;
-
-        return defeat;
+        return c >= d;
     }
 
     public void landShips(ArrayList<Ship> ships) {
@@ -191,7 +172,7 @@ public class Planet extends Sprite {
             try {
                 s.stop();
                 s.setPosition(x - s.width() / 2, y - s.height() / 2);
-                s.getImageView().setImage(null);
+                s.getImageView().setVisible(false);
                 this.ships.add(s);
             } catch (Exception e) {
                 System.err.println("Error during ship transfer : " + e);
@@ -199,14 +180,23 @@ public class Planet extends Sprite {
         }
     }
 
-    public ArrayList<Ship> flyShips(int effectives) {
+    public ArrayList<Ship> flyShips(int effectives) {        
+        if(effectives > this.getNbShip()) {
+            effectives = this.getNbShip();
+        }
+        
         ArrayList<Ship> mobilized = new ArrayList<>();
         for (int i = 0; i < effectives; i++) {
             Ship calledShip = this.ships.get(0);
             mobilized.add(calledShip);
             this.ships.remove(calledShip);
+            
+            System.out.println((((double) 2 / effectives)*i) - 1);
+            double x = this.getPosXMiddle() + (Math.cos(((((double)2 / effectives)*i) - 1)  * Math.PI) * (this.size / 2));
+            double y = this.getPosYMiddle() + (Math.sin(((((double)2 / effectives)*i) - 1)  * Math.PI) * (this.size / 2));
 
-            calledShip.getImageView().setImage(calledShip.getImage());
+            calledShip.setPosition(x, y);
+            calledShip.getImageView().setVisible(true);
         }
 
         return mobilized;

@@ -92,7 +92,7 @@ public class Game {
                                             Game.selectedPlanet = p;
                                         } else {
                                             // This is an friendly planet, send ships from the selected planet
-                                            Game.startMission(Game.selectedPlanet, p, Game.selectedPlanet.getNbShip(), Mission.CONVOY);
+                                            Game.startMission(Game.selectedPlanet, p, Game.selectedPlanet.getNbShip(), 10, Mission.CONVOY);
                                             Game.selectedPlanet = null;
                                         }
                                     } else {
@@ -102,8 +102,8 @@ public class Game {
                                 } else {
                                     if (Game.selectedPlanet != null) {
                                         // This is an enemy planet, send ships from the selected planet
-                                            Game.startMission(Game.selectedPlanet, p, Game.selectedPlanet.getNbShip(), Mission.ATTACK);
-                                            Game.selectedPlanet = null;
+                                        Game.startMission(Game.selectedPlanet, p, Game.selectedPlanet.getNbShip(), 10, Mission.ATTACK);
+                                        Game.selectedPlanet = null;
                                     } else {
                                         // No planet selected but clicked on enemy planet
                                     }
@@ -137,9 +137,8 @@ public class Game {
         // double planetInfluenceZone, double planetSecurityZone, 
         // double minimumPlanetSize, double maximumPlanetSize, double borderMargin)
 
-        Galaxy galaxy = new Galaxy(width, height, 9, 2, 40, 50, 60, 110, 50);
+        Game.galaxy = new Galaxy(width, height, 9, 2, 40, 50, 60, 110, 50);
         Game.routes = new ArrayList<>();
-        Game.galaxy = galaxy;
         Game.primaryHeld = false;
 
         for (Planet p : Galaxy.getPlanets()) {
@@ -149,18 +148,19 @@ public class Game {
     // Game instantiation 
     // Game behavior
 
-    public static void startMission(Planet origin, Planet destination, int effectives, String mission) {
-        ArrayList<Ship> ships = origin.flyShips(effectives);
-
-        Mission r = new Mission(origin, destination, ships, mission);
+    public static void startMission(Planet origin, Planet destination, int effectives, int squadSize, String mission) {
+        Mission r = new Mission(origin, destination, effectives, squadSize, mission);
         Game.routes.add(r);
     }
 
     public void handle(long arg0) {
         Game.ticks++;
         int tShips = 0;
-        
-        for (Planet p : Game.galaxy.getPlanets()) {
+
+        for (Mission r : Game.routes) {
+            r.handle();
+        }
+        for (Planet p : Galaxy.getPlanets()) {
             //p.render(this.gc);
             for (Ship s : p.getShips()) {
                 //s.render(this.gc);
@@ -169,14 +169,15 @@ public class Game {
             p.printStock(gc, root);
             tShips += p.getNbShip();
         }
-        for (Mission r : Game.routes) {
-            r.move_ships();
-        }
+        
         Game.routes.removeIf((Mission r) -> r.isEmpty());
-        System.out.println("-------------- Tick n°"+Game.ticks+" --------------");
-        System.out.println("Planets : "+Galaxy.getPlanets().size());
-        System.out.println("Ships : "+tShips);
-        System.out.println("Nodes : "+DebugUtils.getAllNodes(root).size());
+
+        if (App.DEBUG) {
+            System.out.println("-------------- Tick n°" + Game.ticks + " --------------");
+            System.out.println("Planets : " + Galaxy.getPlanets().size());
+            System.out.println("Ships : " + tShips);
+            System.out.println("Nodes : " + DebugUtils.getAllNodes(root).size());
+        }
     }
 
 }

@@ -48,7 +48,7 @@ public class Galaxy {
             } while ((tries < 100 && isColliding(n)));
 
             if (tries < 100) {
-                this.planets.add(n);
+                Galaxy.planets.add(n);
             } else {
                 System.out.println("Could not put non colliding planet.");
             }
@@ -62,20 +62,17 @@ public class Galaxy {
             Planet target = null;
             int tries = 0;
             int rInt = 0;
-            while (tries < this.planets.size() * 10 && !found) {
+            while (tries < Galaxy.planets.size() * 10 && !found) {
                 rInt = GameUtils.getRandomIntegerBetweenRange(0, this.planets.size() - 1);
-                target = this.planets.get(rInt);
+                target = Galaxy.planets.get(rInt);
                 found = !target.getOwner().isActive();
                 tries++;
             }
 
             if (found) {
                 p.setMainPlayer(main);
-                if(main) {
-                    p.setShipType("Destroyer");
-                }
                 main = false;
-                this.players.add(p);
+                Galaxy.players.add(p);
                 target.setOwner(p);
             } else {
                 System.out.println("Could not find a free planet for the player " + i + ".");
@@ -88,7 +85,7 @@ public class Galaxy {
 
     private boolean isColliding(Planet planet) {
         boolean colliding = false;
-        for (Planet p : this.planets) {
+        for (Planet p : Galaxy.planets) {
             if (Math.sqrt(Math.pow(p.getPosXMiddle() - planet.getPosXMiddle(), 2) + Math.pow(p.getPosYMiddle() - planet.getPosYMiddle(), 2)) < (Galaxy.planetSecurityZone + p.getSize() + planet.getSize())) {
                 colliding = true;
             }
