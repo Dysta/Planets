@@ -38,7 +38,7 @@ public class Mission {
 
     public void send_squad() {
         int squadsCount = this.squads.size();
-        if (squadsCount == 0 || this.squads.get(squadsCount - 1).isGone()) {
+        if (squadsCount == 0 || this.origin.freeToLaunch()) {
             if (this.addQueue > 0) {
                 int mobilize = this.squadSize;
 
@@ -92,7 +92,19 @@ public class Mission {
     public void clearSquads() {
         this.squads.removeIf((Squad s) -> s.isEmpty());
     }
+    
+    public ArrayList<Squad> getSquads() {
+        return this.squads;
+    }
 
+    public Planet getOriginPlanet() {
+        return this.origin;
+    }
+
+    public Planet getDestinationPlanet() {
+        return this.destination;
+    }
+    
     public boolean isEmpty() {
         return this.squads.size() <= 0;
     }

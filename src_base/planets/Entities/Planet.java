@@ -162,40 +162,57 @@ public class Planet extends Sprite {
         }
         return c >= d;
     }
+    
+    public boolean freeToLaunch() {
+        boolean free = true;
+        for(Mission m : Game.missions) {
+            if(m.getOriginPlanet() == this) {
+                for(Squad s : m.getSquads()) {
+                    if(!s.isGone()) {
+                        free = false;
+                    }
+                }
+            }
+        }
+        return free;
+    }
 
     public void landShips(ArrayList<Ship> ships) {
         for (Ship s : ships) {
-            double angle = Math.random() * Math.PI * 2;
-            double radius = (this.size + (Galaxy.planetInfluenceZone - this.size) / 2);
-            double x = ((this.getPosX() + this.getSize() / 2) + Math.cos(angle) * radius);
-            double y = (this.getPosY() + this.getSize() / 2) + Math.sin(angle) * radius;
-            try {
-                s.stop();
-                s.setPosition(x - s.width() / 2, y - s.height() / 2);
-                s.getImageView().setVisible(false);
-                this.ships.add(s);
-            } catch (Exception e) {
-                System.err.println("Error during ship transfer : " + e);
+            if (this.getNbShip() < this.shipCapacity) {
+                double angle = Math.random() * Math.PI * 2;
+                double radius = (this.size + (Galaxy.planetInfluenceZone - this.size) / 2);
+                double x = ((this.getPosX() + this.getSize() / 2) + Math.cos(angle) * radius);
+                double y = (this.getPosY() + this.getSize() / 2) + Math.sin(angle) * radius;
+                try {
+                    s.stop();
+                    s.setPosition(x - s.width() / 2, y - s.height() / 2);
+                    s.getImageView().setVisible(false);
+                    this.ships.add(s);
+                } catch (Exception e) {
+                    System.err.println("Error during ship transfer : " + e);
+                }
+            } else {
+                s.die();
             }
         }
     }
 
-    public ArrayList<Ship> flyShips(int effectives) {        
-        if(effectives > this.getNbShip()) {
+    public ArrayList<Ship> flyShips(int effectives) {
+        if (effectives > this.getNbShip()) {
             effectives = this.getNbShip();
         }
-        
+
         ArrayList<Ship> mobilized = new ArrayList<>();
         for (int i = 0; i < effectives; i++) {
             Ship calledShip = this.ships.get(0);
             mobilized.add(calledShip);
             this.ships.remove(calledShip);
-            
-            System.out.println((((double) 2 / effectives)*i) - 1);
-            double x = this.getPosXMiddle() + (Math.cos(((((double)2 / effectives)*i) - 1)  * Math.PI) * (this.size / 2));
-            double y = this.getPosYMiddle() + (Math.sin(((((double)2 / effectives)*i) - 1)  * Math.PI) * (this.size / 2));
 
-            calledShip.setPosition(x, y);
+            double x = this.getPosXMiddle() + (Math.cos(((((double) 2 / effectives) * i) - 1) * Math.PI) * (this.size / 2));
+            double y = this.getPosYMiddle() + (Math.sin(((((double) 2 / effectives) * i) - 1) * Math.PI) * (this.size / 2));
+
+            calledShip.setMiddlePosition(x, y);
             calledShip.getImageView().setVisible(true);
         }
 

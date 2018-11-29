@@ -55,13 +55,19 @@ public abstract class Ship extends Sprite {
 
     public void gaz() {
         if (this.currentSpeed < this.speedCap) {
-            System.out.println(this.currentSpeed);
             this.currentSpeed += this.acceleration;
         }
     }
 
     public void slowdown() {
-        this.currentSpeed -= this.acceleration;
+
+        if (this.currentSpeed > 0) {
+            this.currentSpeed -= this.acceleration;
+        }
+
+        if (this.currentSpeed < 0) {
+            this.currentSpeed = 0;
+        }
     }
 
     public double getBlindForward() {
@@ -104,24 +110,34 @@ public abstract class Ship extends Sprite {
             if (s.getBlindForward() <= 0) {
                 for (Planet p : intersections) {
                     if (p != destination) {
-                        int tries = 0;
-                        while (p.inOrbit(s.getPosX() + dir.x * Galaxy.planetSecurityZone, s.getPosY() + dir.y * Galaxy.planetSecurityZone)
-                                && p.inOrbit(s.getPosX() + sec_dir_x * Galaxy.planetSecurityZone, s.getPosY() + sec_dir_y * Galaxy.planetSecurityZone) && tries < 200) {
-                            angle += 0.1;
-                            sec_angle -= 0.1;
+                        double FoV = Galaxy.planetSecurityZone;
+                        boolean found = false;
+                        while (!found) {
+                            int tries = 0;
+                            while (p.inOrbit(s.getPosX() + dir.x * FoV, s.getPosY() + dir.y * FoV)
+                                    && p.inOrbit(s.getPosX() + sec_dir_x * FoV, s.getPosY() + sec_dir_y * FoV) && tries < 200) {
+                                angle += 0.1;
+                                sec_angle -= 0.1;
 
-                            dir.x = Math.sin(angle);
-                            dir.y = Math.cos(angle);
-                            sec_dir_x = Math.sin(sec_angle);
-                            sec_dir_y = Math.cos(sec_angle);
+                                dir.x = Math.sin(angle);
+                                dir.y = Math.cos(angle);
+                                sec_dir_x = Math.sin(sec_angle);
+                                sec_dir_y = Math.cos(sec_angle);
 
-                            tries++;
-                        }
+                                tries++;
+                            }
 
-                        if (p.inOrbit(s.getPosX() + dir.x * Galaxy.planetSecurityZone, s.getPosY() + dir.y * Galaxy.planetSecurityZone)) {
-                            dir.x = sec_dir_x;
-                            dir.y = sec_dir_y;
-                            angle = sec_angle;
+                            if (p.inOrbit(s.getPosX() + dir.x * FoV, s.getPosY() + dir.y * FoV)) {
+                                dir.x = sec_dir_x;
+                                dir.y = sec_dir_y;
+                                angle = sec_angle;
+                            }
+                            
+                            if (!p.inOrbit(s.getPosX() + dir.x * FoV, s.getPosY() + dir.y * FoV)) {
+                                found = true;
+                            } else {
+                                FoV += 10;
+                            }
                         }
                         s.setLastDir(angle);
                     }

@@ -7,6 +7,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -26,13 +27,14 @@ public class Game {
     private Canvas canvas;
     // Entities
     public static Galaxy galaxy;
-    public static ArrayList<Mission> routes;
+    public static ArrayList<Mission> missions;
     // Constants
     public static Group root;
 
     // States
     public static boolean primaryHeld;
-    public static Planet selectedPlanet;
+    public static boolean ctrlHeld;
+    public static ArrayList<Planet> selectedPlanets;
     public static int ticks;
 
     // Methods
@@ -86,24 +88,40 @@ public class Game {
                             if (p.isOn(mX, mY)) {
                                 clicked_a_planet = true;
                                 if (p.getOwner().isMainPlayer()) {
-                                    if (Game.selectedPlanet != p) {
-                                        if (Game.selectedPlanet == null) {
+                                    if (!Game.selectedPlanets.contains(p)) {
+                                        if (Game.selectedPlanets.isEmpty()) {
                                             // Select this planet for the next action
-                                            Game.selectedPlanet = p;
+                                            Game.selectedPlanets.add(p);
                                         } else {
-                                            // This is an friendly planet, send ships from the selected planet
-                                            Game.startMission(Game.selectedPlanet, p, Game.selectedPlanet.getNbShip(), 10, Mission.CONVOY);
-                                            Game.selectedPlanet = null;
+                                            // This is an friendly planet
+                                            if (e.isControlDown()) {
+                                                // Select this planet too
+                                                Game.selectedPlanets.add(p);
+                                            } else {
+                                                // Start a convoy
+                                                for (Planet o : Game.selectedPlanets) {
+                                                    Game.startMission(o, p, o.getNbShip(), 10, Mission.CONVOY);
+                                                }
+                                                Game.selectedPlanets.clear();
+                                            }
                                         }
                                     } else {
-                                        // Deselect this planet
-                                        Game.selectedPlanet = null;
+                                        if (Game.selectedPlanets.size() == 1) {
+                                            // Deselect a planet if clicked and already selected
+                                            Game.selectedPlanets.remove(0);
+                                        } else {
+                                            // Keep only this one selected if others were selected
+                                            Game.selectedPlanets.removeIf((Planet o) -> !o.equals(p));
+                                        }
                                     }
                                 } else {
-                                    if (Game.selectedPlanet != null) {
-                                        // This is an enemy planet, send ships from the selected planet
-                                        Game.startMission(Game.selectedPlanet, p, Game.selectedPlanet.getNbShip(), 10, Mission.ATTACK);
-                                        Game.selectedPlanet = null;
+                                    // Enemy planet
+                                    if (!Game.selectedPlanets.isEmpty()) {
+                                        // Send ships from the selected planets
+                                        for (Planet o : Game.selectedPlanets) {
+                                            Game.startMission(o, p, o.getNbShip(), 10, Mission.ATTACK);
+                                        }
+                                        Game.selectedPlanets.clear();
                                     } else {
                                         // No planet selected but clicked on enemy planet
                                     }
@@ -112,7 +130,7 @@ public class Game {
                         }
 
                         if (!clicked_a_planet) {
-                            Game.selectedPlanet = null;
+                            Game.selectedPlanets.clear();
                         }
                     }
                 }
@@ -127,6 +145,12 @@ public class Game {
             }
         };
 
+        EventHandler<KeyEvent> keyEventHandler = new EventHandler<KeyEvent>() {
+            public void handle(KeyEvent e) {
+                // TODO : Keyboard actions
+            }
+        };
+
         scene.setOnMouseDragged(mouseHandler);
         scene.setOnMousePressed(mouseHandler);
         scene.setOnMouseReleased(mouseReleaseHandler);
@@ -138,8 +162,10 @@ public class Game {
         // double minimumPlanetSize, double maximumPlanetSize, double borderMargin)
 
         Game.galaxy = new Galaxy(width, height, 9, 2, 40, 50, 60, 110, 50);
-        Game.routes = new ArrayList<>();
+        Game.missions = new ArrayList<>();
+        Game.selectedPlanets = new ArrayList<>();
         Game.primaryHeld = false;
+        Game.ctrlHeld = false;
 
         for (Planet p : Galaxy.getPlanets()) {
             p.initRender(Game.root);
@@ -150,14 +176,14 @@ public class Game {
 
     public static void startMission(Planet origin, Planet destination, int effectives, int squadSize, String mission) {
         Mission r = new Mission(origin, destination, effectives, squadSize, mission);
-        Game.routes.add(r);
+        Game.missions.add(r);
     }
 
     public void handle(long arg0) {
         Game.ticks++;
         int tShips = 0;
 
-        for (Mission r : Game.routes) {
+        for (Mission r : Game.missions) {
             r.handle();
         }
         for (Planet p : Galaxy.getPlanets()) {
@@ -169,8 +195,8 @@ public class Game {
             p.printStock(gc, root);
             tShips += p.getNbShip();
         }
-        
-        Game.routes.removeIf((Mission r) -> r.isEmpty());
+
+        Game.missions.removeIf((Mission r) -> r.isEmpty());
 
         if (App.DEBUG) {
             System.out.println("-------------- Tick n°" + Game.ticks + " --------------");

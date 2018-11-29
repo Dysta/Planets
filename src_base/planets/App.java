@@ -9,6 +9,10 @@ public class App extends Application {
     public final static boolean DEBUG = false;
     private final static double WIDTH = 1280;
     private final static double HEIGHT = 720;
+    
+    private final static double TICKRATE = 60;
+    
+    private static long last_tick;
 
     public static void main(String[] args) {
         launch(args);
@@ -17,6 +21,8 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
+        App.last_tick = System.currentTimeMillis();
+        
         // Create Game and start it
         Game game = new Game();
         try {
@@ -30,7 +36,12 @@ public class App extends Application {
 
         new AnimationTimer() {
             public void handle(long arg0) {
-                game.handle(arg0);
+                long now = System.currentTimeMillis();
+                
+                if(now - App.last_tick >= 1 / App.TICKRATE) {
+                    App.last_tick = now;
+                    game.handle(arg0);
+                }
             }
         }.start();
     }
