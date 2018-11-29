@@ -6,7 +6,7 @@ import javafx.stage.Stage;
 
 public class App extends Application {
 
-    public final static boolean DEBUG = false;
+    public final static boolean DEBUG = true;
     private final static double WIDTH = 1280;
     private final static double HEIGHT = 720;
     

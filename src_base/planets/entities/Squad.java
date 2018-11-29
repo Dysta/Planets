@@ -5,9 +5,9 @@
  */
 package planets.entities;
 
+import java.awt.Polygon;
 import java.util.ArrayList;
 import planets.utils.Point;
-import planets.utils.Polygon;
 import planets.entities.ship.Ship;
 
 /**
@@ -73,13 +73,16 @@ public class Squad {
     }
     
     public boolean isOn(double x, double y) {
-        ArrayList<Point> points = new ArrayList<>();
+        int[] x_ = new int[this.ships.size()];
+        int[] y_ = new int[this.ships.size()];
         
+        int i = 0;
         for(Ship s: this.ships) {
-            points.add(new Point(s.getPosXMiddle(),s.getPosYMiddle()));
+            x_[i] = (int) s.getPosXMiddle();
+            y_[i] = (int) s.getPosYMiddle();
+            i++;
         }
-        
-        return new Polygon(points).contains(new Point(x,y));
+        return new Polygon(x_,y_,ships.size()).contains(x, y);
     }
     
     public boolean isEmpty() {

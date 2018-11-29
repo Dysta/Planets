@@ -36,7 +36,7 @@ public class Player {
 	}
 	
 	public void setShipType(String shipType) {
-		this.shipType = "ship."+shipType;
+		this.shipType = "planets.entities.ship."+shipType;
 	}
 	
 	public String getShipType() {

@@ -232,10 +232,11 @@ public class Game {
     }
 
     public static void changeMission(ArrayList<Squad> squads, Planet destination, String newOrder) {
-        Mission r = new EmergencyMission(destination, newOrder);
+        Mission r = new Mission(squads.get(0).getMission().getOriginPlanet(), destination, 0, 0, newOrder);
 
         for (Squad s : squads) {
             s.reaffectSquad(r);
+            r.addQuad(s);
         }
 
         Game.missions.add(r);

@@ -97,6 +97,10 @@ public class Mission {
         return this.squads;
     }
     
+    public void addQuad(Squad s) {
+        this.squads.add(s);
+    }
+    
     public void cancelSquad(Squad s) {
         if(this.squads.contains(s)) {
             this.squads.remove(s);
