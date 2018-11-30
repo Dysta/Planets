@@ -107,11 +107,11 @@ public class Game {
                                                 // Select this planet too
                                                 Game.setSelect(Game.selectedPlanets, p, true);
                                             } else {
-                                                // Start a convoy
-                                                for (Planet o : Game.selectedPlanets) {
-                                                    Game.startMission(o, p, o.getNbShip(), o.getMaxLaunchShips(), Mission.CONVOY);
-                                                }
-                                                Game.selectedPlanets.clear();
+	                                            // Start a convoy
+	                                            for (Planet o : Game.selectedPlanets) {
+	                                                Game.startMission(o, p, o.getNbShip(), o.getMaxLaunchShips(), Mission.CONVOY);
+	                                            }
+	                                            Game.selectedPlanets.clear();
                                             }
                                         }
                                     } else {
@@ -193,6 +193,11 @@ public class Game {
                         } 
 
                         if (!clicked_a_squad) {
+                        	for(Squad s : Game.selectedSquads) {
+                        		for(Ship sh : s.getShips()) {
+                        			sh.setSelected(false);
+                        		}
+                        	}
                             Game.selectedSquads.clear();
                         }
                     }
