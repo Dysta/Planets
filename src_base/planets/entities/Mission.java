@@ -1,6 +1,7 @@
 package planets.entities;
 
 import java.util.ArrayList;
+import planets.Game;
 import planets.utils.GameUtils;
 import planets.utils.Point;
 
@@ -90,6 +91,12 @@ public class Mission {
     }
 
     public void clearSquads() {
+        /*
+        for(Squad s : this.squads) {
+            if(s.isEmpty() && Game.selectedSquads.contains(s)) {
+                Game.selectedSquads.remove(s);
+            }
+        }*/
         this.squads.removeIf((Squad s) -> s.isEmpty());
     }
     

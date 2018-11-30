@@ -1,18 +1,23 @@
 package planets;
 
+import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import static planets.Game.root;
+import planets.entities.Galaxy;
+import planets.utils.DebugUtils;
 
 public class App extends Application {
 
-    public final static boolean DEBUG = false;
+    public final static boolean DEBUG = true;
     private final static double WIDTH = 1280;
     private final static double HEIGHT = 720;
-    
-    private final static double TICKRATE = 60;
-    
+
+    private final static int REFRESHRATE = 60;
+
     private static long last_tick;
+    private static ArrayList<Long> ticks;
 
     public static void main(String[] args) {
         launch(args);
@@ -22,7 +27,7 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         App.last_tick = System.currentTimeMillis();
-        
+
         // Create Game and start it
         Game game = new Game();
         try {
@@ -34,13 +39,26 @@ public class App extends Application {
         game.show(WIDTH, HEIGHT);
         game.initGame(WIDTH, HEIGHT);
 
+        App.ticks = new ArrayList<>();
+        for (int i = 60; i > 0; i--) {
+            App.ticks.add((long) 0);
+        }
+
         new AnimationTimer() {
             public void handle(long arg0) {
                 long now = System.currentTimeMillis();
-                
-                if(now - App.last_tick >= 1 / App.TICKRATE) {
+                game.handle(arg0);
+                App.ticks.remove(0);
+                App.ticks.add(now);
+
+                if (now - App.last_tick >= 1000 / App.REFRESHRATE) {
                     App.last_tick = now;
-                    game.handle(arg0);
+
+                    if (App.DEBUG) {
+                        System.out.println("-------------- Tick n°" + Game.ticks + " (tickrate: " + DebugUtils.tickRate(App.ticks) + ") --------------");
+                        System.out.println("Nodes : " + DebugUtils.getAllNodes(root).size());
+                    }
+                    game.updateUI();
                 }
             }
         }.start();

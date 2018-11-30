@@ -202,6 +202,7 @@ public class Planet extends Sprite {
                 double y = (this.getPosY() + this.getSize() / 2) + Math.sin(angle) * radius;
                 try {
                     s.stop();
+                    s.setSelected(false);
                     s.setPosition(x - s.width() / 2, y - s.height() / 2);
                     s.getImageView().setVisible(false);
                     this.ships.add(s);

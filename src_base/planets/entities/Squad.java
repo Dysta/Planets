@@ -45,7 +45,6 @@ public class Squad {
             }
 
             s.gaz();
-            //System.out.println("Dir x : "+p.x+" | Velocity : "+s.getVelocity());
             s.move(p.x * s.getVelocity(), p.y * s.getVelocity());
 
             if (destination.isOn(s.getPosXMiddle(),s.getPosYMiddle())) {

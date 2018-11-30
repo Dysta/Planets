@@ -183,7 +183,6 @@ public class Sprite {
     
     public void setSelected(boolean s) {
         if(s) {
-            System.out.println(this.assetReference()+"_outline");
             this.getImageView().setImage(ResourcesManager.assets.get(this.assetReference()+"_outline").getImage());
         } else {
             this.getImageView().setImage(ResourcesManager.assets.get(this.assetReference()).getImage());

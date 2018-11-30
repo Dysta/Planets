@@ -161,7 +161,6 @@ public class Game {
                                 for (Squad s : m.getSquads()) {
                                     if (s.isOn(mX, mY)) {
                                         clicked_a_squad = true;
-                                        System.out.println("Clicked a squad !");
                                         // Cannot select enemy squads
                                         if (m.getOriginPlanet().getOwner().isMainPlayer()) {
                                             if (!Game.selectedSquads.contains(s)) {
@@ -286,7 +285,6 @@ public class Game {
 
     public void handle(long arg0) {
         Game.ticks++;
-        int tShips = 0;
 
         for (Mission r : Game.missions) {
             r.handle();
@@ -297,18 +295,15 @@ public class Game {
                 //s.render(this.gc);
             }
             p.productionTick();
-            p.printStock(gc, root);
-            tShips += p.getNbShip();
         }
 
         Game.missions.removeIf((Mission r) -> r.isEmpty());
-
-        if (App.DEBUG) {
-            System.out.println("-------------- Tick n°" + Game.ticks + " --------------");
-            System.out.println("Planets : " + Galaxy.getPlanets().size());
-            System.out.println("Ships : " + tShips);
-            System.out.println("Nodes : " + DebugUtils.getAllNodes(root).size());
-        }
+    }
+    
+    public void updateUI() {
+        for (Planet p : Galaxy.getPlanets()) {
+            p.printStock(gc, root);
+        }        
     }
 
 }
