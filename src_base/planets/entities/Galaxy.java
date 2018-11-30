@@ -43,7 +43,7 @@ public class Galaxy {
             int tries = 0;
 
             do {
-                n = new Planet(ResourcesManager.planet, p, this.width, this.height, Galaxy.minimumPlanetSize, Galaxy.maximumPlanetSize, Galaxy.borderMargin);
+                n = new Planet(ResourcesManager.assets.get("planet"), p, this.width, this.height, Galaxy.minimumPlanetSize, Galaxy.maximumPlanetSize, Galaxy.borderMargin);
                 tries++;
             } while ((tries < 100 && isColliding(n)));
 

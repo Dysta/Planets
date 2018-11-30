@@ -30,6 +30,11 @@ public abstract class Ship extends Sprite {
         this.lastDir = 0;
         this.straightLine = false;
     }
+    
+    @Override
+    public String assetReference() {
+        return "baseShip";
+    }
 
     public void changeOwner(Player owner) {
         this.owner = owner;

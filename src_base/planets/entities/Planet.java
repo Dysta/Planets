@@ -59,6 +59,11 @@ public class Planet extends Sprite {
         this.updateDimensions(ResourcesManager.PLANET_PATH, size, size);
         this.size = size;
     }
+    
+    @Override
+    public String assetReference() {
+        return "planet";
+    }
 
     public Planet(Planet s) {
         this(s.getSprite(), s.getOwner(), s.getPosX(), s.getPosY(), s.getSize());
@@ -71,14 +76,14 @@ public class Planet extends Sprite {
         double x = ((this.getPosX() + this.getSize() / 2) + Math.cos(angle) * radius);
         double y = (this.getPosY() + this.getSize() / 2) + Math.sin(angle) * radius;
         try {
-            Ship ship = (Ship) Class.forName(s).getConstructor(Sprite.class, double.class, double.class).newInstance(ResourcesManager.baseShip, x, y);
+            Ship ship = (Ship) Class.forName(s).getConstructor(Sprite.class, double.class, double.class).newInstance(ResourcesManager.assets.get("baseShip"), x, y);
             ship.changeOwner(this.owner);
             ship.setPosition(ship.getPosX() - ship.width() / 2, ship.getPosY() - ship.height() / 2);
             ship.initRender(Game.root);
             ship.getImageView().setVisible(false);
             this.ships.add(ship);
         } catch (Exception e) {
-            System.err.println("Error during ship initialization : " + e);
+            System.err.println("Error during ship ("+Character.toLowerCase(s.charAt(0)) + s.substring(1)+") initialization : " + e);
         }
     }
 

@@ -19,6 +19,7 @@ public class Sprite {
     private double height;
     private double maxX;
     private double maxY;
+    
 
     public Sprite(String path, double width, double height, double maxX, double maxY) {
         image = new Image(path, width, height, false, false);
@@ -36,6 +37,10 @@ public class Sprite {
         height = s.height;
         maxX = s.maxX;
         maxY = s.maxY;
+    }
+    
+    public String assetReference() {
+        return "sprite";
     }
 
     public double width() {
@@ -174,6 +179,15 @@ public class Sprite {
         height = s.height;
         maxX = s.maxX;
         maxY = s.maxY;
+    }
+    
+    public void setSelected(boolean s) {
+        if(s) {
+            System.out.println(this.assetReference()+"_outline");
+            this.getImageView().setImage(ResourcesManager.assets.get(this.assetReference()+"_outline").getImage());
+        } else {
+            this.getImageView().setImage(ResourcesManager.assets.get(this.assetReference()).getImage());
+        }
     }
 
 }

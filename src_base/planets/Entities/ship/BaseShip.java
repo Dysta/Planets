@@ -8,6 +8,11 @@ public class BaseShip extends Ship {
     public BaseShip(Sprite s, double posX, double posY) {
         // Ship , posX, posY, capSpeed, acceleration
         super(s, posX, posY, 0.7, 0.004);
-        this.getImageView().setImage(ResourcesManager.baseShip.getImage());
+        this.getImageView().setImage(ResourcesManager.assets.get("baseShip").getImage());
+    }
+    
+    @Override
+    public String assetReference() {
+        return "baseShip";
     }
 }

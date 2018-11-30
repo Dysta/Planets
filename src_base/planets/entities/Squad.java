@@ -93,6 +93,10 @@ public class Squad {
         return this.parent;
     }
     
+    public ArrayList<Ship> getShips() {
+        return this.ships;
+    }
+    
     public void reaffectSquad(Mission newMission) {
         this.destination = newMission.getDestinationPlanet();
         this.parent.cancelSquad(this);

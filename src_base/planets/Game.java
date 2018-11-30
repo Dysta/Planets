@@ -13,7 +13,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
-import planets.entities.EmergencyMission;
 import planets.entities.Galaxy;
 import planets.entities.Planet;
 import planets.entities.Mission;
@@ -97,7 +96,7 @@ public class Game {
                                         if (Game.selectedPlanets.isEmpty()) {
                                             if (Game.selectedSquads.isEmpty()) {
                                                 // Select this planet
-                                                Game.selectedPlanets.add(p);
+                                                Game.setSelect(Game.selectedPlanets, p, true);
                                             } else {
                                                 // Squads are selected, redirect them
                                                 changeMission(Game.selectedSquads, p, Mission.CONVOY);
@@ -106,7 +105,7 @@ public class Game {
                                             // This is an friendly planet
                                             if (e.isControlDown()) {
                                                 // Select this planet too
-                                                Game.selectedPlanets.add(p);
+                                                Game.setSelect(Game.selectedPlanets, p, true);
                                             } else {
                                                 // Start a convoy
                                                 for (Planet o : Game.selectedPlanets) {
@@ -118,9 +117,14 @@ public class Game {
                                     } else {
                                         if (Game.selectedPlanets.size() == 1) {
                                             // Deselect a planet if clicked and already selected
-                                            Game.selectedPlanets.remove(0);
+                                            Game.setSelect(Game.selectedPlanets, p, false);
                                         } else {
                                             // Keep only this one selected if others were selected
+                                            for (Planet o : Game.selectedPlanets) {
+                                                if (!o.equals(p)) {
+                                                    o.setSelected(false);
+                                                }
+                                            }
                                             Game.selectedPlanets.removeIf((Planet o) -> !o.equals(p));
                                         }
                                     }
@@ -130,6 +134,7 @@ public class Game {
                                         // Send ships from the selected planets
                                         for (Planet o : Game.selectedPlanets) {
                                             Game.startMission(o, p, o.getNbShip(), o.getMaxLaunchShips(), Mission.ATTACK);
+                                            o.setSelected(false);
                                         }
                                         Game.selectedPlanets.clear();
                                     } else {
@@ -137,6 +142,12 @@ public class Game {
                                         if (!Game.selectedSquads.isEmpty()) {
                                             // Squads are selected, redirect them
                                             changeMission(Game.selectedSquads, p, Mission.ATTACK);
+                                            for (Squad s : Game.selectedSquads) {
+                                                for (Ship sq : s.getShips()) {
+                                                    sq.setSelected(false);
+                                                }
+                                            }
+                                            Game.selectedSquads.clear();
                                         }
                                     }
                                 }
@@ -156,15 +167,20 @@ public class Game {
                                             if (!Game.selectedSquads.contains(s)) {
                                                 if (Game.selectedSquads.isEmpty()) {
                                                     // Select this Squad
-                                                    Game.selectedSquads.add(s);
+                                                    Game.setSelectSquad(s, true);
                                                 } else {
                                                     if (e.isControlDown()) {
                                                         // Select this squad too
-                                                        Game.selectedSquads.add(s);
+                                                        Game.setSelectSquad(s, true);
                                                     } else {
                                                         // Select this squad instead
+                                                        for (Squad sq : Game.selectedSquads) {
+                                                            for (Ship sh : sq.getShips()) {
+                                                                sh.setSelected(false);
+                                                            }
+                                                        }
                                                         Game.selectedSquads.clear();
-                                                        Game.selectedSquads.add(s);
+                                                        Game.setSelectSquad(s, true);
                                                     }
                                                 }
                                             } else {
@@ -174,9 +190,9 @@ public class Game {
                                     }
                                 }
                             }
-                        }
-                        
-                        if(!clicked_a_squad) {
+                        } 
+
+                        if (!clicked_a_squad) {
                             Game.selectedSquads.clear();
                         }
                     }
@@ -240,6 +256,27 @@ public class Game {
         }
 
         Game.missions.add(r);
+    }
+
+    public static void setSelect(ArrayList list, Sprite element, boolean state) {
+        if (state) {
+            list.add(element);
+        } else {
+            list.remove(element);
+        }
+        element.setSelected(state);
+    }
+
+    public static void setSelectSquad(Squad s, boolean state) {
+        if (state) {
+            Game.selectedSquads.add(s);
+        } else {
+            Game.selectedSquads.remove(s);
+        }
+
+        for (Ship sq : s.getShips()) {
+            sq.setSelected(state);
+        }
     }
 
     public void handle(long arg0) {
