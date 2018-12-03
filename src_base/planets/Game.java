@@ -156,6 +156,15 @@ public class Game {
         }
     }
     
+    public static void deselectSquads() {
+    	int c = 0;
+    	int t = Game.selectedSquads.size();
+    	while(c < t) {
+    		Game.setSelectSquad(Game.selectedSquads.get(0),false);
+    		c++;
+    	}
+    }
+    
     public static void startConvoy(Planet target) {
         for (Planet o : Game.selectedPlanets) {
             Game.startMission(o, target, o.getNbShip(), o.getMaxLaunchShips(), Mission.CONVOY);
@@ -169,11 +178,8 @@ public class Game {
         for (Mission r : Game.missions) {
             r.handle();
         }
+        
         for (Planet p : Galaxy.getPlanets()) {
-            //p.render(this.gc);
-            for (Ship s : p.getShips()) {
-                //s.render(this.gc);
-            }
             p.productionTick();
         }
 

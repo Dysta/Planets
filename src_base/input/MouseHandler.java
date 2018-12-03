@@ -48,11 +48,7 @@ public class MouseHandler implements EventHandler<MouseEvent> {
                 } 
 
                 if (!clicked_a_squad) {
-                    for (Mission m : Game.missions) {
-                        for (Squad s : m.getSquads()) {
-                        	this.handleSquadClick(m, s);
-                        }
-                    }
+                	Game.deselectSquads();
                 }
             }
         }
@@ -87,7 +83,7 @@ public class MouseHandler implements EventHandler<MouseEvent> {
                         // Deselect a planet if clicked and already selected
                         Game.setSelect(Game.selectedPlanets, p, false);
                     } else {
-                        // Keep only this one selected if others were selected
+                        // Keep only this one selected if others were selected < Replaced by convoy
                     	/*
                         for (Planet o : Game.selectedPlanets) {
                             if (!o.equals(p)) {
@@ -113,10 +109,7 @@ public class MouseHandler implements EventHandler<MouseEvent> {
                     if (!Game.selectedSquads.isEmpty()) {
                         // Squads are selected, redirect them
                         Game.changeMission(Game.selectedSquads, p, Mission.ATTACK);
-                        for (Squad s : Game.selectedSquads) {
-                            Game.setSelectSquad(s, false);
-                        }
-                        Game.selectedSquads.clear();
+                        Game.deselectSquads();
                     }
                 }
             }
@@ -143,7 +136,7 @@ public class MouseHandler implements EventHandler<MouseEvent> {
                                     sh.setSelected(false);
                                 }
                             }
-                            Game.selectedSquads.clear();
+                            Game.deselectSquads();
                             Game.setSelectSquad(s, true);
                         }
                     }

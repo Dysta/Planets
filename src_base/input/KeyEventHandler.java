@@ -10,7 +10,7 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
 
 	@Override
 	public void handle(KeyEvent e) {
-		System.out.println(e.getCode());
+
 		if(e.isControlDown() && e.getCode() == KeyCode.A) {
 			for(Planet p : Game.selectedPlanets) {
 				p.setSelected(false);
