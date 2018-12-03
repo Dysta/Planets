@@ -100,10 +100,10 @@ public class Game {
         double planetInfluenceZone = 40;
         double planetSecurityZone = 50;
         double minimumPlanetSize = 50;
-        double maximumPlanetSize = 150;
+        double maximumPlanetSize = 100;
         double borderMargin = 50;
         int nbPlanets = 10;
-        int nbPlayers = 6;
+        int nbPlayers = 2;
 
         Game.galaxy = new Galaxy(width, height, nbPlanets, nbPlayers, planetInfluenceZone, planetSecurityZone, minimumPlanetSize, maximumPlanetSize, borderMargin);
         for(Planet p : Game.galaxy.getPlanets()) {

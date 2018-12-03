@@ -5,6 +5,7 @@ import java.util.Random;
 
 import javafx.scene.Group;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import planets.Game;
@@ -97,6 +98,7 @@ public class Planet extends Sprite {
     public void printStock(GraphicsContext gc, Group root) {
         this.text.setFont(gc.getFont());
         this.text.setFill(this.owner.getColor());
+        this.text.setStroke(Color.BLACK);
         this.text.setText("" + this.getNbShip());
 
         tf.setLayoutX(this.getPosXMiddle() - this.text.getLayoutBounds().getWidth() / 2);
