@@ -22,7 +22,7 @@ public class Galaxy {
     private static ArrayList<Planet> planets;
     private static ArrayList<Player> players;
 
-    public Galaxy(double width, double height, int nbPlanets, int nbPlayers, double planetInfluenceZone, double planetSecurityZone, double minimumPlanetSize, double maximumPlanetSize, double borderMargin) {
+    public Galaxy(double width, double height, int nbPlanets, int nbPlayers, double borderMargin) {
         Random r = new Random();
 
         Galaxy.planets = new ArrayList<Planet>();
@@ -30,10 +30,10 @@ public class Galaxy {
         this.width = width;
         this.height = height;
 
-        Galaxy.planetInfluenceZone = planetInfluenceZone;
-        Galaxy.planetSecurityZone = planetSecurityZone;
-        Galaxy.minimumPlanetSize = minimumPlanetSize;
-        Galaxy.maximumPlanetSize = maximumPlanetSize;
+        Galaxy.maximumPlanetSize = Math.sqrt(((width-2*borderMargin)*(height-2*borderMargin))/nbPlanets/Math.PI)/1.5;
+        Galaxy.minimumPlanetSize = Galaxy.maximumPlanetSize * 0.7;
+        Galaxy.planetInfluenceZone = Galaxy.maximumPlanetSize * 0.3;
+        Galaxy.planetSecurityZone = Galaxy.maximumPlanetSize * 0.5;
         Galaxy.borderMargin = borderMargin;
 
         Planet n;

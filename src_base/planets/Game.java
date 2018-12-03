@@ -97,15 +97,11 @@ public class Game {
     }
 
     public void initGame(double width, double height) {
-        double planetInfluenceZone = 40;
-        double planetSecurityZone = 50;
-        double minimumPlanetSize = 50;
-        double maximumPlanetSize = 100;
         double borderMargin = 50;
-        int nbPlanets = 10;
-        int nbPlayers = 2;
+        int nbPlanets = 20;
+        int nbPlayers = 7;
 
-        Game.galaxy = new Galaxy(width, height, nbPlanets, nbPlayers, planetInfluenceZone, planetSecurityZone, minimumPlanetSize, maximumPlanetSize, borderMargin);
+        Game.galaxy = new Galaxy(width, height, nbPlanets, nbPlayers, borderMargin);
         for(Planet p : Game.galaxy.getPlanets()) {
         	if(p.getOwner().isMainPlayer()) {
         		Game.mainPlayer = p.getOwner();

@@ -16,7 +16,7 @@ public class ResourcesManager {
     // Common
     public static Image background;
     
-    public final static String BG_PATH = "images/background.jpg";
+    public final static String BG_PATH = "images/animated-background.gif";
     public final static String PLANET_PATH = "images/planet.png";
     
     // Common Sprites

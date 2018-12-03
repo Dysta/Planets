@@ -106,7 +106,7 @@ public abstract class Ship extends Sprite {
 
         ArrayList<Planet> intersections = new ArrayList<Planet>();
         for (Planet p : Galaxy.getPlanets()) {
-            if (p != destination && GameUtils.lineCrossingCircle(s.getPosX(), s.getPosY(), p.getPosX(), p.getPosY(), p.getPosX(), p.getPosY(), Galaxy.planetInfluenceZone)) {
+            if (p != destination && GameUtils.lineCrossingCircle(s.getPosXMiddle(), s.getPosYMiddle(), p.getPosXMiddle(), p.getPosYMiddle(), p.getPosXMiddle(), p.getPosYMiddle(), Galaxy.planetInfluenceZone)) {
                 intersections.add(p);
             }
         }
@@ -119,8 +119,8 @@ public abstract class Ship extends Sprite {
                         boolean found = false;
                         while (!found) {
                             int tries = 0;
-                            while (p.inOrbit(s.getPosX() + dir.x * FoV, s.getPosY() + dir.y * FoV)
-                                    && p.inOrbit(s.getPosX() + sec_dir_x * FoV, s.getPosY() + sec_dir_y * FoV) && tries < 200) {
+                            while (p.inOrbit(s.getPosXMiddle() + dir.x * FoV, s.getPosYMiddle() + dir.y * FoV)
+                                    && p.inOrbit(s.getPosXMiddle() + sec_dir_x * FoV, s.getPosYMiddle() + sec_dir_y * FoV) && tries < 200) {
                                 angle += 0.1;
                                 sec_angle -= 0.1;
 
@@ -132,13 +132,13 @@ public abstract class Ship extends Sprite {
                                 tries++;
                             }
 
-                            if (p.inOrbit(s.getPosX() + dir.x * FoV, s.getPosY() + dir.y * FoV)) {
+                            if (p.inOrbit(s.getPosXMiddle() + dir.x * FoV, s.getPosYMiddle() + dir.y * FoV)) {
                                 dir.x = sec_dir_x;
                                 dir.y = sec_dir_y;
                                 angle = sec_angle;
                             }
                             
-                            if (!p.inOrbit(s.getPosX() + dir.x * FoV, s.getPosY() + dir.y * FoV)) {
+                            if (!p.inOrbit(s.getPosXMiddle() + dir.x * FoV, s.getPosYMiddle() + dir.y * FoV)) {
                                 found = true;
                             } else {
                                 FoV += 10;
