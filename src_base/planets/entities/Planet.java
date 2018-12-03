@@ -91,7 +91,7 @@ public class Planet extends Sprite {
 
     public void setOwner(Player owner) {
         this.owner = owner;
-        ResourcesManager.colorImage(this.getImageView(), owner.getColor());
+        ResourcesManager.colorImage(this, owner.getColor());
     }
 
     public void printStock(GraphicsContext gc, Group root) {

@@ -58,19 +58,21 @@ public class ResourcesManager {
         ResourcesManager.background = new Image(getRessourcePathByName(path), width, height, preserveRatio, smooth);
     }
 
-    public static void colorImage(ImageView iv, Color color) {
-        ColorAdjust effect = new ColorAdjust();
+    public static void colorImage(Sprite sprite, Color color) {
+    	ImageView iv = sprite.getImageView();
+        ColorAdjust effect = sprite.getColorAdjust();
         effect.setSaturation(1);
         double hue = color.getHue();
         if(hue>180) {
-        	hue = -180 + (180 - hue);
+        	hue = -(180 - hue);
         }
         effect.setHue(hue/180);
         iv.setEffect(effect);
     }
     
-    public static void highlightImage(ImageView iv, double brightness) {
-    	ColorAdjust effect = new ColorAdjust();
+    public static void highlightImage(Sprite sprite, double brightness) {
+    	ImageView iv = sprite.getImageView();    	
+    	ColorAdjust effect = sprite.getColorAdjust();
     	effect.setBrightness(brightness);
     	iv.setEffect(effect);
     }

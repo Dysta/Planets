@@ -10,7 +10,6 @@ public class ScrollEventHandler implements EventHandler<ScrollEvent> {
 
 	@Override
 	public void handle(ScrollEvent e) {
-		System.out.println(e.getDeltaY());
 		Game.mainPlayer.setEffectivesPercent(Game.mainPlayer.getEffectivesPercent() + e.getDeltaY()/4);
     }
 

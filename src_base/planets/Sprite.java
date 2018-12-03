@@ -3,6 +3,7 @@ package planets;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -11,6 +12,7 @@ public class Sprite {
 
     private Image image;
     private ImageView iv;
+    private ColorAdjust ca;
     private double x;
     private double y;
     private double xSpeed;
@@ -28,6 +30,7 @@ public class Sprite {
         this.height = height;
         this.maxX = maxX;
         this.maxY = maxY;
+        this.ca = new ColorAdjust();
     }
 
     public Sprite(Sprite s) {
@@ -37,6 +40,7 @@ public class Sprite {
         height = s.height;
         maxX = s.maxX;
         maxY = s.maxY;
+        this.ca = new ColorAdjust();
     }
     
     public String assetReference() {
@@ -187,12 +191,16 @@ public class Sprite {
     
     public void setSelected(boolean s) {
         if(s) {
-        	ResourcesManager.highlightImage(this.getImageView(), +0.2);
+        	ResourcesManager.highlightImage(this, +0.2);
             //this.getImageView().setImage(ResourcesManager.assets.get(this.assetReference()+"_outline").getImage());
         } else {
-        	ResourcesManager.highlightImage(this.getImageView(), -0.2);
+        	ResourcesManager.highlightImage(this, 0);
             //this.getImageView().setImage(ResourcesManager.assets.get(this.assetReference()).getImage());
         }
+    }
+    
+    public ColorAdjust getColorAdjust() {
+    	return this.ca;
     }
 
 }
