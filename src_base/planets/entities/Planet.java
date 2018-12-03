@@ -230,8 +230,7 @@ public class Planet extends Sprite {
             double y = this.getPosYMiddle() + (Math.sin(((((double) 2 / effectives) * i) - 1) * Math.PI) * (this.size / 2));
 
             calledShip.setMiddlePosition(x, y);
-            calledShip.initRender();
-            calledShip.getImageView().setVisible(true);
+            calledShip.start(this);
         }
 
         return mobilized;

@@ -1,6 +1,7 @@
 package planets.entities.ship;
 
 import java.util.ArrayList;
+import javafx.scene.paint.Color;
 import planets.entities.Galaxy;
 import planets.entities.Planet;
 import planets.ResourcesManager;
@@ -30,7 +31,7 @@ public abstract class Ship extends Sprite {
         this.lastDir = 0;
         this.straightLine = false;
     }
-    
+
     @Override
     public String assetReference() {
         return "baseShip";
@@ -48,6 +49,12 @@ public abstract class Ship extends Sprite {
 
     public void die() {
         this.destroy();
+    }
+
+    public void start(Planet origin) {
+        this.initRender();
+        this.getImageView().setVisible(true);
+        ResourcesManager.colorImage(this, origin.getOwner().getColor());
     }
 
     public double getVelocity() {
@@ -137,7 +144,7 @@ public abstract class Ship extends Sprite {
                                 dir.y = sec_dir_y;
                                 angle = sec_angle;
                             }
-                            
+
                             if (!p.inOrbit(s.getPosXMiddle() + dir.x * FoV, s.getPosYMiddle() + dir.y * FoV)) {
                                 found = true;
                             } else {
