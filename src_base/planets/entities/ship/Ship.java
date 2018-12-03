@@ -47,7 +47,7 @@ public abstract class Ship extends Sprite {
     }
 
     public void die() {
-        this.getImageView().setImage(null);
+        this.destroy();
     }
 
     public double getVelocity() {
@@ -147,7 +147,7 @@ public abstract class Ship extends Sprite {
                         s.setLastDir(angle);
                     }
                 }
-                s.setBlindForward(Galaxy.planetSecurityZone / 4 + 1);
+                //s.setBlindForward(Galaxy.planetSecurityZone / 4 + 1);
             } else {
                 angle = s.getLastDir();
                 dir.x = Math.sin(angle);
@@ -159,5 +159,4 @@ public abstract class Ship extends Sprite {
         }
 
     }
-
 }

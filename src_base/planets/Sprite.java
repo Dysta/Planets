@@ -117,14 +117,18 @@ public class Sprite {
         gc.drawImage(image, x, y);
     }
 
-    public void initRender(Group root) {
+    public void initRender() {
         this.iv.setX(this.x);
         this.iv.setY(this.y);
         this.iv.setFitHeight(this.height);
         this.iv.setFitWidth(this.width);
-        root.getChildren().add(iv);
+        Game.root.getChildren().add(this.iv);
     }
 
+    public void destroy() {
+    	Game.root.getChildren().remove(this.iv);
+    }
+    
     public boolean intersects(Sprite s) {
         return ((x >= s.x && x <= s.x + s.width) || (s.x >= x && s.x <= x + width))
                 && ((y >= s.y && y <= s.y + s.height) || (s.y >= y && s.y <= y + height));

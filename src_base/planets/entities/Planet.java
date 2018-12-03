@@ -36,8 +36,8 @@ public class Planet extends Sprite {
         this.owner = new Player();
         this.ships = new ArrayList<Ship>();
         this.productionProgression = 20; // Base ships on any planet (will produce those ships instantly)
-        this.shipsPerTick = 0.02; // Minimum production
-        this.shipCapacity = 50; // Minimum storage
+        this.shipsPerTick = 2; // Minimum production
+        this.shipCapacity = 5000; // Minimum storage
 
         // Components displaying current ships capacity
         this.text = new Text();
@@ -79,8 +79,6 @@ public class Planet extends Sprite {
             Ship ship = (Ship) Class.forName(s).getConstructor(Sprite.class, double.class, double.class).newInstance(ResourcesManager.assets.get("baseShip"), x, y);
             ship.changeOwner(this.owner);
             ship.setPosition(ship.getPosX() - ship.width() / 2, ship.getPosY() - ship.height() / 2);
-            ship.initRender(Game.root);
-            ship.getImageView().setVisible(false);
             this.ships.add(ship);
         } catch (Exception e) {
             System.err.println("Error during ship ("+Character.toLowerCase(s.charAt(0)) + s.substring(1)+") initialization : " + e);
@@ -204,7 +202,7 @@ public class Planet extends Sprite {
                     s.stop();
                     s.setSelected(false);
                     s.setPosition(x - s.width() / 2, y - s.height() / 2);
-                    s.getImageView().setVisible(false);
+                    s.destroy();
                     this.ships.add(s);
                 } catch (Exception e) {
                     System.err.println("Error during ship transfer : " + e);
@@ -230,6 +228,7 @@ public class Planet extends Sprite {
             double y = this.getPosYMiddle() + (Math.sin(((((double) 2 / effectives) * i) - 1) * Math.PI) * (this.size / 2));
 
             calledShip.setMiddlePosition(x, y);
+            calledShip.initRender();
             calledShip.getImageView().setVisible(true);
         }
 
