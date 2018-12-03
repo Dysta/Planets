@@ -13,9 +13,12 @@ public class Player {
 	private boolean active;
 	private String shipType;
 	
+	private double effectivesPercent;
+	
 	public Player(Color color, boolean active) {
 		this.color = color;
 		this.active = active;
+		this.effectivesPercent = 100;
 		this.setShipType("BaseShip");
 	}
 	
@@ -49,6 +52,20 @@ public class Player {
 	
 	public boolean isMainPlayer() {
 		return this.mainPlayer;
+	}
+	
+	public double getEffectivesPercent() {
+		return this.effectivesPercent;
+	}
+	
+	public void setEffectivesPercent(double s) {
+		if(s>100) {
+			s = 100;
+		}
+		if(s<0) {
+			s = 0;
+		}
+		this.effectivesPercent = s;
 	}
 
 }

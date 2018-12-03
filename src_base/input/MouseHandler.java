@@ -101,7 +101,7 @@ public class MouseHandler implements EventHandler<MouseEvent> {
                 if (!Game.selectedPlanets.isEmpty()) {
                     // Send ships from the selected planets
                     for (Planet o : Game.selectedPlanets) {
-                        Game.startMission(o, p, o.getNbShip(), o.getMaxLaunchShips(), Mission.ATTACK);
+                        Game.startAttack(o,p);
                     }
                     Game.deselect(Game.selectedPlanets);
                 } else {

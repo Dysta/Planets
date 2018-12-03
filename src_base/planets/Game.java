@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import input.KeyEventHandler;
 import input.MouseHandler;
 import input.MouseReleaseHandler;
+import input.ScrollEventHandler;
 import javafx.event.EventHandler;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
@@ -19,9 +20,11 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import planets.entities.Galaxy;
 import planets.entities.Planet;
+import planets.entities.Player;
 import planets.entities.Mission;
 import planets.entities.Squad;
 import planets.utils.DebugUtils;
+import ui.SelectPercentage;
 import planets.entities.ship.Ship;
 
 public class Game {
@@ -33,6 +36,7 @@ public class Game {
     // Entities
     public static Galaxy galaxy;
     public static ArrayList<Mission> missions;
+    public static Player mainPlayer;
     // Constants
     public static Group root;
 
@@ -42,6 +46,9 @@ public class Game {
     public static ArrayList<Planet> selectedPlanets;
     public static ArrayList<Squad> selectedSquads;
     public static int ticks;
+    
+    // UI Elements
+    private static SelectPercentage selectP;
 
     // Methods
     // Stage options are defined by the game
@@ -80,11 +87,13 @@ public class Game {
     	MouseHandler mouseHandler = new MouseHandler();
     	MouseReleaseHandler mouseReleaseHandler = new MouseReleaseHandler();
         KeyEventHandler keyEventHandler = new KeyEventHandler();
+        ScrollEventHandler scrollEventHandler = new ScrollEventHandler();
 
         scene.setOnMouseDragged(mouseHandler);
         scene.setOnMousePressed(mouseHandler);
         scene.setOnMouseReleased(mouseReleaseHandler);
         scene.setOnKeyPressed(keyEventHandler);
+        scene.setOnScroll(scrollEventHandler);
     }
 
     public void initGame(double width, double height) {
@@ -97,11 +106,19 @@ public class Game {
         int nbPlayers = 2;
 
         Game.galaxy = new Galaxy(width, height, nbPlanets, nbPlayers, planetInfluenceZone, planetSecurityZone, minimumPlanetSize, maximumPlanetSize, borderMargin);
+        for(Planet p : Game.galaxy.getPlanets()) {
+        	if(p.getOwner().isMainPlayer()) {
+        		Game.mainPlayer = p.getOwner();
+        	}
+        }
         Game.missions = new ArrayList<>();
         Game.selectedPlanets = new ArrayList<>();
         Game.selectedSquads = new ArrayList<>();
         Game.primaryHeld = false;
         Game.ctrlHeld = false;
+        
+        // init UI
+        this.selectP = new SelectPercentage(gc, root, Game.mainPlayer, width, height);
 
         for (Planet p : Galaxy.getPlanets()) {
             p.initRender();
@@ -167,9 +184,13 @@ public class Game {
     
     public static void startConvoy(Planet target) {
         for (Planet o : Game.selectedPlanets) {
-            Game.startMission(o, target, o.getNbShip(), o.getMaxLaunchShips(), Mission.CONVOY);
+            Game.startMission(o, target, (int) (o.getNbShip()*(o.getOwner().getEffectivesPercent()/100)), o.getMaxLaunchShips(), Mission.CONVOY);
         }
        	Game.deselect(Game.selectedPlanets);
+    }
+    
+    public static void startAttack(Planet o, Planet target) {
+        Game.startMission(o, target, (int) (o.getNbShip()*(o.getOwner().getEffectivesPercent()/100)),  o.getMaxLaunchShips(), Mission.ATTACK);
     }
 
     public void handle(long arg0) {
@@ -190,6 +211,7 @@ public class Game {
         for (Planet p : Galaxy.getPlanets()) {
             p.printStock(gc, root);
         }        
+        this.selectP.update();
     }
 
 }
