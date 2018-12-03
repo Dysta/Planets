@@ -63,7 +63,7 @@ public class ResourcesManager {
         ColorAdjust effect = sprite.getColorAdjust();
         effect.setSaturation(1);
         double hue = color.getHue();
-        if(hue>180) {
+        if(hue > 180) {
         	hue = -(180 - hue);
         }
         effect.setHue(hue/180);
