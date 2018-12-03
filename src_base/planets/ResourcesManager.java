@@ -35,7 +35,7 @@ public class ResourcesManager {
         ResourcesManager.assets = new HashMap<String, Sprite>();
 
         ResourcesManager.loadBackground(BG_PATH, width, height, false, false);
-        ResourcesManager.loadSprite("planet", PLANET_PATH, 435, 435, width, height, true);
+        ResourcesManager.loadSprite("planet", PLANET_PATH, 1600, 1600	, width, height, true);
 
         // Ships
         ResourcesManager.loadSprite("baseShip", BASESHIP_PATH, 20, 20, width, height, true);
@@ -60,7 +60,12 @@ public class ResourcesManager {
 
     public static void colorImage(ImageView iv, Color color) {
         ColorAdjust effect = new ColorAdjust();
-        effect.setHue(color.getHue());
+        effect.setSaturation(1);
+        double hue = color.getHue();
+        if(hue>180) {
+        	hue = -180 + (180 - hue);
+        }
+        effect.setHue(hue/180);
         iv.setEffect(effect);
     }
     
