@@ -42,7 +42,7 @@ public class ResourcesManager {
     }
 
     private static void loadSprite(String name, String path, int width, int height, double maxX, double maxY, boolean outlined) {
-            System.out.println("Loaded "+path+"...");
+        System.out.println("Loaded "+path+"...");
         ResourcesManager.assets.put(name, new Sprite(getRessourcePathByName(path), width, height, maxX, maxY));
         if(outlined) {
             ResourcesManager.assets.put(name+"_outline", new Sprite(getRessourcePathByName(path.substring(0,path.length()-4)+"_outline.png"), width, height, maxX, maxY));

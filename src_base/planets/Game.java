@@ -2,7 +2,9 @@ package planets;
 
 import java.util.ArrayList;
 
+import input.KeyEventHandler;
 import input.MouseHandler;
+import input.MouseReleaseHandler;
 import javafx.event.EventHandler;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
@@ -76,24 +78,13 @@ public class Game {
 
     private void initEvents(Scene scene) {
     	MouseHandler mouseHandler = new MouseHandler();
-        EventHandler<MouseEvent> mouseReleaseHandler = new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent e) {
-                if (!e.isPrimaryButtonDown()) {
-                    Game.primaryHeld = false;
-                }
-
-            }
-        };
-
-        EventHandler<KeyEvent> keyEventHandler = new EventHandler<KeyEvent>() {
-            public void handle(KeyEvent e) {
-                // TODO : Keyboard actions
-            }
-        };
+    	MouseReleaseHandler mouseReleaseHandler = new MouseReleaseHandler();
+        KeyEventHandler keyEventHandler = new KeyEventHandler();
 
         scene.setOnMouseDragged(mouseHandler);
         scene.setOnMousePressed(mouseHandler);
         scene.setOnMouseReleased(mouseReleaseHandler);
+        scene.setOnKeyPressed(keyEventHandler);
     }
 
     public void initGame(double width, double height) {
@@ -143,6 +134,15 @@ public class Game {
         }
         element.setSelected(state);
     }
+    
+    public static void deselect(ArrayList list) {
+    	int c = 0;
+    	int t = list.size();
+    	while(c < t) {
+    		Game.setSelect(list,(Sprite) list.get(0), false);
+    		c++;
+    	}
+    }
 
     public static void setSelectSquad(Squad s, boolean state) {
         if (state) {
@@ -154,6 +154,13 @@ public class Game {
         for (Ship sq : s.getShips()) {
             sq.setSelected(state);
         }
+    }
+    
+    public static void startConvoy(Planet target) {
+        for (Planet o : Game.selectedPlanets) {
+            Game.startMission(o, target, o.getNbShip(), o.getMaxLaunchShips(), Mission.CONVOY);
+        }
+       	Game.deselect(Game.selectedPlanets);
     }
 
     public void handle(long arg0) {
