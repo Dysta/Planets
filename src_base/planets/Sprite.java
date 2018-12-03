@@ -187,9 +187,11 @@ public class Sprite {
     
     public void setSelected(boolean s) {
         if(s) {
-            this.getImageView().setImage(ResourcesManager.assets.get(this.assetReference()+"_outline").getImage());
+        	ResourcesManager.highlightImage(this.getImageView(), +0.2);
+            //this.getImageView().setImage(ResourcesManager.assets.get(this.assetReference()+"_outline").getImage());
         } else {
-            this.getImageView().setImage(ResourcesManager.assets.get(this.assetReference()).getImage());
+        	ResourcesManager.highlightImage(this.getImageView(), -0.2);
+            //this.getImageView().setImage(ResourcesManager.assets.get(this.assetReference()).getImage());
         }
     }
 

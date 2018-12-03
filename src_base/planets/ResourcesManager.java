@@ -60,6 +60,13 @@ public class ResourcesManager {
 
     public static void colorImage(ImageView iv, Color color) {
         ColorAdjust effect = new ColorAdjust();
+        effect.setHue(color.getHue());
         iv.setEffect(effect);
+    }
+    
+    public static void highlightImage(ImageView iv, double brightness) {
+    	ColorAdjust effect = new ColorAdjust();
+    	effect.setBrightness(brightness);
+    	iv.setEffect(effect);
     }
 }
