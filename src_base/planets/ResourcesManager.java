@@ -35,25 +35,16 @@ public class ResourcesManager {
         ResourcesManager.assets = new HashMap<String, Sprite>();
 
         ResourcesManager.loadBackground(BG_PATH, width, height, false, false);
-        ResourcesManager.loadSprite("planet", PLANET_PATH, 1600, 1600	, width, height, true);
+        ResourcesManager.loadSprite("planet", PLANET_PATH, 1600, 1600	, width, height);
 
         // Ships
-        ResourcesManager.loadSprite("baseShip", BASESHIP_PATH, 20, 20, width, height, true);
+        ResourcesManager.loadSprite("baseShip", BASESHIP_PATH, 20, 20, width, height);
     }
 
-    private static void loadSprite(String name, String path, int width, int height, double maxX, double maxY, boolean outlined) {
+    private static void loadSprite(String name, String path, int width, int height, double maxX, double maxY) {
         System.out.println("Loaded "+path+"...");
         ResourcesManager.assets.put(name, new Sprite(getRessourcePathByName(path), width, height, maxX, maxY));
-        if(outlined) {
-            ResourcesManager.assets.put(name+"_outline", new Sprite(getRessourcePathByName(path.substring(0,path.length()-4)+"_outline.png"), width, height, maxX, maxY));
-            System.out.println("Loaded "+path.substring(0,path.length()-4)+"_outline.png"+"...");
-        }
     }
-    
-    private static void loadSprite(String name, String path, int width, int height, double maxX, double maxY) {
-        ResourcesManager.loadSprite(name, path, width, height, maxX, maxY, false);
-    }
-
     private static void loadBackground(String path, double width, double height, boolean preserveRatio, boolean smooth) {
         ResourcesManager.background = new Image(getRessourcePathByName(path), width, height, preserveRatio, smooth);
     }
