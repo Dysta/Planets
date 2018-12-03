@@ -103,7 +103,7 @@ public class Game {
         double maximumPlanetSize = 150;
         double borderMargin = 50;
         int nbPlanets = 10;
-        int nbPlayers = 2;
+        int nbPlayers = 6;
 
         Game.galaxy = new Galaxy(width, height, nbPlanets, nbPlayers, planetInfluenceZone, planetSecurityZone, minimumPlanetSize, maximumPlanetSize, borderMargin);
         for(Planet p : Game.galaxy.getPlanets()) {

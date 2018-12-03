@@ -15,8 +15,10 @@ public class App extends Application {
     private final static double HEIGHT = 720;
 
     private final static int REFRESHRATE = 60;
+    private final static int TICKRATE = 5;
 
     private static long last_tick;
+    private static long last_frame;
     private static ArrayList<Long> ticks;
 
     public static void main(String[] args) {
@@ -27,6 +29,7 @@ public class App extends Application {
     public void start(Stage primaryStage) throws Exception {
 
         App.last_tick = System.currentTimeMillis();
+        App.last_frame = System.currentTimeMillis();
 
         // Create Game and start it
         Game game = new Game();
@@ -47,12 +50,15 @@ public class App extends Application {
         new AnimationTimer() {
             public void handle(long arg0) {
                 long now = System.currentTimeMillis();
-                game.handle(arg0);
-                App.ticks.remove(0);
-                App.ticks.add(now);
 
-                if (now - App.last_tick >= 1000 / App.REFRESHRATE) {
-                    App.last_tick = now;
+                if (now - App.last_tick >= 1000 / App.TICKRATE) {
+                    game.handle(arg0);
+                    App.ticks.remove(0);
+                    App.ticks.add(now);
+                }
+
+                if (now - App.last_frame >= 1000 / App.REFRESHRATE) {
+                    App.last_frame = now;
 
                     if (App.DEBUG) {
                         System.out.println("-------------- Tick n°" + Game.ticks + " (tickrate: " + DebugUtils.tickRate(App.ticks) + ") --------------");
