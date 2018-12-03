@@ -22,6 +22,17 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
 				}
 			}
 		}
+		
+		if (e.getCode() == KeyCode.UP) {
+			Game.mainPlayer.setEffectivesPercent(Game.mainPlayer.getEffectivesPercent() + 10);
+		}
+		if (e.getCode() == KeyCode.DOWN) {
+			Game.mainPlayer.setEffectivesPercent(Game.mainPlayer.getEffectivesPercent() - 10);
+		}
+		
+		if (e.getCode() == KeyCode.ESCAPE) {
+			System.exit(0);
+		}
     }
 
 }
