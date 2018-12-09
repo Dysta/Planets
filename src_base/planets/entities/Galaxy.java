@@ -61,7 +61,7 @@ public class Galaxy {
             
             Player p;
             if(main) {
-                p = new Player(Color.color(Math.random(), Math.random(), Math.random()));
+                p = new Player(Color.color(Math.random(), Math.random(), Math.random()), true);
             } else {
                 p = new BaseAI(Color.color(Math.random(), Math.random(), Math.random()));
             }

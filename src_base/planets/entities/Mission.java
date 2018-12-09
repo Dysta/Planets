@@ -16,6 +16,8 @@ public class Mission {
     private ArrayList<Squad> squads;
 
     private int addQueue;
+    
+    private Player owner;
     private final Planet origin;
     private final Planet destination;
 
@@ -26,6 +28,7 @@ public class Mission {
     public Mission(Planet p1, Planet p2, int addQueue, int squadSize, String mission) {
         this.addQueue = addQueue;
         this.squads = new ArrayList<>();
+        this.owner = p1.getOwner();
         this.origin = p1;
         this.destination = p2;
         this.mission = mission;
@@ -64,14 +67,14 @@ public class Mission {
 
         switch (this.mission) {
             case Mission.ATTACK:
-                if (this.origin.getOwner() == this.destination.getOwner()) {
+                if (this.owner == this.destination.getOwner()) {
                     // The planet will gladly receive the ships, 
                     // as it's been conquered since the order to attack was given
                     this.mission = Mission.CONVOY;
                 }
                 break;
             case Mission.CONVOY:
-                if (this.origin.getOwner() != this.destination.getOwner()) {
+                if (this.owner != this.destination.getOwner()) {
                     // Abort escort mission ! Units will have to fight
                     this.mission = Mission.ATTACK;
                 }
@@ -81,7 +84,7 @@ public class Mission {
         switch (this.mission) {
             case Mission.ATTACK:
                 if (this.destination.defend(arrivers)) {
-                    this.destination.setOwner(this.origin.getOwner());
+                    this.destination.setOwner(this.owner);
                 }
                 break;
             case Mission.CONVOY:
@@ -124,6 +127,6 @@ public class Mission {
     }
     
     public boolean isEmpty() {
-        return this.squads.size() <= 0;
+        return this.squads.size() <= 0 && this.addQueue == 0;
     }
 }
