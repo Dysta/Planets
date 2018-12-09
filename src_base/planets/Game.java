@@ -99,7 +99,7 @@ public class Game {
     public void initGame(double width, double height) {
         double borderMargin = 50;
         int nbPlanets = 20;
-        int nbPlayers = 7;
+        int nbPlayers = 2;
 
         Game.galaxy = new Galaxy(width, height, nbPlanets, nbPlayers, borderMargin);
         for(Planet p : Game.galaxy.getPlanets()) {
