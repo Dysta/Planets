@@ -33,7 +33,6 @@ abstract public class AI extends Player {
                     if(t.getOwner() == this) continue;
                     
                     if(shouldInvade(p,t)) {
-                        System.out.println("AI attack !");
                         Game.startAttack(p, t);
                         orderGiven = true;
                     }

@@ -46,7 +46,7 @@ public class Game {
     public static ArrayList<Planet> selectedPlanets;
     public static ArrayList<Squad> selectedSquads;
     public static int ticks;
-
+    
     // UI Elements
     private static SelectPercentage selectP;
 
@@ -84,8 +84,8 @@ public class Game {
     }
 
     private void initEvents(Scene scene) {
-        MouseHandler mouseHandler = new MouseHandler();
-        MouseReleaseHandler mouseReleaseHandler = new MouseReleaseHandler();
+    	MouseHandler mouseHandler = new MouseHandler();
+    	MouseReleaseHandler mouseReleaseHandler = new MouseReleaseHandler();
         KeyEventHandler keyEventHandler = new KeyEventHandler();
         ScrollEventHandler scrollEventHandler = new ScrollEventHandler();
 
@@ -102,17 +102,17 @@ public class Game {
         int nbPlayers = 7;
 
         Game.galaxy = new Galaxy(width, height, nbPlanets, nbPlayers, borderMargin);
-        for (Planet p : Game.galaxy.getPlanets()) {
-            if (p.getOwner().isMainPlayer()) {
-                Game.mainPlayer = p.getOwner();
-            }
+        for(Planet p : Game.galaxy.getPlanets()) {
+        	if(p.getOwner().isMainPlayer()) {
+        		Game.mainPlayer = p.getOwner();
+        	}
         }
         Game.missions = new ArrayList<>();
         Game.selectedPlanets = new ArrayList<>();
         Game.selectedSquads = new ArrayList<>();
         Game.primaryHeld = false;
         Game.ctrlHeld = false;
-
+        
         // init UI
         this.selectP = new SelectPercentage(gc, root, Game.mainPlayer, width, height);
 
@@ -147,14 +147,14 @@ public class Game {
         }
         element.setSelected(state);
     }
-
+    
     public static void deselect(ArrayList list) {
-        int c = 0;
-        int t = list.size();
-        while (c < t) {
-            Game.setSelect(list, (Sprite) list.get(0), false);
-            c++;
-        }
+    	int c = 0;
+    	int t = list.size();
+    	while(c < t) {
+    		Game.setSelect(list,(Sprite) list.get(0), false);
+    		c++;
+    	}
     }
 
     public static void setSelectSquad(Squad s, boolean state) {
@@ -168,25 +168,25 @@ public class Game {
             sq.setSelected(state);
         }
     }
-
+    
     public static void deselectSquads() {
-        int c = 0;
-        int t = Game.selectedSquads.size();
-        while (c < t) {
-            Game.setSelectSquad(Game.selectedSquads.get(0), false);
-            c++;
-        }
+    	int c = 0;
+    	int t = Game.selectedSquads.size();
+    	while(c < t) {
+    		Game.setSelectSquad(Game.selectedSquads.get(0),false);
+    		c++;
+    	}
     }
-
+    
     public static void startConvoy(Planet target) {
         for (Planet o : Game.selectedPlanets) {
-            Game.startMission(o, target, (int) (o.getNbShip() * (o.getOwner().getEffectivesPercent() / 100)), o.getMaxLaunchShips(), Mission.CONVOY);
+            Game.startMission(o, target, (int) (o.getNbShip()*(o.getOwner().getEffectivesPercent()/100)), o.getMaxLaunchShips(), Mission.CONVOY);
         }
-        Game.deselect(Game.selectedPlanets);
+       	Game.deselect(Game.selectedPlanets);
     }
-
+    
     public static void startAttack(Planet o, Planet target) {
-        Game.startMission(o, target, (int) (o.getNbShip() * (o.getOwner().getEffectivesPercent() / 100)), o.getMaxLaunchShips(), Mission.ATTACK);
+        Game.startMission(o, target, (int) (o.getNbShip()*(o.getOwner().getEffectivesPercent()/100)),  o.getMaxLaunchShips(), Mission.ATTACK);
     }
 
     public void handle(long arg0) {
@@ -195,22 +195,22 @@ public class Game {
         for (Mission r : Game.missions) {
             r.handle();
         }
-
+        
         for (Planet p : Galaxy.getPlanets()) {
             p.productionTick();
         }
-
+        
         for (Player p : Galaxy.getPlayers()) {
             p.handle();
         }
 
         Game.missions.removeIf((Mission r) -> r.isEmpty());
     }
-
+    
     public void updateUI() {
         for (Planet p : Galaxy.getPlanets()) {
             p.printStock(gc, root);
-        }
+        }        
         this.selectP.update();
     }
 
