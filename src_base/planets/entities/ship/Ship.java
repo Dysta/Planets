@@ -113,17 +113,14 @@ public abstract class Ship extends Sprite {
     
     public void takeDamage(int d) {
         this.shield -= d;
-        System.out.println(this + " has been wounded for "+d);
     }
     
     public boolean isDead() {
-        System.out.println(this + " died");
         return this.shield <= 0;
     }
     
     public void attack(Ship s) {
         s.takeDamage(this.power);
-        System.out.println(this + " inflicted "+this.power+" damage to "+s);
     }
 
     public void correctTrajectory(Ship s, Planet destination, Point dir, double angle) {
@@ -185,6 +182,14 @@ public abstract class Ship extends Sprite {
             s.setStraightLine(true);
         }
 
+    }
+    
+    public int getPower() {
+        return this.power;
+    }
+    
+    public int getShield() {
+        return this.shield;
     }
     
     @Override

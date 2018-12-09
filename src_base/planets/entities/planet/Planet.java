@@ -204,6 +204,14 @@ public abstract class Planet extends Sprite {
         return attackers.size() > 0;
     }
     
+    public int getPower() {
+        int t = 0;
+        for(Ship s : this.ships) {
+            t += s.getPower();
+        }
+        return t;
+    }
+    
     public boolean freeToLaunch() {
         boolean free = true;
         for(Mission m : Game.missions) {

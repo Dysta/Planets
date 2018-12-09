@@ -1,5 +1,6 @@
 package planets.entities;
 
+import planets.entities.AIs.AI;
 import planets.entities.planet.Planet;
 import java.util.ArrayList;
 import java.util.Random;
@@ -7,6 +8,7 @@ import java.util.Random;
 import javafx.scene.paint.Color;
 import planets.utils.GameUtils;
 import planets.ResourcesManager;
+import planets.entities.AIs.BaseAI;
 import planets.entities.planet.BasePlanet;
 import planets.entities.ship.Ship;
 
@@ -56,7 +58,13 @@ public class Galaxy {
 
         boolean main = true;
         for (int i = 0; i < nbPlayers; i++) {
-            Player p = new Player(Color.color(Math.random(), Math.random(), Math.random()));
+            
+            Player p;
+            if(main) {
+                p = new Player(Color.color(Math.random(), Math.random(), Math.random()));
+            } else {
+                p = new BaseAI(Color.color(Math.random(), Math.random(), Math.random()));
+            }
 
             boolean found = false;
             Planet target = null;
@@ -98,5 +106,9 @@ public class Galaxy {
 
     public static ArrayList<Planet> getPlanets() {
         return Galaxy.planets;
+    }
+
+    public static ArrayList<Player> getPlayers() {
+        return Galaxy.players;
     }
 }
