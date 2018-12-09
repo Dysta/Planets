@@ -51,8 +51,6 @@ public class Galaxy {
 
             if (tries < 10) {
                 Galaxy.planets.add(n);
-            } else {
-                System.out.println("Could not put non colliding planet.");
             }
         }
 
@@ -87,7 +85,7 @@ public class Galaxy {
 
 
 
-    private boolean isColliding(Planet planet) {
+    public boolean isColliding(Planet planet) {
         boolean colliding = false;
         for (Planet p : Galaxy.planets) {
             if (Math.sqrt(Math.pow(p.getPosXMiddle() - planet.getPosXMiddle(), 2) + Math.pow(p.getPosYMiddle() - planet.getPosYMiddle(), 2)) < (Galaxy.planetSecurityZone + p.getSize() + planet.getSize())) {

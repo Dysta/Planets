@@ -44,7 +44,6 @@ public class ResourcesManager {
     }
 
     private static void loadSprite(String name, String path, int width, int height, double maxX, double maxY) {
-        System.out.println("Loaded "+path+"...");
         ResourcesManager.assets.put(name, new Sprite(getRessourcePathByName(path), width, height, maxX, maxY));
     }
     private static void loadBackground(String path, double width, double height, boolean preserveRatio, boolean smooth) {
