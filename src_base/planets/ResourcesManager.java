@@ -17,11 +17,13 @@ public class ResourcesManager {
     public static Image background;
     
     public final static String BG_PATH = "images/animated-background.gif";
-    public final static String PLANET_PATH = "images/planet.png";
     
     // Common Sprites
     public static Map<String, Sprite> assets;
 
+    // Planets
+    public final static String PLANET_PATH = "images/planets/BasePlanet.png";
+    
     // Ships        
     public final static String BASESHIP_PATH = "images/ships/BaseShip.png";
 
@@ -35,7 +37,7 @@ public class ResourcesManager {
         ResourcesManager.assets = new HashMap<String, Sprite>();
 
         ResourcesManager.loadBackground(BG_PATH, width, height, false, false);
-        ResourcesManager.loadSprite("planet", PLANET_PATH, 1600, 1600	, width, height);
+        ResourcesManager.loadSprite("basePlanet", PLANET_PATH, 1600, 1600, width, height);
 
         // Ships
         ResourcesManager.loadSprite("baseShip", BASESHIP_PATH, 20, 20, width, height);

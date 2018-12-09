@@ -19,7 +19,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import planets.entities.Galaxy;
-import planets.entities.Planet;
+import planets.entities.planet.Planet;
 import planets.entities.Player;
 import planets.entities.Mission;
 import planets.entities.Squad;

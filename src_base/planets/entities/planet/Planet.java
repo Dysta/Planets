@@ -1,4 +1,4 @@
-package planets.entities;
+package planets.entities.planet;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -11,9 +11,13 @@ import javafx.scene.text.TextFlow;
 import planets.Game;
 import planets.ResourcesManager;
 import planets.Sprite;
+import planets.entities.Galaxy;
+import planets.entities.Mission;
+import planets.entities.Player;
+import planets.entities.Squad;
 import planets.entities.ship.Ship;
 
-public class Planet extends Sprite {
+public abstract class Planet extends Sprite {
 
     private Sprite s;
     private Player owner;
@@ -24,6 +28,8 @@ public class Planet extends Sprite {
     private int shipCapacity;
     private double shipsPerTick;
     private double productionProgression;
+    
+    private String shipType;
 
     private ArrayList<Ship> ships;
 
@@ -35,7 +41,7 @@ public class Planet extends Sprite {
         this.updateDimensions(ResourcesManager.PLANET_PATH, size, size);
         this.size = size;
         this.owner = new Player();
-        this.ships = new ArrayList<Ship>();
+        this.ships = new ArrayList<>();
         this.productionProgression = 20; // Base ships on any planet (will produce those ships instantly)
         this.shipsPerTick = 0.02; // Minimum production
         this.shipCapacity = 50; // Minimum storage
@@ -55,6 +61,8 @@ public class Planet extends Sprite {
         
         this.shipsPerTick *= 1 + (size / (Galaxy.maximumPlanetSize * 2)); // The biggest planets can produce up to 50% more than smallest ones
         this.shipCapacity *= 1 + (size / (Galaxy.maximumPlanetSize * 1.2)); // The biggest planets can store up to 83% more than smallest ones
+        
+        this.shipType = this.owner.getShipType();
 
         this.setPosition(posX, posY);
         this.updateDimensions(ResourcesManager.PLANET_PATH, size, size);
@@ -63,7 +71,11 @@ public class Planet extends Sprite {
     
     @Override
     public String assetReference() {
-        return "planet";
+        return "basePlanet";
+    }
+    
+    public void setShipType(String type) {
+        this.shipType = type;
     }
 
     public Planet(Planet s) {
@@ -71,7 +83,8 @@ public class Planet extends Sprite {
         this.ships = s.getShips();
     }
 
-    private void produceShip(String s) {
+    private void produceShip() {
+        String s = this.shipType ;
         double angle = Math.random() * Math.PI * 2;
         double radius = (this.size + (Galaxy.planetInfluenceZone - this.size) / 2);
         double x = ((this.getPosX() + this.getSize() / 2) + Math.cos(angle) * radius);
@@ -143,7 +156,7 @@ public class Planet extends Sprite {
         }
 
         while (this.productionProgression >= 1) {
-            this.produceShip(this.owner.getShipType());
+            this.produceShip();
             this.productionProgression -= 1;
         }
     }
@@ -165,18 +178,30 @@ public class Planet extends Sprite {
     }
 
     public boolean defend(ArrayList<Ship> attackers) {
-        int c = 0;
-        int a = attackers.size();
-        int d = this.ships.size();
-        while (c < a && c < d) {
-            this.ships.get(0).die();
-            this.ships.remove(0);
-            attackers.get(0).die();
-            attackers.remove(0);
+        while(attackers.size() > 0 && this.ships.size() > 0) {
+            int c = 0;
+            int a = attackers.size();
+            int d = this.ships.size();
+            while (c < a && c < d) {
+                Ship defender = this.ships.get(0);
+                Ship attacker = attackers.get(0);
 
-            c++;
+                attacker.attack(defender);
+                defender.attack(attacker);
+
+                if(defender.isDead()) {
+                    defender.die();
+                    this.ships.remove(defender);
+                }
+                if(attacker.isDead()) {
+                    attacker.die();
+                    attackers.remove(attacker);
+                }
+
+                c++;
+            }
         }
-        return c >= d;
+        return attackers.size() > 0;
     }
     
     public boolean freeToLaunch() {

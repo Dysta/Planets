@@ -5,6 +5,7 @@
  */
 package planets.entities;
 
+import planets.entities.planet.Planet;
 import java.awt.Polygon;
 import java.util.ArrayList;
 import planets.utils.Point;

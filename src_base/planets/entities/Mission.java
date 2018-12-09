@@ -1,5 +1,6 @@
 package planets.entities;
 
+import planets.entities.planet.Planet;
 import java.util.ArrayList;
 import planets.Game;
 import planets.utils.GameUtils;

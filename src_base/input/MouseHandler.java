@@ -5,7 +5,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import planets.Game;
 import planets.entities.Mission;
-import planets.entities.Planet;
+import planets.entities.planet.Planet;
 import planets.entities.Squad;
 import planets.entities.ship.Ship;
 

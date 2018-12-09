@@ -1,11 +1,13 @@
 package planets.entities;
 
+import planets.entities.planet.Planet;
 import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.scene.paint.Color;
 import planets.utils.GameUtils;
 import planets.ResourcesManager;
+import planets.entities.planet.BasePlanet;
 import planets.entities.ship.Ship;
 
 public class Galaxy {
@@ -43,11 +45,11 @@ public class Galaxy {
             int tries = 0;
 
             do {
-                n = new Planet(ResourcesManager.assets.get("planet"), p, this.width, this.height, Galaxy.minimumPlanetSize, Galaxy.maximumPlanetSize, Galaxy.borderMargin);
+                n = new BasePlanet(ResourcesManager.assets.get("basePlanet"), p, this.width, this.height, Galaxy.minimumPlanetSize, Galaxy.maximumPlanetSize, Galaxy.borderMargin);
                 tries++;
-            } while ((tries < 100 && isColliding(n)));
+            } while ((tries < 10 && isColliding(n)));
 
-            if (tries < 100) {
+            if (tries < 10) {
                 Galaxy.planets.add(n);
             } else {
                 System.out.println("Could not put non colliding planet.");
@@ -70,8 +72,10 @@ public class Galaxy {
             }
 
             if (found) {
-                p.setMainPlayer(main);
-                main = false;
+                if(main) {
+                    p.setMainPlayer(main);
+                    main = false;
+                }
                 Galaxy.players.add(p);
                 target.setOwner(p);
             } else {

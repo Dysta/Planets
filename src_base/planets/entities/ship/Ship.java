@@ -3,7 +3,7 @@ package planets.entities.ship;
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
 import planets.entities.Galaxy;
-import planets.entities.Planet;
+import planets.entities.planet.Planet;
 import planets.ResourcesManager;
 import planets.Sprite;
 import planets.entities.Player;
@@ -16,16 +16,21 @@ public abstract class Ship extends Sprite {
     protected double currentSpeed;
     protected double acceleration;
     protected double speedCap;
+    
+    protected int power;
+    protected int shield;
 
     private double blindForward;
     private double lastDir;
     private boolean straightLine;
 
-    public Ship(Sprite s, double posX, double posY, double speedCap, double acceleration) {
+    public Ship(Sprite s, double posX, double posY, double speedCap, double acceleration, int power, int shield) {
         super(s);
         this.setPosition(posX, posY);
         this.speedCap = speedCap;
         this.acceleration = acceleration;
+        this.power = power;
+        this.shield = shield;
         this.currentSpeed = 0;
         this.blindForward = 0;
         this.lastDir = 0;
@@ -105,6 +110,21 @@ public abstract class Ship extends Sprite {
     public void setStraightLine(boolean t) {
         this.straightLine = t;
     }
+    
+    public void takeDamage(int d) {
+        this.shield -= d;
+        System.out.println(this + " has been wounded for "+d);
+    }
+    
+    public boolean isDead() {
+        System.out.println(this + " died");
+        return this.shield <= 0;
+    }
+    
+    public void attack(Ship s) {
+        s.takeDamage(this.power);
+        System.out.println(this + " inflicted "+this.power+" damage to "+s);
+    }
 
     public void correctTrajectory(Ship s, Planet destination, Point dir, double angle) {
         double sec_angle = angle;
@@ -165,5 +185,10 @@ public abstract class Ship extends Sprite {
             s.setStraightLine(true);
         }
 
+    }
+    
+    @Override
+    public String toString() {
+        return this.assetReference();
     }
 }

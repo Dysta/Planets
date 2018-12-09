@@ -4,7 +4,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import planets.Game;
-import planets.entities.Planet;
+import planets.entities.planet.Planet;
 
 public class KeyEventHandler implements EventHandler<KeyEvent> {
 
