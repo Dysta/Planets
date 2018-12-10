@@ -69,7 +69,7 @@ public class App extends Application {
                     App.last_frame = now;
 
                     if (App.DEBUG) {
-                        System.out.println("-------------- Tick nÂ°" + Game.ticks + " (tickrate: " + DebugUtils.tickRate(App.ticks) + ") --------------");
+                        System.out.println("-------------- Tick n°" + Game.ticks + " (tickrate: " + DebugUtils.tickRate(App.ticks) + ") --------------");
                         System.out.println("Nodes : " + DebugUtils.getAllNodes(root).size());
                     }
                     game.updateUI();
