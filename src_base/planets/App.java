@@ -15,10 +15,12 @@ public class App extends Application {
     private final static double HEIGHT = 720;
 
     private final static int REFRESHRATE = 60;
-    private final static int TICKRATE = 5;
+    private final static int TICKRATE = 60;
+    private final static int AI_THINKRATE = 2;
 
     private static long last_tick;
     private static long last_frame;
+    private static long last_think;
     private static ArrayList<Long> ticks;
 
     public static void main(String[] args) {
@@ -52,9 +54,15 @@ public class App extends Application {
                 long now = System.currentTimeMillis();
 
                 if (now - App.last_tick >= 1000 / App.TICKRATE) {
+                    App.last_tick = now;
                     game.handle(arg0);
                     App.ticks.remove(0);
                     App.ticks.add(now);
+                }
+
+                if (now - App.last_think >= 1000 / App.AI_THINKRATE) {
+                    App.last_think = now;
+                    game.handleAI();
                 }
 
                 if (now - App.last_frame >= 1000 / App.REFRESHRATE) {

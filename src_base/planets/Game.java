@@ -99,7 +99,7 @@ public class Game {
     public void initGame(double width, double height) {
         double borderMargin = 50;
         int nbPlanets = 20;
-        int nbPlayers = 2;
+        int nbPlayers = 5;
 
         Game.galaxy = new Galaxy(width, height, nbPlanets, nbPlayers, borderMargin);
         for(Planet p : Game.galaxy.getPlanets()) {
@@ -199,10 +199,6 @@ public class Game {
         for (Planet p : Galaxy.getPlanets()) {
             p.productionTick();
         }
-        
-        for (Player p : Galaxy.getPlayers()) {
-            p.handle();
-        }
 
         Game.missions.removeIf((Mission r) -> r.isEmpty());
     }
@@ -211,7 +207,14 @@ public class Game {
         for (Planet p : Galaxy.getPlanets()) {
             p.printStock(gc, root);
         }        
+        
         this.selectP.update();
+    }
+    
+    public void handleAI() {
+        for (Player p : Galaxy.getPlayers()) {
+            p.handle();
+        }
     }
 
 }
