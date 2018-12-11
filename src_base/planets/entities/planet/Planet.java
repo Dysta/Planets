@@ -8,7 +8,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import planets.Game;
+import planets.windows.Game;
 import planets.ResourcesManager;
 import planets.Sprite;
 import planets.entities.Galaxy;

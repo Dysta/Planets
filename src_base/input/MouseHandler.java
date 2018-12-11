@@ -3,7 +3,7 @@ package input;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import planets.Game;
+import planets.windows.Game;
 import planets.entities.Mission;
 import planets.entities.planet.Planet;
 import planets.entities.Squad;

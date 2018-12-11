@@ -2,7 +2,7 @@ package planets.entities;
 
 import planets.entities.planet.Planet;
 import java.util.ArrayList;
-import planets.Game;
+import planets.windows.Game;
 import planets.utils.GameUtils;
 import planets.utils.Point;
 

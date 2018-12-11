@@ -3,7 +3,7 @@ package tests;
 import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import planets.Game;
+import planets.windows.Game;
 import planets.ResourcesManager;
 
 public class Tests extends Application  {

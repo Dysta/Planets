@@ -2,7 +2,7 @@ package planets.entities.AIs;
 
 import java.util.ArrayList;
 import javafx.scene.paint.Color;
-import planets.Game;
+import planets.windows.Game;
 import planets.entities.Galaxy;
 import planets.entities.Player;
 import planets.entities.planet.Planet;

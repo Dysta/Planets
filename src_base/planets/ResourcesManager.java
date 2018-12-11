@@ -1,5 +1,6 @@
 package planets;
 
+import planets.windows.Game;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,15 +16,17 @@ public class ResourcesManager {
 
     // Common
     public static Image background;
-    
+    public static Image menuBackground;
+
     public final static String BG_PATH = "images/animated-background.gif";
-    
+    public final static String MENUBG_PATH = "images/animated-background.gif";
+
     // Common Sprites
     public static Map<String, Sprite> assets;
 
     // Planets
     public final static String PLANET_PATH = "images/planets/BasePlanet.png";
-    
+
     // Ships        
     public final static String BASESHIP_PATH = "images/ships/BaseShip.png";
 
@@ -33,10 +36,15 @@ public class ResourcesManager {
     }
 
     /* ====== GAME ASSETS ====== */
+    public static void initMenuAssets(double width, double height) {
+        ResourcesManager.menuBackground = new Image(getRessourcePathByName(MENUBG_PATH), width, height, false, false);
+    }
+
+    /* ====== GAME ASSETS ====== */
     public static void initGameAssets(double width, double height) {
         ResourcesManager.assets = new HashMap<String, Sprite>();
+        ResourcesManager.background = new Image(getRessourcePathByName(BG_PATH), width, height, false, false);
 
-        ResourcesManager.loadBackground(BG_PATH, width, height, false, false);
         ResourcesManager.loadSprite("basePlanet", PLANET_PATH, 1600, 1600, width, height);
 
         // Ships
@@ -46,26 +54,23 @@ public class ResourcesManager {
     private static void loadSprite(String name, String path, int width, int height, double maxX, double maxY) {
         ResourcesManager.assets.put(name, new Sprite(getRessourcePathByName(path), width, height, maxX, maxY));
     }
-    private static void loadBackground(String path, double width, double height, boolean preserveRatio, boolean smooth) {
-        ResourcesManager.background = new Image(getRessourcePathByName(path), width, height, preserveRatio, smooth);
-    }
 
     public static void colorImage(Sprite sprite, Color color) {
-    	ImageView iv = sprite.getImageView();
+        ImageView iv = sprite.getImageView();
         ColorAdjust effect = sprite.getColorAdjust();
         effect.setSaturation(1);
         double hue = color.getHue();
-        if(hue>180) {
-        	hue = -(360 - hue);
+        if (hue > 180) {
+            hue = -(360 - hue);
         }
-        effect.setHue(hue/180);
+        effect.setHue(hue / 180);
         iv.setEffect(effect);
     }
-    
+
     public static void highlightImage(Sprite sprite, double brightness) {
-    	ImageView iv = sprite.getImageView();    	
-    	ColorAdjust effect = sprite.getColorAdjust();
-    	effect.setBrightness(brightness);
-    	iv.setEffect(effect);
+        ImageView iv = sprite.getImageView();
+        ColorAdjust effect = sprite.getColorAdjust();
+        effect.setBrightness(brightness);
+        iv.setEffect(effect);
     }
 }

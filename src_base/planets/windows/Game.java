@@ -1,4 +1,4 @@
-package planets;
+package planets.windows;
 
 import java.util.ArrayList;
 
@@ -18,6 +18,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import planets.ResourcesManager;
+import planets.Sprite;
 import planets.entities.Galaxy;
 import planets.entities.planet.Planet;
 import planets.entities.Player;
@@ -27,18 +29,12 @@ import planets.utils.DebugUtils;
 import ui.SelectPercentage;
 import planets.entities.ship.Ship;
 
-public class Game {
+public class Game extends Window {
 
-    // Attributes
-    private Stage stage;
-    private GraphicsContext gc;
-    private Canvas canvas;
     // Entities
     public static Galaxy galaxy;
     public static ArrayList<Mission> missions;
     public static Player mainPlayer;
-    // Constants
-    public static Group root;
 
     // States
     public static boolean primaryHeld;
@@ -51,16 +47,18 @@ public class Game {
     private static SelectPercentage selectP;
 
     // Methods
-    // Stage options are defined by the game
+    @Override
     public void setStage(Stage stage_p, String title) {
         this.stage = stage_p;
         stage.setTitle(title);
         stage.setResizable(false);
     }
 
-    // GraphicsContext is defined by the game
-    public void show(double WIDTH, double HEIGHT) {
-        Group root = new Group();
+    public void init(double WIDTH, double HEIGHT) {
+        this.WIDTH = WIDTH;
+        this.HEIGHT = HEIGHT;
+        
+        Game.root = new Group();
         Scene scene = new Scene(root);
         canvas = new Canvas(WIDTH, HEIGHT);
         root.getChildren().add(canvas);
@@ -74,12 +72,11 @@ public class Game {
         gc.setFill(Color.BISQUE);
         gc.setStroke(Color.RED);
         gc.setLineWidth(1);
-
         gc.drawImage(ResourcesManager.background, 0, 0);
 
-        Game.root = root;
         stage.setScene(scene);
         this.initEvents(scene);
+        
         stage.show();
     }
 
@@ -96,12 +93,10 @@ public class Game {
         scene.setOnScroll(scrollEventHandler);
     }
 
-    public void initGame(double width, double height) {
+    public void initGame(int nbPlayers, int nbPlanets) {
         double borderMargin = 50;
-        int nbPlanets = 20;
-        int nbPlayers = 5;
 
-        Game.galaxy = new Galaxy(width, height, nbPlanets, nbPlayers, borderMargin);
+        Game.galaxy = new Galaxy(this.WIDTH, this.HEIGHT, nbPlanets, nbPlayers, borderMargin);
         for(Planet p : Game.galaxy.getPlanets()) {
         	if(p.getOwner().isMainPlayer()) {
         		Game.mainPlayer = p.getOwner();
@@ -114,7 +109,7 @@ public class Game {
         Game.ctrlHeld = false;
         
         // init UI
-        this.selectP = new SelectPercentage(gc, root, Game.mainPlayer, width, height);
+        this.selectP = new SelectPercentage(gc, root, Game.mainPlayer, this.WIDTH, this.HEIGHT);
 
         for (Planet p : Galaxy.getPlanets()) {
             p.initRender();

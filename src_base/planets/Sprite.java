@@ -1,5 +1,6 @@
 package planets;
 
+import planets.windows.Game;
 import javafx.scene.Group;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
