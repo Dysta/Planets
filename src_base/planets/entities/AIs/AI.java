@@ -29,16 +29,15 @@ abstract public class AI extends Player {
             if (p.getOwner() == this) {
                 boolean orderGiven = false;
 
-                Planet t = Galaxy.getPlanets().get(GameUtils.getRandomIntegerBetweenRange(0,Galaxy.getPlanets().size()-1));
-                        if (t.getOwner() == this) {
-                            continue;
-                        }
+                Planet t = Galaxy.getPlanets().get(GameUtils.getRandomIntegerBetweenRange(0, Galaxy.getPlanets().size() - 1));
+                if (t.getOwner() == this) {
+                    continue;
+                }
 
-                        if (shouldInvade(p, t)) {
-                            Game.startAttack(p, t);
-                            orderGiven = true;
-                        }
-                
+                if (shouldInvade(p, t)) {
+                    Game.startAttack(p, t);
+                    orderGiven = true;
+                }
 
             }
         }
@@ -69,4 +68,11 @@ abstract public class AI extends Player {
     private boolean shouldInvade(Planet p, Planet t) {
         return decide(percentInvade(p, t));
     }
+    
+    @Override
+    public boolean isAI() {
+        return true;
+    }
+    
+    abstract public String AIclass();
 }

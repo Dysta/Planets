@@ -17,7 +17,6 @@ public class BasePlanet extends Planet {
     
     public BasePlanet(Sprite s, Player owner, double posX, double posY, double size) {
         super(s, owner, posX, posY, size);
-        System.out.println("x: "+posX+"| y: "+posY);
         this.getImageView().setImage(ResourcesManager.assets.get("basePlanet").getImage());
     }
 

@@ -33,7 +33,7 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
             try {
                 SaveManager.load(App.game, "last");
             } catch (Exception err) {
-                System.err.println("Failed to load last save " + err);
+                err.printStackTrace();
             }
         }
 

@@ -45,7 +45,6 @@ public abstract class Planet extends Sprite {
         this.setPosition(posX, posY);
         this.updateDimensions(ResourcesManager.PLANET_PATH, size, size);
         this.size = size;
-        this.owner = new Player();
         this.ships = new ArrayList<>();
         this.productionProgression = 20; // Base ships on any planet (will produce those ships instantly)
         this.shipsPerTick = 0.02; // Minimum production
@@ -77,9 +76,8 @@ public abstract class Planet extends Sprite {
     public void loadPlanet(String shipType, double shipPerTick, int shipsCount, int shipCapacity, double productionProgression) {
         this.shipType = shipType;
         this.shipsPerTick = shipPerTick;
-        this.productionProgression = shipsCount;
         this.shipCapacity = shipCapacity;
-        this.productionProgression = productionProgression;
+        this.productionProgression = productionProgression + shipsCount;
     }
     
     @Override
@@ -118,7 +116,7 @@ public abstract class Planet extends Sprite {
 
     public void setOwner(Player owner) {
         this.owner = owner;
-        Game.clearPlanetMissions(this);
+        Game.endPlanetMissions(this);
         ResourcesManager.colorImage(this, owner.getColor());
     }
 

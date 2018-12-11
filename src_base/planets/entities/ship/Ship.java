@@ -193,6 +193,10 @@ public abstract class Ship extends Sprite {
         return this.currentSpeed;
     }
     
+    public void setCurrentSpeed(double s) {
+        this.currentSpeed = s;
+    }
+    
     public int getPower() {
         return this.power;
     }

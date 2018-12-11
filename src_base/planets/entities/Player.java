@@ -84,6 +84,10 @@ public class Player {
 
     }
     
+    public boolean isAI() {
+        return false;
+    }
+    
     public int getId() {
         return this.id;
     }

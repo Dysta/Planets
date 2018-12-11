@@ -17,4 +17,8 @@ public class BaseAI extends AI {
         super(color,10,10,10,10);
     }
     
+    @Override
+    public String AIclass() {
+        return "planets.entities.AIs.BaseAI";
+    }
 }

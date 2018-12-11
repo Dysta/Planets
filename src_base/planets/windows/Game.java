@@ -39,7 +39,7 @@ public class Game extends Window {
     // States
     public static boolean primaryHeld;
     public static boolean ctrlHeld;
-    public static boolean freeze;
+    public static boolean freeze = false;
     public static ArrayList<Planet> selectedPlanets;
     public static ArrayList<Squad> selectedSquads;
     public static int ticks;
@@ -58,8 +58,6 @@ public class Game extends Window {
     public void init(double WIDTH, double HEIGHT) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
-
-        this.freeze = false;
 
         Game.root = new Group();
         Scene scene = new Scene(root);
@@ -128,6 +126,15 @@ public class Game extends Window {
 
         for (Planet p : Galaxy.getPlanets()) {
             p.initRender();
+        }
+
+        for (Mission m : Game.missions) {
+            for(Squad s : m.getSquads()) {
+                for(Ship sh : s.getShips()) {
+                    sh.initRender();
+                    ResourcesManager.colorImage(sh, m.getOwner().getColor());
+                }
+            }
         }
     }
     // Game instantiation 
@@ -203,8 +210,12 @@ public class Game extends Window {
         Game.startMission(o, target, (int) (o.getNbShip() * (o.getOwner().getEffectivesPercent() / 100)), o.getMaxLaunchShips(), Mission.ATTACK);
     }
 
-    public static void clearPlanetMissions(Planet p) {
-        Game.missions.removeIf((Mission r) -> r.getOriginPlanet() == p);
+    public static void endPlanetMissions(Planet p) {
+        for(Mission m : Game.missions) {
+            if(m.getOriginPlanet() == p) {
+                m.clearQueue();
+            }
+        }
     }
 
     public void handle(long arg0) {

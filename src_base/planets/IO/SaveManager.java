@@ -27,6 +27,8 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 import planets.ResourcesManager;
 import planets.Sprite;
+import planets.entities.AIs.AI;
+import planets.entities.AIs.BaseAI;
 import planets.entities.Galaxy;
 import planets.entities.Mission;
 
@@ -94,78 +96,116 @@ public class SaveManager {
             DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
             Document document = documentBuilder.parse(file);
+            
+            Node gameNode = document.getElementsByTagName("game").item(0);
 
-            double width = Double.parseDouble(document.getElementsByTagName("game").item(0).getAttributes().getNamedItem("width").getTextContent());
-            double height = Double.parseDouble(document.getElementsByTagName("game").item(0).getAttributes().getNamedItem("height").getTextContent());
+            double width = Double.parseDouble(getAttribute(gameNode,"width"));
+            double height = Double.parseDouble(getAttribute(gameNode,"height"));
+            
+            Node galaxyNode = gameNode.getChildNodes().item(0);
 
-            double borderMargin = Double.parseDouble(document.getElementsByTagName("game").item(0).getChildNodes().item(0).getAttributes().getNamedItem("borderMargin").getTextContent());
+            double borderMargin = Double.parseDouble(getAttribute(galaxyNode,"borderMargin"));
 
-            Node players = document.getElementsByTagName("game").item(0).getChildNodes().item(1);
-            Node planets = document.getElementsByTagName("game").item(0).getChildNodes().item(2);
-            Node missions = document.getElementsByTagName("game").item(0).getChildNodes().item(3);
+            Node players = gameNode.getChildNodes().item(1);
+            Node planets = gameNode.getChildNodes().item(2);
+            Node missions = gameNode.getChildNodes().item(3);
             
             ArrayList<Player> playersArrayList = new ArrayList<>();            
             ArrayList<Planet> planetsArrayList = new ArrayList<>();
 
             Map<String, Player> playersList = new HashMap<>();
             for (Node p : new IteratableNodeList(players.getChildNodes())) {
+                boolean active = getAttribute(p,"active").equals("1");
                 Player pl = new Player(
-                        p.getAttributes().getNamedItem("shipType").getTextContent(), 
-                        p.getAttributes().getNamedItem("mainPlayer").getTextContent().equals("1"),
-                        Double.parseDouble(p.getAttributes().getNamedItem("effectivesPercent").getTextContent()),
-                        Color.web(p.getAttributes().getNamedItem("color").getTextContent()), 
-                        p.getAttributes().getNamedItem("active").getTextContent().equals("1"));
+                        getAttribute(p,"shipType"), 
+                        getAttribute(p,"mainPlayer").equals("1"),
+                        Double.parseDouble(getAttribute(p,"effectivesPercent")),
+                        active ? Color.web(getAttribute(p,"color")) : Color.GREY, 
+                        active);
                 
-                pl.setId(Integer.parseInt(p.getAttributes().getNamedItem("id").getTextContent()));
+                if(!"0".equals(p.getAttributes().getNamedItem("AI").getTextContent())) {
+                    pl = new BaseAI(Color.web(getAttribute(p,"color")));
+                }
+                pl.setId(Integer.parseInt(getAttribute(p,"id")));
+                
                 playersList.put(Integer.toString(pl.getId()), pl);
                 playersArrayList.add(pl);
             }
 
             Map<String, Planet> planetsList = new HashMap<>();
             for (Node p : new IteratableNodeList(planets.getChildNodes())) {
-                String t = p.getAttributes().getNamedItem("type").getTextContent();
+                String t = getAttribute(p,"type");
+                
                 String classRef = "planets.entities.planet." + Character.toUpperCase(t.charAt(0)) + t.substring(1);
+                
+                Player owner = playersList.get(getAttribute(p,"ownerId"));
                 
                 Planet pl = (Planet) Class.forName(classRef)
                         .getConstructor(Sprite.class, Player.class, double.class, double.class, double.class)
                         .newInstance(ResourcesManager.assets.get("basePlanet"), 
-                                playersList.get(p.getAttributes().getNamedItem("ownerId").getTextContent()),
-                                Double.parseDouble(p.getAttributes().getNamedItem("x").getTextContent()),
-                                Double.parseDouble(p.getAttributes().getNamedItem("y").getTextContent()),
-                                Double.parseDouble(p.getAttributes().getNamedItem("size").getTextContent())
+                                owner,
+                                Double.parseDouble(getAttribute(p,"x")),
+                                Double.parseDouble(getAttribute(p,"y")),
+                                Double.parseDouble(getAttribute(p,"size"))
                         );
                 
-                pl.loadPlanet(p.getAttributes().getNamedItem("shipType").getTextContent(), 
-                        Double.parseDouble(p.getAttributes().getNamedItem("shipsPerTick").getTextContent()),
-                        Integer.parseInt(p.getAttributes().getNamedItem("shipsCount").getTextContent()),
-                        Integer.parseInt(p.getAttributes().getNamedItem("shipCapacity").getTextContent()),
-                        Double.parseDouble(p.getAttributes().getNamedItem("productionProgression").getTextContent()));
-                
                 pl.setId(Integer.parseInt(p.getAttributes().getNamedItem("id").getTextContent()));
-                System.out.println("Added "+pl);
+                if(owner.isActive()) { 
+                    pl.setOwner(owner);
+                }
+                pl.loadPlanet(
+                        getAttribute(p,"shipType"), 
+                        Double.parseDouble(getAttribute(p,"shipsPerTick")),
+                        Integer.parseInt(getAttribute(p,"shipsCount")),
+                        Integer.parseInt(getAttribute(p,"shipCapacity")),
+                        Double.parseDouble(getAttribute(p,"productionProgression")));
+                
                 planetsList.put(Integer.toString(pl.getId()), pl);
                 planetsArrayList.add(pl);
             }
             
             ArrayList<Mission> missionsList = new ArrayList<>();
             for (Node m : new IteratableNodeList(missions.getChildNodes())) {
-                System.out.println(planetsList.get(m.getAttributes().getNamedItem("origin").getTextContent()));
+                
+                Planet origin = planetsList.get(getAttribute(m,"origin"));
+                Planet destination = planetsList.get(getAttribute(m,"destination"));
+                
                 Mission mi = new Mission(
-                        planetsList.get(m.getAttributes().getNamedItem("origin").getTextContent()),
-                        planetsList.get(m.getAttributes().getNamedItem("destination").getTextContent()),
-                        Integer.parseInt(m.getAttributes().getNamedItem("addQueue").getTextContent()),
-                        Integer.parseInt(m.getAttributes().getNamedItem("squadSize").getTextContent()),
-                        m.getAttributes().getNamedItem("mission").getTextContent()
+                        origin,
+                        destination,
+                        Integer.parseInt(getAttribute(m,"addQueue")),
+                        Integer.parseInt(getAttribute(m,"squadSize")),
+                        getAttribute(m,"mission")
                 );
                 
+                ArrayList<Squad> squads = new ArrayList<>();
+                for (Node s : new IteratableNodeList(m.getChildNodes().item(0).getChildNodes())) {
+                    // Squad
+                    
+                    ArrayList<Ship> shipsArrayList = new ArrayList<>();
+                    for(Node ship: new IteratableNodeList(s.getChildNodes().item(0).getChildNodes())) {
+                        // Squad's ships
+                        
+                        Ship sh = (Ship) Class.forName(getAttribute(ship,"type"))
+                                .getConstructor(Sprite.class, double.class, double.class)
+                                .newInstance(ResourcesManager.assets.get("baseShip"),
+                                        Double.parseDouble(getAttribute(ship,"x")),
+                                        Double.parseDouble(getAttribute(ship,"y")));
+                        
+                        sh.setCurrentSpeed(Double.parseDouble(getAttribute(ship,"currentSpeed")));
+                        shipsArrayList.add(sh);
+                    }
+                    
+                    Squad sq = new Squad(origin,destination,shipsArrayList,mi);
+                    squads.add(sq);
+                }                
+                
+                mi.setSquads(squads);
                 missionsList.add(mi);
             }
             
 
             System.out.println("-- Loading --");
-            System.out.println("Width: " + width);
-            System.out.println("Height: " + height);
-            System.out.println("borderMargin: " + borderMargin);
             Galaxy galaxy = new Galaxy(width, height, planetsArrayList, playersArrayList, borderMargin);
             game.load(galaxy, missionsList);
             Game.toggleFreeze();
@@ -177,11 +217,22 @@ public class SaveManager {
         node.setAttributeNode(attr);
     }
 
+    private static String getAttribute(Node m, String name) {
+        return m.getAttributes().getNamedItem(name).getTextContent();
+    }
+    
     private static void addPlayers(Element players) {
         for (Player p : Galaxy.getPlayers()) {
             Element player = doc.createElement("Player");
             players.appendChild(player);
 
+            if(p.isAI()) {
+                AI a = (AI) p;
+                addAttribute("AI", a.AIclass(), player);
+            } else {
+                addAttribute("AI", "0", player);
+            }
+            
             addAttribute("mainPlayer", p.isMainPlayer() ? "1" : "0", player);
             addAttribute("color", p.getColor().toString(), player);
             addAttribute("id", Integer.toString(p.getId()), player);
@@ -245,7 +296,7 @@ public class SaveManager {
             ships.appendChild(ship);
 
             addAttribute("currentSpeed", Double.toString(s.getCurrentSpeed()), ship);
-            addAttribute("type", s.assetReference(), ship);
+            addAttribute("type", "planets.entities.ship."+Character.toUpperCase(s.assetReference().charAt(0)) + s.assetReference().substring(1), ship);
             addAttribute("x", Double.toString(s.getPosX()), ship);
             addAttribute("y", Double.toString(s.getPosY()), ship);
         }

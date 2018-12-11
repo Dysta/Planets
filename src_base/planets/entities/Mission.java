@@ -110,6 +110,10 @@ public class Mission {
         this.squads.removeIf((Squad s) -> s.isEmpty());
     }
     
+    public void clearQueue() {
+        this.addQueue = 0;
+    }
+    
     public ArrayList<Squad> getSquads() {
         return this.squads;
     }
