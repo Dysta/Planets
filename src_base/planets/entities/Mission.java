@@ -9,6 +9,9 @@ import planets.utils.Point;
 import planets.entities.ship.Ship;
 
 public class Mission {
+    
+    private static int last_id = 0;
+    private int id;
 
     public static final String ATTACK = "ATTACK";
     public static final String CONVOY = "CONVOY";
@@ -26,6 +29,9 @@ public class Mission {
     private int squadSize;
 
     public Mission(Planet p1, Planet p2, int addQueue, int squadSize, String mission) {
+        Mission.last_id++;
+        this.id = Mission.last_id;
+        
         this.addQueue = addQueue;
         this.squads = new ArrayList<>();
         this.owner = p1.getOwner();
@@ -108,6 +114,10 @@ public class Mission {
         return this.squads;
     }
     
+    public void setSquads(ArrayList<Squad> squads) {
+        this.squads = squads;
+    }
+    
     public void addQuad(Squad s) {
         this.squads.add(s);
     }
@@ -128,5 +138,25 @@ public class Mission {
     
     public boolean isEmpty() {
         return this.squads.size() <= 0 && this.addQueue == 0;
+    }
+    
+    public int getAddQueue() {
+        return this.addQueue;
+    }
+    
+    public Player getOwner() {
+        return this.owner;
+    }
+    
+    public String getMission() {
+        return this.mission;
+    }
+    
+    public int getSquadSize() {
+        return this.squadSize;
+    }
+    
+    public int getId() {
+        return this.id;
     }
 }

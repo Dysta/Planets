@@ -39,10 +39,11 @@ public class Game extends Window {
     // States
     public static boolean primaryHeld;
     public static boolean ctrlHeld;
+    public static boolean freeze;
     public static ArrayList<Planet> selectedPlanets;
     public static ArrayList<Squad> selectedSquads;
     public static int ticks;
-    
+
     // UI Elements
     private static SelectPercentage selectP;
 
@@ -57,7 +58,9 @@ public class Game extends Window {
     public void init(double WIDTH, double HEIGHT) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
-        
+
+        this.freeze = false;
+
         Game.root = new Group();
         Scene scene = new Scene(root);
         canvas = new Canvas(WIDTH, HEIGHT);
@@ -76,13 +79,13 @@ public class Game extends Window {
 
         stage.setScene(scene);
         this.initEvents(scene);
-        
+        stage.centerOnScreen();
         stage.show();
     }
 
     private void initEvents(Scene scene) {
-    	MouseHandler mouseHandler = new MouseHandler();
-    	MouseReleaseHandler mouseReleaseHandler = new MouseReleaseHandler();
+        MouseHandler mouseHandler = new MouseHandler();
+        MouseReleaseHandler mouseReleaseHandler = new MouseReleaseHandler();
         KeyEventHandler keyEventHandler = new KeyEventHandler();
         ScrollEventHandler scrollEventHandler = new ScrollEventHandler();
 
@@ -96,20 +99,31 @@ public class Game extends Window {
     public void initGame(int nbPlayers, int nbPlanets) {
         double borderMargin = 50;
 
-        Game.galaxy = new Galaxy(this.WIDTH, this.HEIGHT, nbPlanets, nbPlayers, borderMargin);
-        for(Planet p : Game.galaxy.getPlanets()) {
-        	if(p.getOwner().isMainPlayer()) {
-        		Game.mainPlayer = p.getOwner();
-        	}
-        }
         Game.missions = new ArrayList<>();
+        Game.galaxy = new Galaxy(this.WIDTH, this.HEIGHT, nbPlanets, nbPlayers, borderMargin);
+        for (Planet p : Game.galaxy.getPlanets()) {
+            if (p.getOwner().isMainPlayer()) {
+                Game.mainPlayer = p.getOwner();
+            }
+        }
         Game.selectedPlanets = new ArrayList<>();
         Game.selectedSquads = new ArrayList<>();
         Game.primaryHeld = false;
         Game.ctrlHeld = false;
-        
+
         // init UI
         this.selectP = new SelectPercentage(gc, root, Game.mainPlayer, this.WIDTH, this.HEIGHT);
+
+        for (Planet p : Galaxy.getPlanets()) {
+            p.initRender();
+        }
+    }
+
+    public void load(Galaxy galaxy, ArrayList<Mission> missions) {
+        Game.galaxy = galaxy;
+        Game.missions = missions;
+
+        this.init(WIDTH, HEIGHT);
 
         for (Planet p : Galaxy.getPlanets()) {
             p.initRender();
@@ -142,14 +156,18 @@ public class Game extends Window {
         }
         element.setSelected(state);
     }
-    
+
     public static void deselect(ArrayList list) {
-    	int c = 0;
-    	int t = list.size();
-    	while(c < t) {
-    		Game.setSelect(list,(Sprite) list.get(0), false);
-    		c++;
-    	}
+        int c = 0;
+        int t = list.size();
+        while (c < t) {
+            Game.setSelect(list, (Sprite) list.get(0), false);
+            c++;
+        }
+    }
+
+    public static void toggleFreeze() {
+        Game.freeze = !Game.freeze;
     }
 
     public static void setSelectSquad(Squad s, boolean state) {
@@ -163,52 +181,62 @@ public class Game extends Window {
             sq.setSelected(state);
         }
     }
-    
+
     public static void deselectSquads() {
-    	int c = 0;
-    	int t = Game.selectedSquads.size();
-    	while(c < t) {
-    		Game.setSelectSquad(Game.selectedSquads.get(0),false);
-    		c++;
-    	}
+        int c = 0;
+        int t = Game.selectedSquads.size();
+        while (c < t) {
+            Game.setSelectSquad(Game.selectedSquads.get(0), false);
+            c++;
+        }
     }
-    
+
     public static void startConvoy(Planet target) {
         for (Planet o : Game.selectedPlanets) {
-            Game.startMission(o, target, (int) (o.getNbShip()*(o.getOwner().getEffectivesPercent()/100)), o.getMaxLaunchShips(), Mission.CONVOY);
+            Game.startMission(o, target, (int) (o.getNbShip() * (o.getOwner().getEffectivesPercent() / 100)), o.getMaxLaunchShips(), Mission.CONVOY);
         }
-       	Game.deselect(Game.selectedPlanets);
+        Game.deselect(Game.selectedPlanets);
     }
-    
+
     public static void startAttack(Planet o, Planet target) {
-        Game.startMission(o, target, (int) (o.getNbShip()*(o.getOwner().getEffectivesPercent()/100)),  o.getMaxLaunchShips(), Mission.ATTACK);
+        Game.startMission(o, target, (int) (o.getNbShip() * (o.getOwner().getEffectivesPercent() / 100)), o.getMaxLaunchShips(), Mission.ATTACK);
+    }
+
+    public static void clearPlanetMissions(Planet p) {
+        Game.missions.removeIf((Mission r) -> r.getOriginPlanet() == p);
     }
 
     public void handle(long arg0) {
-        Game.ticks++;
+        if (!Game.freeze) {
+            Game.ticks++;
 
-        for (Mission r : Game.missions) {
-            r.handle();
-        }
-        
-        for (Planet p : Galaxy.getPlanets()) {
-            p.productionTick();
-        }
+            for (Mission r : Game.missions) {
+                r.handle();
+            }
 
-        Game.missions.removeIf((Mission r) -> r.isEmpty());
+            for (Planet p : Galaxy.getPlanets()) {
+                p.productionTick();
+            }
+
+            Game.missions.removeIf((Mission r) -> r.isEmpty());
+        }
     }
-    
+
     public void updateUI() {
-        for (Planet p : Galaxy.getPlanets()) {
-            p.printStock(gc, root);
-        }        
-        
-        this.selectP.update();
+        if (!Game.freeze) {
+            for (Planet p : Galaxy.getPlanets()) {
+                p.printStock(gc, root);
+            }
+
+            this.selectP.update();
+        }
     }
-    
+
     public void handleAI() {
-        for (Player p : Galaxy.getPlayers()) {
-            p.handle();
+        if (!Game.freeze) {
+            for (Player p : Galaxy.getPlayers()) {
+                p.handle();
+            }
         }
     }
 

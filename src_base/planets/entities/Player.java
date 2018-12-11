@@ -6,6 +6,9 @@ import planets.Sprite;
 import planets.entities.ship.Ship;
 
 public class Player {
+    
+    private static int last_id = 0;
+    private int id;
 
     private boolean mainPlayer;
 
@@ -16,6 +19,8 @@ public class Player {
     private double effectivesPercent;
 
     public Player(Color color, boolean active) {
+        Player.last_id++;
+        this.id = Player.last_id;
         this.color = color;
         this.active = active;
         this.effectivesPercent = 100;
@@ -28,6 +33,13 @@ public class Player {
 
     public Player() {
         this(Color.GREY, false);
+    }
+
+    public Player(String shiptype, boolean mainPlayer, double effectivesPercent, Color color, boolean active) {
+        this(color,active);
+        this.shipType = shiptype;
+        this.mainPlayer = mainPlayer;
+        this.effectivesPercent = effectivesPercent;
     }
 
     public boolean isActive() {
@@ -70,6 +82,14 @@ public class Player {
 
     public void handle() {
 
+    }
+    
+    public int getId() {
+        return this.id;
+    }
+    
+    public void setId(int id) {
+        this.id = id;
     }
 
 }

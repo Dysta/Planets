@@ -3,6 +3,8 @@ package input;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import planets.App;
+import planets.IO.SaveManager;
 import planets.windows.Game;
 import planets.entities.planet.Planet;
 
@@ -21,6 +23,14 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
                     Game.setSelect(Game.selectedPlanets, p, true);
                 }
             }
+        }
+        
+        if (e.isControlDown() && e.getCode() == KeyCode.S) {
+            SaveManager.save(App.game, "last");
+        }
+        
+        if (e.isControlDown() && e.getCode() == KeyCode.D) {
+            SaveManager.load(App.game, "last");
         }
 
         if (e.getCode() == KeyCode.UP) {

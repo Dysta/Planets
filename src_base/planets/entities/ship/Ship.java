@@ -11,6 +11,9 @@ import planets.utils.GameUtils;
 import planets.utils.Point;
 
 public abstract class Ship extends Sprite {
+    
+    private static int last_id = 0;
+    private int id;
 
     private Player owner;
     protected double currentSpeed;
@@ -26,6 +29,8 @@ public abstract class Ship extends Sprite {
 
     public Ship(Sprite s, double posX, double posY, double speedCap, double acceleration, int power, int shield) {
         super(s);
+        Ship.last_id++;
+        this.id = Ship.last_id;
         this.setPosition(posX, posY);
         this.speedCap = speedCap;
         this.acceleration = acceleration;
@@ -184,6 +189,10 @@ public abstract class Ship extends Sprite {
 
     }
     
+    public double getCurrentSpeed() {
+        return this.currentSpeed;
+    }
+    
     public int getPower() {
         return this.power;
     }
@@ -195,5 +204,9 @@ public abstract class Ship extends Sprite {
     @Override
     public String toString() {
         return this.assetReference();
+    }
+    
+    public int getId() {
+        return this.id;
     }
 }

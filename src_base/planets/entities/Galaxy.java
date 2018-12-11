@@ -43,6 +43,7 @@ public class Galaxy {
         Planet n;
         for (int i = 0; i < nbPlanets; i++) {
             Player p = new Player();
+            Galaxy.players.add(p);
 
             int tries = 0;
 
@@ -83,15 +84,26 @@ public class Galaxy {
                     main = false;
                 }
                 Galaxy.players.add(p);
+                Galaxy.players.remove(target.getOwner());
                 target.setOwner(p);
             } else {
                 System.out.println("Could not find a free planet for the player " + i + ".");
             }
-
         }
     }
+    
+    public Galaxy(double width, double height, ArrayList<Planet> planets, ArrayList<Player> players, double borderMargin) {
+        Galaxy.planets = planets;
+        Galaxy.players = players;
+        this.width = width;
+        this.height = height;
 
-
+        Galaxy.maximumPlanetSize = Math.sqrt(((width-2*borderMargin)*(height-2*borderMargin))/planets.size()/Math.PI)/1.5;
+        Galaxy.minimumPlanetSize = Galaxy.maximumPlanetSize * 0.7;
+        Galaxy.planetInfluenceZone = Galaxy.maximumPlanetSize * 0.3;
+        Galaxy.planetSecurityZone = Galaxy.maximumPlanetSize * 0.5;
+        Galaxy.borderMargin = borderMargin;
+    }
 
     public boolean isColliding(Planet planet) {
         boolean colliding = false;
@@ -103,12 +115,20 @@ public class Galaxy {
 
         return colliding;
     }
-
+    
     public static ArrayList<Planet> getPlanets() {
         return Galaxy.planets;
     }
 
     public static ArrayList<Player> getPlayers() {
         return Galaxy.players;
+    }
+
+    public static void setPlanets(ArrayList<Planet> planets) {
+        Galaxy.planets = planets;
+    }
+
+    public static void setPlayers(ArrayList<Player> players) {
+        Galaxy.players = players;
     }
 }

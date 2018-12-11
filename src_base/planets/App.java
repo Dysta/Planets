@@ -13,7 +13,7 @@ import planets.utils.DebugUtils;
 
 public class App extends Application {
 
-    public final static boolean DEBUG = true;
+    public final static boolean DEBUG = false;
     
     private final static double WIDTH = 1280;
     private final static double HEIGHT = 720;
@@ -30,8 +30,8 @@ public class App extends Application {
     private static long last_think;
     private static ArrayList<Long> ticks;
 
-    private static Menu menu;
-    private static Game game;
+    public static Menu menu;
+    public static Game game;
 
     public static void main(String[] args) {
         launch(args);

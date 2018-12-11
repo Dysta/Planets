@@ -18,6 +18,9 @@ import planets.entities.Squad;
 import planets.entities.ship.Ship;
 
 public abstract class Planet extends Sprite {
+    
+    private static int last_id = 0;
+    private int id;
 
     private Sprite s;
     private Player owner;
@@ -35,6 +38,8 @@ public abstract class Planet extends Sprite {
 
     public Planet(Sprite s, Player owner, double posX, double posY, double size) {
         super(s);
+        Planet.last_id++;
+        this.id = Planet.last_id;
         this.s = s;
         this.owner = owner;
         this.setPosition(posX, posY);
@@ -67,6 +72,14 @@ public abstract class Planet extends Sprite {
         this.setPosition(posX, posY);
         this.updateDimensions(ResourcesManager.PLANET_PATH, size, size);
         this.size = size;
+    }
+    
+    public void loadPlanet(String shipType, double shipPerTick, int shipsCount, int shipCapacity, double productionProgression) {
+        this.shipType = shipType;
+        this.shipsPerTick = shipPerTick;
+        this.productionProgression = shipsCount;
+        this.shipCapacity = shipCapacity;
+        this.productionProgression = productionProgression;
     }
     
     @Override
@@ -105,6 +118,7 @@ public abstract class Planet extends Sprite {
 
     public void setOwner(Player owner) {
         this.owner = owner;
+        Game.clearPlanetMissions(this);
         ResourcesManager.colorImage(this, owner.getColor());
     }
 
@@ -266,7 +280,27 @@ public abstract class Planet extends Sprite {
             calledShip.start(this);
         }
 
-        return mobilized;
+        return mobilized; 
+    }
+    
+    public int getShipCapacity() {
+        return this.shipCapacity;
+    }
+    
+    public double getShipsPerTick() {
+        return this.shipsPerTick;
+    }
+    
+    public double getProductionProgression() {
+        return this.productionProgression;
+    }
+    
+    public String getShipType() {
+        return this.shipType;
+    }
+    
+    public int getId() {
+        return this.id;
     }
 
 }

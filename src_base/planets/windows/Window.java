@@ -16,8 +16,8 @@ import javafx.stage.Stage;
  */
 abstract public class Window {
     
-    protected double WIDTH = 1280;
-    protected double HEIGHT = 720;
+    public double WIDTH = 1280;
+    public double HEIGHT = 720;
     public final static int STANDBY = -1;
     public final static int MAIN_MENU = 0;
     public final static int GAME = 1;
