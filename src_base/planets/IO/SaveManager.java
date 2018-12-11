@@ -103,8 +103,11 @@ public class SaveManager {
             Node players = document.getElementsByTagName("game").item(0).getChildNodes().item(1);
             Node planets = document.getElementsByTagName("game").item(0).getChildNodes().item(2);
             Node missions = document.getElementsByTagName("game").item(0).getChildNodes().item(3);
+            
+            ArrayList<Player> playersArrayList = new ArrayList<>();            
+            ArrayList<Planet> planetsArrayList = new ArrayList<>();
 
-            Map<Integer, Player> playersList = new HashMap<>();
+            Map<String, Player> playersList = new HashMap<>();
             for (Node p : new IteratableNodeList(players.getChildNodes())) {
                 Player pl = new Player(
                         p.getAttributes().getNamedItem("shipType").getTextContent(), 
@@ -114,10 +117,11 @@ public class SaveManager {
                         p.getAttributes().getNamedItem("active").getTextContent().equals("1"));
                 
                 pl.setId(Integer.parseInt(p.getAttributes().getNamedItem("id").getTextContent()));
-                playersList.put(pl.getId(), pl);
+                playersList.put(Integer.toString(pl.getId()), pl);
+                playersArrayList.add(pl);
             }
 
-            Map<Integer, Planet> planetsList = new HashMap<>();
+            Map<String, Planet> planetsList = new HashMap<>();
             for (Node p : new IteratableNodeList(planets.getChildNodes())) {
                 String t = p.getAttributes().getNamedItem("type").getTextContent();
                 String classRef = "planets.entities.planet." + Character.toUpperCase(t.charAt(0)) + t.substring(1);
@@ -125,7 +129,7 @@ public class SaveManager {
                 Planet pl = (Planet) Class.forName(classRef)
                         .getConstructor(Sprite.class, Player.class, double.class, double.class, double.class)
                         .newInstance(ResourcesManager.assets.get("basePlanet"), 
-                                playersList.get(Integer.parseInt(p.getAttributes().getNamedItem("ownerId").getTextContent())),
+                                playersList.get(p.getAttributes().getNamedItem("ownerId").getTextContent()),
                                 Double.parseDouble(p.getAttributes().getNamedItem("x").getTextContent()),
                                 Double.parseDouble(p.getAttributes().getNamedItem("y").getTextContent()),
                                 Double.parseDouble(p.getAttributes().getNamedItem("size").getTextContent())
@@ -137,16 +141,18 @@ public class SaveManager {
                         Integer.parseInt(p.getAttributes().getNamedItem("shipCapacity").getTextContent()),
                         Double.parseDouble(p.getAttributes().getNamedItem("productionProgression").getTextContent()));
                 
+                pl.setId(Integer.parseInt(p.getAttributes().getNamedItem("id").getTextContent()));
                 System.out.println("Added "+pl);
-                planetsList.put(pl.getId(), pl);
+                planetsList.put(Integer.toString(pl.getId()), pl);
+                planetsArrayList.add(pl);
             }
             
             ArrayList<Mission> missionsList = new ArrayList<>();
             for (Node m : new IteratableNodeList(missions.getChildNodes())) {
-                System.out.println(planetsList.get(Integer.parseInt(m.getAttributes().getNamedItem("origin").getTextContent())));
+                System.out.println(planetsList.get(m.getAttributes().getNamedItem("origin").getTextContent()));
                 Mission mi = new Mission(
-                        planetsList.get(Integer.parseInt(m.getAttributes().getNamedItem("origin").getTextContent())),
-                        planetsList.get(Integer.parseInt(m.getAttributes().getNamedItem("destination").getTextContent())),
+                        planetsList.get(m.getAttributes().getNamedItem("origin").getTextContent()),
+                        planetsList.get(m.getAttributes().getNamedItem("destination").getTextContent()),
                         Integer.parseInt(m.getAttributes().getNamedItem("addQueue").getTextContent()),
                         Integer.parseInt(m.getAttributes().getNamedItem("squadSize").getTextContent()),
                         m.getAttributes().getNamedItem("mission").getTextContent()
@@ -155,11 +161,6 @@ public class SaveManager {
                 missionsList.add(mi);
             }
             
-            ArrayList<Player> playersArrayList = new ArrayList<>();
-            playersArrayList.addAll((Collection<? extends Player>) playersList);
-            
-            ArrayList<Planet> planetsArrayList = new ArrayList<>();
-            planetsArrayList.addAll((Collection<? extends Planet>) planetsList);
 
             System.out.println("-- Loading --");
             System.out.println("Width: " + width);

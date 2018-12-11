@@ -120,6 +120,7 @@ public class Game extends Window {
     }
 
     public void load(Galaxy galaxy, ArrayList<Mission> missions) {
+        Game.root.getChildren().clear();
         Game.galaxy = galaxy;
         Game.missions = missions;
 

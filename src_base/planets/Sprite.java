@@ -56,28 +56,9 @@ public class Sprite {
         return height;
     }
 
-    public void validatePosition() {
-        if (x + width >= maxX) {
-            x = maxX - width;
-            xSpeed *= -1;
-        } else if (x < 0) {
-            x = 0;
-            xSpeed *= -1;
-        }
-
-        if (y + height >= maxY) {
-            y = maxY - height;
-            ySpeed *= -1;
-        } else if (y < 0) {
-            y = 0;
-            ySpeed *= -1;
-        }
-    }
-
     public final void setPosition(double x, double y) {
         this.x = x;
         this.y = y;
-        validatePosition();
         this.iv.setX(this.x);
         this.iv.setY(this.y);
     }
@@ -115,7 +96,6 @@ public class Sprite {
     public void updatePosition() {
         x += xSpeed;
         y += ySpeed;
-        validatePosition();
     }
 
     public void render(GraphicsContext gc) {

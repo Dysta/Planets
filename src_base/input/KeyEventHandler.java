@@ -24,13 +24,17 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
                 }
             }
         }
-        
+
         if (e.isControlDown() && e.getCode() == KeyCode.S) {
             SaveManager.save(App.game, "last");
         }
-        
+
         if (e.isControlDown() && e.getCode() == KeyCode.D) {
-            SaveManager.load(App.game, "last");
+            try {
+                SaveManager.load(App.game, "last");
+            } catch (Exception err) {
+                System.err.println("Failed to load last save " + err);
+            }
         }
 
         if (e.getCode() == KeyCode.UP) {
