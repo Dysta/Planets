@@ -70,9 +70,11 @@ public class App extends Application {
                     case Window.MAIN_MENU:
                         if (game != null) {
                             game.clear();
+                            game.close();
                         }
                         if (load != null) {
                             load.clear();
+                            game.close();
                         }
                         menu.setStage(stage, "Main Menu");
                         menu.init(MENU_WIDTH, MENU_HEIGHT);

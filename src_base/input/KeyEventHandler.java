@@ -7,6 +7,7 @@ import planets.App;
 import planets.IO.SaveManager;
 import planets.windows.Game;
 import planets.entities.planet.Planet;
+import planets.windows.Window;
 
 public class KeyEventHandler implements EventHandler<KeyEvent> {
 
@@ -45,7 +46,7 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
         }
 
         if (e.getCode() == KeyCode.ESCAPE) {
-            System.exit(0);
+            App.menu.setSelectedWindow(Window.MAIN_MENU);
         }
     }
 
