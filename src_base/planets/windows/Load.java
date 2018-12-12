@@ -80,6 +80,7 @@ public class Load extends Window {
         grid.setPadding(new Insets(20, 20, 20, 20));
         grid.setVgap(15);
         grid.setHgap(15);
+        //grid.setGridLinesVisible(true);
 
         int v = 0;
         for (File save : SaveManager.getSaveFiles()) {
@@ -90,12 +91,12 @@ public class Load extends Window {
 
         // Back
         WindowSwitchButton back = new WindowSwitchButton("Back", this.parent, Window.MAIN_MENU);
-        GridPane.setConstraints(back, 1, v);
+        GridPane.setConstraints(back, 2, v);
         grid.getChildren().add(back);
 
         grid.setMaxWidth(GridPane.USE_PREF_SIZE);
         grid.setMaxHeight(GridPane.USE_PREF_SIZE);
-        grid.setLayoutX((WIDTH / 3.5));
+        grid.setLayoutX((WIDTH / 3));
         grid.setLayoutY((HEIGHT / 4.5));
         Load.root.getChildren().add(grid);
     }
@@ -120,6 +121,7 @@ public class Load extends Window {
                     System.err.println("Failed to load ResourcesManager MenuAssets: " + e);
                 }
                 try {
+                    parent.setSelectedWindow(Window.LOADING);
                     SaveManager.load(null, label_text);
                 } catch (Exception ex) {
                     Logger.getLogger(Load.class.getName()).log(Level.SEVERE, null, ex);

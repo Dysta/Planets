@@ -26,12 +26,12 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
         }
 
         if (e.isControlDown() && e.getCode() == KeyCode.S) {
-            SaveManager.save(App.game, "last");
+            SaveManager.save(App.game, "Quicksave");
         }
 
         if (e.isControlDown() && e.getCode() == KeyCode.D) {
             try {
-                SaveManager.load(App.game, "last");
+                SaveManager.load(App.game, "Quicksave");
             } catch (Exception err) {
                 err.printStackTrace();
             }

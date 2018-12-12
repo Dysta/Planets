@@ -46,6 +46,9 @@ abstract public class Window {
     public void show() {
         stage.show();
     }
+    public void close() {
+        stage.close();
+    }
     public void clear() {
         root.getChildren().clear();
     }

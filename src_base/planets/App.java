@@ -95,8 +95,6 @@ public class App extends Application {
                         load.init(MENU_WIDTH, MENU_HEIGHT);
                         break;
                     case Window.LOADING:
-                        load.clear();
-
                         try {
                             ResourcesManager.initGameAssets(WIDTH, HEIGHT);
                         } catch (Exception e) {
@@ -105,6 +103,7 @@ public class App extends Application {
 
                         Game loaded = game;
                         App.startGame(stage, menu.getNbPlayers(), menu.getNbPlanets());
+                        load.close();
                         App.game = loaded;
                         break;
                     case Window.QUIT:
