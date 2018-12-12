@@ -10,11 +10,12 @@ import javafx.stage.Stage;
 import static planets.windows.Game.root;
 import planets.entities.Galaxy;
 import planets.utils.DebugUtils;
+import planets.windows.Load;
 
 public class App extends Application {
 
     public final static boolean DEBUG = false;
-    
+
     private final static double WIDTH = 1280;
     private final static double HEIGHT = 720;
 
@@ -32,6 +33,7 @@ public class App extends Application {
 
     public static Menu menu;
     public static Game game;
+    public static Load load;
 
     public static void main(String[] args) {
         launch(args);
@@ -40,6 +42,7 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         menu = new Menu();
+        load = new Load(menu);
 
         try {
             ResourcesManager.initMenuAssets(WIDTH, HEIGHT);
@@ -65,7 +68,14 @@ public class App extends Application {
                 menu.setSelectedWindow(Window.STANDBY);
                 switch (selectedMenu) {
                     case Window.MAIN_MENU:
-                        game.clear();
+                        if (game != null) {
+                            game.clear();
+                        }
+                        if (load != null) {
+                            load.clear();
+                        }
+                        menu.setStage(stage, "Main Menu");
+                        menu.init(MENU_WIDTH, MENU_HEIGHT);
                         menu.show();
                         break;
                     case Window.GAME:
@@ -76,6 +86,26 @@ public class App extends Application {
                             menu.clear();
                             App.startGame(stage, menu.getNbPlayers(), menu.getNbPlanets());
                         }
+                        break;
+                    case Window.LOAD:
+                        load = new Load(menu);
+                        menu.clear();
+                        load.clear();
+                        load.setStage(stage, "Load save");
+                        load.init(MENU_WIDTH, MENU_HEIGHT);
+                        break;
+                    case Window.LOADING:
+                        load.clear();
+
+                        try {
+                            ResourcesManager.initGameAssets(WIDTH, HEIGHT);
+                        } catch (Exception e) {
+                            System.err.println("Failed to load ResourcesManager MenuAssets: " + e);
+                        }
+
+                        Game loaded = game;
+                        App.startGame(stage, menu.getNbPlayers(), menu.getNbPlanets());
+                        App.game = loaded;
                         break;
                     case Window.QUIT:
                         System.exit(0);
@@ -93,7 +123,7 @@ public class App extends Application {
         } catch (Exception e) {
             System.err.println("Failed to load ResourcesManager GameAssets: " + e);
         }
-        
+
         // Create Game and start it
         game = new Game();
 

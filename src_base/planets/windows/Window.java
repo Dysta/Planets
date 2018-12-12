@@ -22,6 +22,8 @@ abstract public class Window {
     public final static int MAIN_MENU = 0;
     public final static int GAME = 1;
     public final static int QUIT = 2;
+    public final static int LOAD = 3;
+    public final static int LOADING = 4;
 
     // Attributes
     protected Stage stage;
@@ -30,7 +32,11 @@ abstract public class Window {
     
     public static Group root;
     
-    abstract public void setStage(Stage stage_p, String title);
+    public void setStage(Stage stage_p, String title) {
+        this.stage = stage_p;
+        stage.setTitle(title);
+        stage.setResizable(false);
+    }
     abstract public void init(double WIDTH, double HEIGHT);
     
     

@@ -48,13 +48,6 @@ public class Game extends Window {
     private static SelectPercentage selectP;
 
     // Methods
-    @Override
-    public void setStage(Stage stage_p, String title) {
-        this.stage = stage_p;
-        stage.setTitle(title);
-        stage.setResizable(false);
-    }
-
     public void init(double WIDTH, double HEIGHT) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
@@ -129,8 +122,8 @@ public class Game extends Window {
         }
 
         for (Mission m : Game.missions) {
-            for(Squad s : m.getSquads()) {
-                for(Ship sh : s.getShips()) {
+            for (Squad s : m.getSquads()) {
+                for (Ship sh : s.getShips()) {
                     sh.initRender();
                     ResourcesManager.colorImage(sh, m.getOwner().getColor());
                 }
@@ -211,9 +204,11 @@ public class Game extends Window {
     }
 
     public static void endPlanetMissions(Planet p) {
-        for(Mission m : Game.missions) {
-            if(m.getOriginPlanet() == p) {
-                m.clearQueue();
+        if(Game.missions != null) {
+            for (Mission m : Game.missions) {
+                if (m.getOriginPlanet() == p) {
+                    m.clearQueue();
+                }
             }
         }
     }

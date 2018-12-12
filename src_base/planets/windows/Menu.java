@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package planets.windows;
 
 import javafx.beans.value.ChangeListener;
@@ -23,8 +18,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import planets.ResourcesManager;
-import planets.utils.NumericField;
-import planets.utils.WindowSwitchButton;
+import ui.NumericField;
+import ui.WindowSwitchButton;
 
 /**
  *
@@ -37,13 +32,8 @@ public class Menu extends Window {
 
     private int selectedMenu;
 
-    public void setStage(Stage stage_p, String title) {
-        this.stage = stage_p;
-        stage.setTitle(title);
-        stage.setResizable(false);
-    }
-
     // GraphicsContext is defined by the game
+    @Override
     public void init(double WIDTH, double HEIGHT) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
@@ -75,7 +65,7 @@ public class Menu extends Window {
         this.selectedMenu = Window.STANDBY;
         // Container
         GridPane grid = new GridPane();
-        grid.setPadding(new Insets(10, 10, 10, 10));
+        grid.setPadding(new Insets(20, 20, 20, 20));
         grid.setVgap(15);
         grid.setHgap(15);
 
@@ -84,8 +74,18 @@ public class Menu extends Window {
 
         // Play
         WindowSwitchButton play = new WindowSwitchButton("Start", this, Window.GAME);
-        GridPane.setConstraints(play, 5, 1);
+        GridPane.setConstraints(play, 4, 3);
         grid.getChildren().add(play);
+
+        // Load
+        WindowSwitchButton load = new WindowSwitchButton("Load", this, Window.LOAD);
+        GridPane.setConstraints(load, 2, 3);
+        grid.getChildren().add(load);
+
+        // Quit
+        WindowSwitchButton quit = new WindowSwitchButton("Quit", this, Window.QUIT);
+        GridPane.setConstraints(quit, 0, 3);
+        grid.getChildren().add(quit);
         
         grid.setMaxWidth(GridPane.USE_PREF_SIZE);
         grid.setMaxHeight(GridPane.USE_PREF_SIZE);

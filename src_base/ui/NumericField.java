@@ -1,4 +1,4 @@
-package planets.utils;
+package ui;
 
 import javafx.scene.control.TextField;
 
