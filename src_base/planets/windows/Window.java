@@ -26,7 +26,7 @@ abstract public class Window {
     public final static int LOADING = 4;
 
     // Attributes
-    protected Stage stage;
+    public Stage stage;
     protected GraphicsContext gc;
     protected Canvas canvas;
     

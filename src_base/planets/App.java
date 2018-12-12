@@ -31,6 +31,7 @@ public class App extends Application {
     private static long last_think;
     private static ArrayList<Long> ticks;
 
+    public static Stage stage;
     public static Menu menu;
     public static Game game;
     public static Load load;
@@ -41,6 +42,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        stage = primaryStage;
         menu = new Menu();
         load = new Load(menu);
 
@@ -53,10 +55,10 @@ public class App extends Application {
         App.last_tick = System.currentTimeMillis();
         App.last_frame = System.currentTimeMillis();
 
-        startMenu(primaryStage);
+        startMenu();
     }
 
-    public static void startMenu(Stage stage) {
+    public static void startMenu() {
         menu.setStage(stage, "Main Menu");
         menu.init(MENU_WIDTH, MENU_HEIGHT);
 
@@ -68,16 +70,9 @@ public class App extends Application {
                 menu.setSelectedWindow(Window.STANDBY);
                 switch (selectedMenu) {
                     case Window.MAIN_MENU:
-                        if (game != null) {
-                            game.clear();
-                            game.close();
-                        }
-                        if (load != null) {
-                            load.clear();
-                            game.close();
-                        }
                         menu.setStage(stage, "Main Menu");
                         menu.init(MENU_WIDTH, MENU_HEIGHT);
+                        menu.stage.centerOnScreen();
                         menu.show();
                         break;
                     case Window.GAME:
@@ -86,15 +81,14 @@ public class App extends Application {
 
                         if (nbPlayers >= 1 && nbPlanets >= nbPlayers) {
                             menu.clear();
-                            App.startGame(stage, menu.getNbPlayers(), menu.getNbPlanets());
+                            App.startGame(menu.getNbPlayers(), menu.getNbPlanets());
                         }
                         break;
                     case Window.LOAD:
                         load = new Load(menu);
-                        menu.clear();
-                        load.clear();
                         load.setStage(stage, "Load save");
                         load.init(MENU_WIDTH, MENU_HEIGHT);
+                        load.stage.centerOnScreen();
                         break;
                     case Window.LOADING:
                         try {
@@ -102,11 +96,7 @@ public class App extends Application {
                         } catch (Exception e) {
                             System.err.println("Failed to load ResourcesManager MenuAssets: " + e);
                         }
-
-                        Game loaded = game;
-                        App.startGame(stage, menu.getNbPlayers(), menu.getNbPlanets());
-                        load.close();
-                        App.game = loaded;
+                        App.startGame(menu.getNbPlayers(), menu.getNbPlanets());
                         break;
                     case Window.QUIT:
                         System.exit(0);
@@ -118,7 +108,7 @@ public class App extends Application {
         menu_anim.start();
     }
 
-    public static void startGame(Stage stage, int nbPlayers, int nbPlanets) {
+    public static void startGame(int nbPlayers, int nbPlanets) {
         try {
             ResourcesManager.initGameAssets(WIDTH, HEIGHT);
         } catch (Exception e) {

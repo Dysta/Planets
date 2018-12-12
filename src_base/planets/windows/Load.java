@@ -122,7 +122,7 @@ public class Load extends Window {
                 }
                 try {
                     parent.setSelectedWindow(Window.LOADING);
-                    SaveManager.load(null, label_text);
+                    SaveManager.load(label_text);
                 } catch (Exception ex) {
                     Logger.getLogger(Load.class.getName()).log(Level.SEVERE, null, ex);
                 }

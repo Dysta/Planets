@@ -246,5 +246,11 @@ public class Game extends Window {
             }
         }
     }
+    
+    @Override
+    public void clear() {
+        Game.freeze = true;
+        root.getChildren().clear();
+    }
 
 }

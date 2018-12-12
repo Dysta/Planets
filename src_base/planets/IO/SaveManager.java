@@ -92,7 +92,7 @@ public class SaveManager {
         }
     }
 
-    public static void load(Game game, String save_name) throws ParserConfigurationException, SAXException, IOException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public static void load(String save_name) throws ParserConfigurationException, SAXException, IOException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Game.toggleFreeze();
         File file = new File(SaveManager.save_folder + save_name + save_ext);
 
@@ -105,12 +105,10 @@ public class SaveManager {
         double width = Double.parseDouble(getAttribute(gameNode, "width"));
         double height = Double.parseDouble(getAttribute(gameNode, "height"));
 
-        if (game == null) {
-            // Create dummy game to alter it with the
-            App.startGame(new Stage(), 1, 1);
-            game = App.game;
-        }
-        
+        // Create new game
+        App.startGame(1, 1);
+        Game game = App.game;
+
         Node galaxyNode = gameNode.getChildNodes().item(0);
 
         double borderMargin = Double.parseDouble(getAttribute(galaxyNode, "borderMargin"));
@@ -215,8 +213,7 @@ public class SaveManager {
 
         System.out.println("-- Loading --");
         Galaxy galaxy = new Galaxy(width, height, planetsArrayList, playersArrayList, borderMargin);
-        
-        
+
         game.load(galaxy, missionsList);
         Game.toggleFreeze();
     }

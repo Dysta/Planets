@@ -32,7 +32,7 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
 
         if (e.isControlDown() && e.getCode() == KeyCode.D) {
             try {
-                SaveManager.load(App.game, "Quicksave");
+                SaveManager.load("Quicksave");
             } catch (Exception err) {
                 err.printStackTrace();
             }
