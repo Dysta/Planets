@@ -26,8 +26,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
-import planets.App;
-import static planets.App.game;
+import planets.Planets;
+import static planets.Planets.game;
 import planets.ResourcesManager;
 import planets.Sprite;
 import planets.entities.AIs.AI;
@@ -106,8 +106,8 @@ public class SaveManager {
         double height = Double.parseDouble(getAttribute(gameNode, "height"));
 
         // Create new game
-        App.startGame(1, 1);
-        Game game = App.game;
+        Planets.startGame(1, 1);
+        Game game = Planets.game;
 
         Node galaxyNode = gameNode.getChildNodes().item(0);
 

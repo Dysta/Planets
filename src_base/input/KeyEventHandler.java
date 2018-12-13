@@ -3,7 +3,7 @@ package input;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import planets.App;
+import planets.Planets;
 import planets.IO.SaveManager;
 import planets.windows.Game;
 import planets.entities.planet.Planet;
@@ -27,7 +27,7 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
         }
 
         if (e.isControlDown() && e.getCode() == KeyCode.S) {
-            SaveManager.save(App.game, "Quicksave");
+            SaveManager.save(Planets.game, "Quicksave");
         }
 
         if (e.isControlDown() && e.getCode() == KeyCode.D) {
@@ -46,7 +46,7 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
         }
 
         if (e.getCode() == KeyCode.ESCAPE) {
-            App.menu.setSelectedWindow(Window.MAIN_MENU);
+            Planets.menu.setSelectedWindow(Window.MAIN_MENU);
         }
     }
 

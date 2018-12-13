@@ -27,7 +27,7 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
-import planets.App;
+import planets.Planets;
 import planets.IO.SaveManager;
 import planets.ResourcesManager;
 import ui.NumericField;

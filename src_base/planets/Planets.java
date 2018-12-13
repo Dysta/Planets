@@ -12,7 +12,11 @@ import planets.entities.Galaxy;
 import planets.utils.DebugUtils;
 import planets.windows.Load;
 
-public class App extends Application {
+/**
+ * 
+ * @author Adri & Dysta
+ */
+public class Planets extends Application {
 
     public final static boolean DEBUG = false;
 
@@ -52,8 +56,8 @@ public class App extends Application {
             System.err.println("Failed to load ResourcesManager MenuAssets: " + e);
         }
 
-        App.last_tick = System.currentTimeMillis();
-        App.last_frame = System.currentTimeMillis();
+        Planets.last_tick = System.currentTimeMillis();
+        Planets.last_frame = System.currentTimeMillis();
 
         startMenu();
     }
@@ -81,7 +85,7 @@ public class App extends Application {
 
                         if (nbPlayers >= 1 && nbPlanets >= nbPlayers) {
                             menu.clear();
-                            App.startGame(menu.getNbPlayers(), menu.getNbPlanets());
+                            Planets.startGame(menu.getNbPlayers(), menu.getNbPlanets());
                         }
                         break;
                     case Window.LOAD:
@@ -96,7 +100,7 @@ public class App extends Application {
                         } catch (Exception e) {
                             System.err.println("Failed to load ResourcesManager MenuAssets: " + e);
                         }
-                        App.startGame(menu.getNbPlayers(), menu.getNbPlanets());
+                        Planets.startGame(menu.getNbPlayers(), menu.getNbPlanets());
                         break;
                     case Window.QUIT:
                         System.exit(0);
@@ -122,32 +126,32 @@ public class App extends Application {
         game.init(WIDTH, HEIGHT);
         game.initGame(nbPlayers, nbPlanets);
 
-        App.ticks = new ArrayList<>();
+        Planets.ticks = new ArrayList<>();
         for (int i = 60; i > 0; i--) {
-            App.ticks.add((long) 0);
+            Planets.ticks.add((long) 0);
         }
 
         AnimationTimer game_anim = new AnimationTimer() {
             public void handle(long arg0) {
                 long now = System.currentTimeMillis();
 
-                if (now - App.last_tick >= 1000 / App.TICKRATE) {
-                    App.last_tick = now;
+                if (now - Planets.last_tick >= 1000 / Planets.TICKRATE) {
+                    Planets.last_tick = now;
                     game.handle(arg0);
-                    App.ticks.remove(0);
-                    App.ticks.add(now);
+                    Planets.ticks.remove(0);
+                    Planets.ticks.add(now);
                 }
 
-                if (now - App.last_think >= 1000 / App.AI_THINKRATE) {
-                    App.last_think = now;
+                if (now - Planets.last_think >= 1000 / Planets.AI_THINKRATE) {
+                    Planets.last_think = now;
                     game.handleAI();
                 }
 
-                if (now - App.last_frame >= 1000 / App.REFRESHRATE) {
-                    App.last_frame = now;
+                if (now - Planets.last_frame >= 1000 / Planets.REFRESHRATE) {
+                    Planets.last_frame = now;
 
-                    if (App.DEBUG) {
-                        System.out.println("-------------- Tick n°" + Game.ticks + " (tickrate: " + DebugUtils.tickRate(App.ticks) + ") --------------");
+                    if (Planets.DEBUG) {
+                        System.out.println("-------------- Tick n°" + Game.ticks + " (tickrate: " + DebugUtils.tickRate(Planets.ticks) + ") --------------");
                         System.out.println("Nodes : " + DebugUtils.getAllNodes(root).size());
                     }
                     game.updateUI();
