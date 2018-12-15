@@ -45,14 +45,14 @@ public class ResourcesManager {
         ResourcesManager.assets = new HashMap<String, Sprite>();
         ResourcesManager.background = new Image(getRessourcePathByName(BG_PATH), width, height, false, false);
 
-        ResourcesManager.loadSprite("basePlanet", PLANET_PATH, 1600, 1600, width, height);
+        ResourcesManager.loadSprite("basePlanet", PLANET_PATH, 1600, 1600);
 
         // Ships
-        ResourcesManager.loadSprite("baseShip", BASESHIP_PATH, 20, 20, width, height);
+        ResourcesManager.loadSprite("baseShip", BASESHIP_PATH, 20, 20);
     }
 
-    private static void loadSprite(String name, String path, int width, int height, double maxX, double maxY) {
-        ResourcesManager.assets.put(name, new Sprite(getRessourcePathByName(path), width, height, maxX, maxY));
+    private static void loadSprite(String name, String path, int width, int height) {
+        ResourcesManager.assets.put(name, new Sprite(getRessourcePathByName(path), width, height));
     }
 
     public static void colorImage(Sprite sprite, Color color) {
