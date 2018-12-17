@@ -1,39 +1,45 @@
 package planets.windows;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
 import planets.ResourcesManager;
 import ui.NumericField;
 import ui.WindowSwitchButton;
 
 /**
- *
+ *  The main menu window
+ * 
  * @author Adri
  */
 public class Menu extends Window {
 
+    /**
+     * Asks the user for a number of players before generating the game.
+     */
     private static NumericField playersField;
+    /**
+     * Asks the user for a number of planets before generating the game.
+     */
     private static NumericField planetsField;
 
+    /**
+     * Keeps track of what menu we need to switch to.
+     */
     private int selectedMenu;
 
-    // GraphicsContext is defined by the game
+    /**
+     * Initializes the application window 
+     * 
+     * @param WIDTH the width of the window
+     * @param HEIGHT the height of the window
+     */
     @Override
     public void init(double WIDTH, double HEIGHT) {
         this.WIDTH = WIDTH;
@@ -58,6 +64,9 @@ public class Menu extends Window {
         stage.show();
     }
 
+    /**
+     * Adds the needed elements to the window.
+     */
     public void initMenu() {
         this.selectedMenu = Window.STANDBY;
         // Container
@@ -93,6 +102,15 @@ public class Menu extends Window {
         Menu.root.getChildren().add(grid);
     }
 
+    /**
+     * Correctly adds a NumericField to a grid
+     * @param grid the grid to add to
+     * @param label_text the text on the Label
+     * @param h the horizontal start position
+     * @param v the vertical position
+     * @param baseValue the default valued in the numeric field
+     * @return a new NumericField
+     */
     public NumericField addNumericTextField(GridPane grid, String label_text, int h, int v, int baseValue) {
         Label label = new Label();
         label.setTextFill(Color.WHITE);
@@ -110,18 +128,34 @@ public class Menu extends Window {
         return field;
     }
 
+    /**
+     * Changes the selected window, directly causing the code in the Planets timer for windows switching to be executed.
+     * @param s the new window
+     */
     public void setSelectedWindow(int s) {
         this.selectedMenu = s;
     }
 
+    /**
+     * Returns the currently selected menu.
+     * @return the currently selected menu.
+     */
     public int getSelectedWindow() {
         return this.selectedMenu;
     }
 
+    /**
+     * Get the number of players, input by the user.
+     * @return number of players input by the user.
+     */
     public int getNbPlayers() {
         return Integer.valueOf(Menu.playersField.getText());
     }
 
+    /**
+     * Get the number of planets, input by the user.
+     * @return number of planets input by the user.
+     */
     public int getNbPlanets() {
         return Integer.valueOf(Menu.planetsField.getText());
     }

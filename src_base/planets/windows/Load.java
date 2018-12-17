@@ -5,10 +5,7 @@
  */
 package planets.windows;
 
-import java.awt.Event;
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
@@ -18,33 +15,40 @@ import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.stage.Stage;
-import javax.xml.parsers.ParserConfigurationException;
-import org.xml.sax.SAXException;
-import planets.Planets;
 import planets.IO.SaveManager;
 import planets.ResourcesManager;
-import ui.NumericField;
 import ui.WindowSwitchButton;
 
 /**
- *
+ *  The Load window, displaying playable savegames.
+ * 
  * @author Adri
  */
 public class Load extends Window {
 
-    private Menu parent;
+    /**
+     * Allows to return to the Menu
+     */
+    private final Menu parent;
 
+    /**
+     * Basic constructor
+     * @param parent the Menu
+     */
     public Load(Menu parent) {
         this.parent = parent;
     }
 
+    /**
+     * Creates the Load window 
+     * @param WIDTH the load menu width
+     * @param HEIGHT the load menu height
+     */
     @Override
     public void init(double WIDTH, double HEIGHT) {
         this.WIDTH = WIDTH;
@@ -73,6 +77,9 @@ public class Load extends Window {
         stage.show();
     }
 
+    /**
+     * Creates the actual menu of saves
+     */
     public void initLoad() {
 
         // Container
@@ -101,6 +108,15 @@ public class Load extends Window {
         Load.root.getChildren().add(grid);
     }
 
+    /**
+     * Adds a load button to a grid at a position
+     * 
+     * @param grid the grid to add to
+     * @param label_text the save file name
+     * @param h The horizontal position
+     * @param v The vertical position
+     * @return a new WindowSwitchButton
+     */
     public WindowSwitchButton addLoadButton(GridPane grid, String label_text, int h, int v) {
         Label label = new Label();
         label.setTextFill(Color.WHITE);

@@ -1,12 +1,10 @@
 package planets.windows;
 
-import javafx.event.EventHandler;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
-import static javafx.scene.input.KeyCode.T;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -15,11 +13,18 @@ import planets.Planets;
 import planets.ResourcesManager;
 
 /**
+ * Displays the end of the game
  *
  * @author Adri
  */
 public class ResultScreen extends Window {
 
+    /***
+     * Creates the result screen
+     * 
+     * @param WIDTH the width for the end screen
+     * @param HEIGHT the height for the end screen
+     */
     @Override
     public void init(double WIDTH, double HEIGHT) {
         this.WIDTH = WIDTH;
