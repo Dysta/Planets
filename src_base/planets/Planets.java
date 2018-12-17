@@ -8,6 +8,8 @@ import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import static planets.windows.Game.root;
+
+import planets.IO.SaveManager;
 import planets.entities.Galaxy;
 import planets.utils.DebugUtils;
 import planets.windows.Load;
@@ -74,6 +76,9 @@ public class Planets extends Application {
                 menu.setSelectedWindow(Window.STANDBY);
                 switch (selectedMenu) {
                     case Window.MAIN_MENU:
+                        if(game!=null) {
+                        	game.clear();
+                        }
                         menu.setStage(stage, "Main Menu");
                         menu.init(MENU_WIDTH, MENU_HEIGHT);
                         menu.stage.centerOnScreen();
@@ -100,7 +105,6 @@ public class Planets extends Application {
                         } catch (Exception e) {
                             System.err.println("Failed to load ResourcesManager MenuAssets: " + e);
                         }
-                        Planets.startGame(menu.getNbPlayers(), menu.getNbPlanets());
                         break;
                     case Window.QUIT:
                         System.exit(0);
