@@ -9,7 +9,7 @@ import planets.utils.Point;
 import planets.entities.ship.Ship;
 
 public class Mission {
-    
+
     private static int last_id = 0;
     private int id;
 
@@ -19,7 +19,7 @@ public class Mission {
     private ArrayList<Squad> squads;
 
     private int addQueue;
-    
+
     private Player owner;
     private final Planet origin;
     private final Planet destination;
@@ -31,7 +31,7 @@ public class Mission {
     public Mission(Planet p1, Planet p2, int addQueue, int squadSize, String mission) {
         Mission.last_id++;
         this.id = Mission.last_id;
-        
+
         this.addQueue = addQueue;
         this.squads = new ArrayList<>();
         this.owner = p1.getOwner();
@@ -95,9 +95,9 @@ public class Mission {
                 break;
             case Mission.CONVOY:
                 this.destination.landShips(arrivers);
-                arrivers.clear();
                 break;
         }
+        arrivers.clear();
     }
 
     public void clearSquads() {
@@ -109,25 +109,25 @@ public class Mission {
         }*/
         this.squads.removeIf((Squad s) -> s.isEmpty());
     }
-    
+
     public void clearQueue() {
         this.addQueue = 0;
     }
-    
+
     public ArrayList<Squad> getSquads() {
         return this.squads;
     }
-    
+
     public void setSquads(ArrayList<Squad> squads) {
         this.squads = squads;
     }
-    
+
     public void addQuad(Squad s) {
         this.squads.add(s);
     }
-    
+
     public void cancelSquad(Squad s) {
-        if(this.squads.contains(s)) {
+        if (this.squads.contains(s)) {
             this.squads.remove(s);
         }
     }
@@ -139,27 +139,27 @@ public class Mission {
     public Planet getDestinationPlanet() {
         return this.destination;
     }
-    
+
     public boolean isEmpty() {
         return this.squads.size() <= 0 && this.addQueue == 0;
     }
-    
+
     public int getAddQueue() {
         return this.addQueue;
     }
-    
+
     public Player getOwner() {
         return this.owner;
     }
-    
+
     public String getMission() {
         return this.mission;
     }
-    
+
     public int getSquadSize() {
         return this.squadSize;
     }
-    
+
     public int getId() {
         return this.id;
     }

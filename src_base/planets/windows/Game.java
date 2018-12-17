@@ -268,6 +268,8 @@ public class Game extends Window {
         boolean hasEnemy = false;
         boolean hasMainPlayer = false;
         
+        if(!Game.missions.isEmpty()) return false;
+        
         for(Planet p : Galaxy.getPlanets()) {
             if(p.getOwner().isAI()) {
                 hasEnemy = true;

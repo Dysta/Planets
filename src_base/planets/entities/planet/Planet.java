@@ -213,6 +213,11 @@ public abstract class Planet extends Sprite {
                 c++;
             }
         }
+        
+        if(attackers.size() > 0) {
+            this.landShips(attackers);
+        }
+        
         return attackers.size() > 0;
     }
     

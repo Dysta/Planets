@@ -45,13 +45,10 @@ public class Squad {
 
             if (destination.isOn(s.getPosXMiddle(),s.getPosYMiddle())) {
                 arrivers.add(s);
+                this.ships.remove(s);
             }
 
             c++;
-        }
-        
-        for(Ship s : arrivers) {
-            this.ships.remove(s);
         }
         
         return arrivers;

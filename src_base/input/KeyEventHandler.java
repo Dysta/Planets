@@ -51,6 +51,11 @@ public class KeyEventHandler implements EventHandler<KeyEvent> {
             }
         }
 
+        // Debug
+        if (e.getCode() == KeyCode.F) {
+            Game.toggleFreeze();
+        }
+
         // UP ARROW -> Increase the percentage of ships per mission
         if (e.getCode() == KeyCode.UP) {
             Game.mainPlayer.setEffectivesPercent(Game.mainPlayer.getEffectivesPercent() + 10);
