@@ -18,6 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import planets.Planets;
 import planets.ResourcesManager;
 import planets.Sprite;
 import planets.entities.Galaxy;
@@ -48,6 +49,7 @@ public class Game extends Window {
     public static SelectPercentage selectP;
 
     // Methods
+    @Override
     public void init(double WIDTH, double HEIGHT) {
         this.WIDTH = WIDTH;
         this.HEIGHT = HEIGHT;
@@ -219,6 +221,11 @@ public class Game extends Window {
 
     public void handle(long arg0) {
         if (!Game.freeze) {
+            if(isGameOver()) {
+                Planets.menu.setSelectedWindow(Window.RESULT_SCREEN);
+                Game.setFreeze(true);
+            }
+            
             Game.ticks++;
 
             for (Mission r : Game.missions) {
@@ -257,4 +264,21 @@ public class Game extends Window {
         root.getChildren().clear();
     }
 
+    public boolean isGameOver() {
+        boolean hasEnemy = false;
+        boolean hasMainPlayer = false;
+        
+        for(Planet p : Galaxy.getPlanets()) {
+            if(p.getOwner().isAI()) {
+                hasEnemy = true;
+            } else {
+                if(p.getOwner() == Game.mainPlayer) {
+                    hasMainPlayer = true;
+                }
+            }
+        }
+        
+        return !hasEnemy || !hasMainPlayer;
+    }
+    
 }

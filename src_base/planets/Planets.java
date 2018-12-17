@@ -6,11 +6,16 @@ import planets.windows.Window;
 import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 import static planets.windows.Game.root;
 
 import planets.utils.DebugUtils;
 import planets.windows.Load;
+import planets.windows.ResultScreen;
 
 /**
  * The main class for the application.
@@ -101,6 +106,11 @@ public class Planets extends Application {
     public static Load load;
 
     /**
+     * The ResultScreen window : Printed when the game has ended.
+     */
+    public static ResultScreen resultScreen;
+
+    /**
      * Starts the application.
      * 
      * @param args Default console arguments passed to Application.launch
@@ -121,9 +131,9 @@ public class Planets extends Application {
         load = new Load(menu);
 
         try {
-            ResourcesManager.initMenuAssets(MENU_WIDTH, MENU_HEIGHT);
+            ResourcesManager.initGlobalAssets(MENU_WIDTH, MENU_HEIGHT);
         } catch (Exception e) {
-            System.err.println("Failed to load ResourcesManager MenuAssets: " + e);
+            System.err.println("Failed to load ResourcesManager GlobalAssets: " + e);
         }
 
         Planets.last_tick = System.currentTimeMillis();
@@ -140,6 +150,7 @@ public class Planets extends Application {
         menu.init(MENU_WIDTH, MENU_HEIGHT);
 
         AnimationTimer menu_anim = new AnimationTimer() {
+            @Override
             public void handle(long arg0) {
                 int selectedMenu;
 
@@ -178,6 +189,17 @@ public class Planets extends Application {
                             System.err.println("Failed to load ResourcesManager MenuAssets: " + e);
                         }
                         break;
+                    case Window.RESULT_SCREEN:
+                        if(game!=null) {
+                        	game.clear();
+                        }
+                        resultScreen = new ResultScreen();
+                        resultScreen.setStage(stage, "Game Over !");
+                        resultScreen.init(MENU_WIDTH, MENU_HEIGHT);
+                        resultScreen.stage.centerOnScreen();
+                        resultScreen.show();
+                        
+                        break;
                     case Window.QUIT:
                         System.exit(0);
                         break;
@@ -214,6 +236,7 @@ public class Planets extends Application {
         }
 
         AnimationTimer game_anim = new AnimationTimer() {
+            @Override
             public void handle(long arg0) {
                 long now = System.currentTimeMillis();
 

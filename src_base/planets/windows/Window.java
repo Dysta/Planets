@@ -24,6 +24,7 @@ abstract public class Window {
     public final static int QUIT = 2;
     public final static int LOAD = 3;
     public final static int LOADING = 4;
+    public final static int RESULT_SCREEN = 5;
 
     // Attributes
     public Stage stage;
