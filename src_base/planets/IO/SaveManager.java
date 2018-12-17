@@ -35,6 +35,8 @@ import planets.entities.planet.Planet;
 import planets.entities.ship.Ship;
 import planets.utils.IteratableNodeList;
 import planets.windows.Game;
+import static planets.windows.Window.root;
+import ui.SelectPercentage;
 
 /**
  * Manage savegames : Save and Load as XML.
@@ -177,13 +179,17 @@ public class SaveManager {
             } else {
                 // Otherwise, create an usual player.
                 boolean active = getAttribute(p, "active").equals("1");
+                boolean mainplayer = getAttribute(p, "mainPlayer").equals("1");
                 pl = new Player(
                         getAttribute(p, "shipType"),
-                        getAttribute(p, "mainPlayer").equals("1"),
+                        mainplayer,
                         Double.parseDouble(getAttribute(p, "effectivesPercent")),
                         active ? Color.web(getAttribute(p, "color")) : Color.GREY,
                         active);
 
+                if(mainplayer) {
+                    Game.mainPlayer = pl;
+                }
             }
             // Set its it so that we can associate him with his belongings later on
             pl.setId(Integer.parseInt(getAttribute(p, "id")));
@@ -274,6 +280,7 @@ public class SaveManager {
 
         // Call game.load to start a prepared game
         game.load(galaxy, missionsList);
+        Game.selectP = new SelectPercentage(width,height);
         
         // Unfreeze the game, ready to go.
         Game.toggleFreeze();

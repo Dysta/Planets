@@ -3,31 +3,34 @@ package ui;
 import javafx.scene.Group;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import planets.Planets;
 import planets.entities.Player;
+import planets.windows.Game;
 
 public class SelectPercentage {
 
-	private GraphicsContext gc;
-	private Group root;
+	private final GraphicsContext gc;
+	private final Group root;
 
-	private double bottomLeftX;
-	private double bottomLeftY;
+	private final double bottomLeftX;
+	private final double bottomLeftY;
 	private double width;
 	private double height;
 
-	private Text text;
-	private TextFlow tf;
+	private final Text text;
+	private final TextFlow tf;
 	
-	private Player p;
+	private final Player p;
 	
-	public SelectPercentage(GraphicsContext gc, Group root, Player p, double bottomLeftX, double bottomLeftY) {
+	public SelectPercentage(double bottomLeftX, double bottomLeftY) {
 		this.text = new Text();
 		this.tf = new TextFlow();
-		this.p = p;
-		this.gc = gc;
-		this.root = root;
+		this.p = Game.mainPlayer;
+		this.gc = Planets.game.gc;
+		this.root = Game.root;
 		this.bottomLeftX = bottomLeftX;
 		this.bottomLeftY = bottomLeftY;
 		this.update();

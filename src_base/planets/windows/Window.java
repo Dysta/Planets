@@ -27,8 +27,8 @@ abstract public class Window {
 
     // Attributes
     public Stage stage;
-    protected GraphicsContext gc;
-    protected Canvas canvas;
+    public GraphicsContext gc;
+    public Canvas canvas;
     
     public static Group root;
     

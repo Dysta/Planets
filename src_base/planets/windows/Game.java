@@ -45,7 +45,7 @@ public class Game extends Window {
     public static int ticks;
 
     // UI Elements
-    private static SelectPercentage selectP;
+    public static SelectPercentage selectP;
 
     // Methods
     public void init(double WIDTH, double HEIGHT) {
@@ -103,7 +103,7 @@ public class Game extends Window {
         Game.ctrlHeld = false;
 
         // init UI
-        this.selectP = new SelectPercentage(gc, root, Game.mainPlayer, this.WIDTH, this.HEIGHT);
+        Game.selectP = new SelectPercentage(this.WIDTH, this.HEIGHT);
 
         for (Planet p : Galaxy.getPlanets()) {
             p.initRender();

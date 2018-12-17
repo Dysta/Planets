@@ -121,7 +121,7 @@ public class Planets extends Application {
         load = new Load(menu);
 
         try {
-            ResourcesManager.initMenuAssets(WIDTH, HEIGHT);
+            ResourcesManager.initMenuAssets(MENU_WIDTH, MENU_HEIGHT);
         } catch (Exception e) {
             System.err.println("Failed to load ResourcesManager MenuAssets: " + e);
         }

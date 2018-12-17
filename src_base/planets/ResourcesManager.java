@@ -19,7 +19,7 @@ public class ResourcesManager {
     public static Image menuBackground;
 
     public final static String BG_PATH = "images/animated-background.gif";
-    public final static String MENUBG_PATH = "images/animated-background.gif";
+    public final static String MENUBG_PATH = "images/menu-background.png";
 
     // Common Sprites
     public static Map<String, Sprite> assets;
