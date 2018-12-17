@@ -9,7 +9,11 @@ import java.util.stream.StreamSupport;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-// from https://stackoverflow.com/a/35762965
+/**
+ * Makes a Node List iterable, useful for the SaveManager.
+ * 
+ * @author https://stackoverflow.com/a/35762965
+ */
 public class IteratableNodeList implements Iterable<Node> {
     final NodeList nodeList;
     public IteratableNodeList(final NodeList _nodeList) {
