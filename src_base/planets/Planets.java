@@ -9,45 +9,114 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import static planets.windows.Game.root;
 
-import planets.IO.SaveManager;
-import planets.entities.Galaxy;
 import planets.utils.DebugUtils;
 import planets.windows.Load;
 
 /**
+ * The main class for the application.
+ * Handles screens and periodic calls
  * 
  * @author Adri & Dysta
  */
 public class Planets extends Application {
 
+    /**
+     * Can only be change in the source code.
+     * Enables more logs.
+     */
     public final static boolean DEBUG = false;
 
+    /**
+     * The allowed width for this application.
+     */
     private final static double WIDTH = 1280;
+
+    /**
+     * The allowed height for this application.
+     */
     private final static double HEIGHT = 720;
 
+    /**
+     * The preffered width for this application.
+     */
     private final static double MENU_WIDTH = 600;
+
+    /**
+     * The preffered height for this application.
+     */
     private final static double MENU_HEIGHT = 400;
 
+    /**
+     * How many frames should be processed every second.
+     */
     private final static int REFRESHRATE = 60;
+
+    /**
+     * How many game ticks should be processed every second.
+     */
     private final static int TICKRATE = 60;
+
+    /**
+     * How many times per second are AIs able to "think".
+     */
     private final static int AI_THINKRATE = 2;
 
+    /**
+     * Stores the last game tick, used for respecting TICKRATE.
+     */
     private static long last_tick;
+
+    /**
+     * Stores the last processed frame, used for respecting REFRESHRATE.
+     */
     private static long last_frame;
+
+    /**
+     * Stores the last AIs process turn, used for respecting AI_THINKRATE.
+     */
     private static long last_think;
+    
+    /**
+     * Stores ticks to compute the tickrate, used in logs.
+     */
     private static ArrayList<Long> ticks;
 
+    /**
+     * The Stage window.
+     */
     public static Stage stage;
+
+    /**
+     * The Menu window.
+     */
     public static Menu menu;
+
+    /**
+     * The Game window.
+     */
     public static Game game;
+
+    /**
+     * The Load window.
+     */
     public static Load load;
 
+    /**
+     * Starts the application
+     * 
+     * @param args 
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Creates the initial game state and initializes basic assets.
+     * 
+     * @param primaryStage This argument is provided by the Application superclass
+     */
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         stage = primaryStage;
         menu = new Menu();
         load = new Load(menu);
@@ -64,6 +133,9 @@ public class Planets extends Application {
         startMenu();
     }
 
+    /**
+     * Creates the Main Menu and starts a timer whose goal is to handle Window switching.
+     */
     public static void startMenu() {
         menu.setStage(stage, "Main Menu");
         menu.init(MENU_WIDTH, MENU_HEIGHT);
@@ -117,6 +189,12 @@ public class Planets extends Application {
         menu_anim.start();
     }
 
+    /**
+     * Creates a random game and starts the global Game handler.
+     * 
+     * @param nbPlayers The maximum amount of players to assign a planet too
+     * @param nbPlanets The maximum amount of planets to generate
+     */
     public static void startGame(int nbPlayers, int nbPlanets) {
         try {
             ResourcesManager.initGameAssets(WIDTH, HEIGHT);

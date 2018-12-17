@@ -1,6 +1,5 @@
 package input;
 
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import planets.windows.Game;
@@ -9,14 +8,42 @@ import planets.entities.planet.Planet;
 import planets.entities.Squad;
 import planets.entities.ship.Ship;
 
+/**
+ * Handles any mouse related event from the user related to the Application.
+ * 
+ * @author Adri
+ */
 public class MouseHandler implements EventHandler<MouseEvent> {
 
+    /**
+     * Stores the last Event to be able to access more easily
+     */
     private MouseEvent e;
+    
+    /**
+     * The last known mouseX positions
+     */
     double mX;
+    
+    /**
+     * The last known mouseY positions
+     */
     double mY;
+    
+    /**
+     * Whether a planet has been clicked when the last handled event was triggerd
+     */
     private boolean clicked_a_planet;
+    
+    /**
+     * Whether a squad has been clicked when the last handled event was triggerd
+     */
     private boolean clicked_a_squad;
 
+    /**
+     * Deals with the provided KeyEvent
+     * @param evt the KeyEvent provided by EventHandler
+     */
     @Override
     public void handle(MouseEvent evt) {
         this.e = evt;
@@ -54,6 +81,11 @@ public class MouseHandler implements EventHandler<MouseEvent> {
         }
     }
 
+    /**
+     * Handles the consequences of a click on a planet according to the current Game state and previous actions
+     * 
+     * @param p The planet that has been clicked
+     */
     private void handlePlanetClick(Planet p) {
         if (p.isOn(mX, mY)) {
             clicked_a_planet = true;
@@ -116,6 +148,13 @@ public class MouseHandler implements EventHandler<MouseEvent> {
         }
     }
 
+
+    /**
+     * Handles the consequences of a click on a squad according to the current Game state and previous actions
+     * 
+     * @param m The Squad's current Mission
+     * @param s The Squad that has been clicked
+     */
     private void handleSquadClick(Mission m, Squad s) {
         if (s.isOn(mX, mY)) {
             clicked_a_squad = true;
@@ -141,7 +180,7 @@ public class MouseHandler implements EventHandler<MouseEvent> {
                         }
                     }
                 } else {
-                    // Do nothing
+                    // Do nothing for now
                 }
             }
         }
