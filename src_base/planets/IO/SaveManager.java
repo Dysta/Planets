@@ -48,12 +48,15 @@ import planets.windows.Game;
  */
 public class SaveManager {
 
-    private final static String save_folder = "C:\\Users\\Adri\\Desktop\\test\\";
+    private final static String save_folder = "./saves/";
     private final static String save_ext = ".planets";
     private static Document doc;
 
     public static void save(Game game, String savename) {
         try {
+            if(!checkSaveFolder()) {
+            	return;
+            }
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
@@ -94,6 +97,9 @@ public class SaveManager {
 
     public static void load(String save_name) throws ParserConfigurationException, SAXException, IOException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Game.toggleFreeze();
+        if(!checkSaveFolder()) {
+        	return;
+        }
         File file = new File(SaveManager.save_folder + save_name + save_ext);
 
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -315,8 +321,11 @@ public class SaveManager {
     }
 
     public static ArrayList<File> getSaveFiles() {
-        File saveFolder = new File(SaveManager.save_folder);
         ArrayList<File> files = new ArrayList<>();
+        if(!checkSaveFolder()) {
+        	return files;
+        }
+        File saveFolder = new File(SaveManager.save_folder);
         for (File f : saveFolder.listFiles()) {
             String name = f.getName();
             if (name.substring(name.length() - (save_ext.length())).equals(save_ext)) {
@@ -326,5 +335,13 @@ public class SaveManager {
         }
 
         return files;
+    }
+    
+    public static boolean checkSaveFolder() {
+    	File dir = new File(SaveManager.save_folder);
+    	if(!dir.exists()) {
+    		dir.mkdirs();
+    	}
+    	return dir.exists() && dir.isDirectory();
     }
 }
