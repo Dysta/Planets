@@ -89,7 +89,7 @@ public class Sprite {
      * This method should be Overriden by any children in reference to their
      * indexed Image in ResourcesManager. @see ResourcesManager.
      * 
-     * @return 
+     * @return the index keyword
      */
     public String assetReference() {
         return "sprite";
@@ -162,7 +162,7 @@ public class Sprite {
      * account the target sprite's image transparency.
      * 
      * @param s The sprite to test
-     * @return 
+     * @return the check result
      */
     public boolean intersects(Sprite s) {
         return ((x >= s.x && x <= s.x + s.width) || (s.x >= x && s.x <= x + width))
@@ -189,7 +189,7 @@ public class Sprite {
     /**
      * Gives a string representation of this Sprite's state.
      * 
-     * @return A string in the format of 'Sprite<x,y>'
+     * @return A string in the format of 'Sprite&lt;x,y&gt;'
      */
     public String toString() {
         return "Sprite<" + x + ", " + y + ">";
@@ -216,7 +216,7 @@ public class Sprite {
     /**
      * Get this Sprite's top-left X position.
      * 
-     * @return 
+     * @return top-left X
      */
     public double getPosX() {
         return this.x;
@@ -225,7 +225,7 @@ public class Sprite {
     /**
      * Get this Sprite's top-left Y position.
      * 
-     * @return 
+     * @return top-left Y
      */
     public double getPosY() {
         return this.y;
@@ -234,7 +234,7 @@ public class Sprite {
     /**
      * Get this Sprite's middle X position.
      * 
-     * @return 
+     * @return middle X
      */
     public double getPosXMiddle() {
         return this.x + (this.width / 2);
@@ -243,16 +243,14 @@ public class Sprite {
     /**
      * Get this Sprite's middle Y position.
      * 
-     * @return 
+     * @return middle Y
      */
     public double getPosYMiddle() {
         return this.y + (this.height / 2);
     }
 
     /**
-     * Change this Sprite's Image dimensions. Caution :
-     * This loads a new Image in memory.
-     * This doesn't update the ImageView.
+     * Change this Sprite's Image dimensions, caution : this loads a new Image in memory and this doesn't update the ImageView.
      * 
      * @param path The path to the newly created Image
      * @param width The new width
@@ -265,8 +263,7 @@ public class Sprite {
     }
 
     /**
-     * Copies another Sprite's Image reference and dimensions.
-     * This doesn't update the ImageView.
+     * Copies another Sprite's Image reference and dimensions, this doesn't update the ImageView.
      * 
      * @param s The Sprite containing the Image to reference
      */
@@ -291,8 +288,7 @@ public class Sprite {
     }
 
     /**
-     * Returns the latest state of the ColorAdjust effect applied to the ImageView
-     * in ResourcesManager. Used to stack effects instead on each other.
+     * Returns the latest state of the ColorAdjust effect applied to the ImageView in ResourcesManager Used to stack effects instead on each other.
      * 
      * @return the latest ColorAdjust Effect applied to the ImageView
      */

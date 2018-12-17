@@ -4,18 +4,13 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
-import javafx.stage.Stage;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -27,7 +22,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 import planets.Planets;
-import static planets.Planets.game;
 import planets.ResourcesManager;
 import planets.Sprite;
 import planets.entities.AIs.AI;
@@ -43,49 +37,76 @@ import planets.utils.IteratableNodeList;
 import planets.windows.Game;
 
 /**
+ * Manage savegames : Save and Load as XML.
  *
  * @author Adri
  */
 public class SaveManager {
 
-    private final static String save_folder = "./saves/";
-    private final static String save_ext = ".planets";
+    /**
+     * Save game directory, should always end with a /.
+     */
+    private final static String SAVE_FOLDER = "./saves/";
+
+    /**
+     * The savegame's file extension.
+     */
+    private final static String SAVE_EXT = ".planets";
+
+    /**
+     * The current working Document object to generate XML.
+     */
     private static Document doc;
 
+    /**
+     * Saves the current game state into an XML File.
+     *
+     * @param game The game state to save
+     * @param savename The name of the savefile
+     */
     public static void save(Game game, String savename) {
         try {
-            if(!checkSaveFolder()) {
-            	return;
+            if (!checkSaveFolder()) {
+                return;
             }
+
+            // Create a Document Factory in order to properly generate an XML file
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 
             doc = docBuilder.newDocument();
+
+            // Create the main container along with some basic information
             Element rootElement = doc.createElement("game");
             doc.appendChild(rootElement);
             addAttribute("width", Double.toString(game.WIDTH), rootElement);
             addAttribute("height", Double.toString(game.HEIGHT), rootElement);
 
+            // Add the Galaxy in Game and its main attributes. Not a container.
             Element galaxy = doc.createElement("Galaxy");
             rootElement.appendChild(galaxy);
             addAttribute("borderMargin", Double.toString(Galaxy.borderMargin), galaxy);
 
+            // Add the players in Game
             Element players = doc.createElement("Players");
             rootElement.appendChild(players);
             addPlayers(players);
 
+            // Add the planets in Game
             Element planets = doc.createElement("Planets");
             rootElement.appendChild(planets);
             addPlanets(planets);
 
+            // Add the missions in Game
             Element missions = doc.createElement("Missions");
             rootElement.appendChild(missions);
             addMissions(missions);
 
+            // Generate the XML and create/overwrite the existing file.
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new File(SaveManager.save_folder + savename + save_ext));
+            StreamResult result = new StreamResult(new File(SaveManager.SAVE_FOLDER + savename + SAVE_EXT));
 
             transformer.transform(source, result);
         } catch (ParserConfigurationException pce) {
@@ -95,17 +116,35 @@ public class SaveManager {
         }
     }
 
+    /**
+     * Reads the savefile from its name and replaces the current Game by the
+     * newly generated one.
+     *
+     * @param save_name The name of the save file.
+     * @throws ParserConfigurationException
+     * @throws SAXException
+     * @throws IOException
+     * @throws NoSuchMethodException
+     * @throws ClassNotFoundException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws IllegalArgumentException
+     * @throws InvocationTargetException
+     */
     public static void load(String save_name) throws ParserConfigurationException, SAXException, IOException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         Game.setFreeze(true);
-        if(!checkSaveFolder()) {
-        	return;
+        if (!checkSaveFolder()) {
+            return;
         }
-        File file = new File(SaveManager.save_folder + save_name + save_ext);
+        // Fetch the desired savefile
+        File file = new File(SaveManager.SAVE_FOLDER + save_name + SAVE_EXT);
 
+        // Create a Document Factory to parse the XML formatted file.
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         Document document = documentBuilder.parse(file);
 
+        // This is the Game container
         Node gameNode = document.getElementsByTagName("game").item(0);
 
         double width = Double.parseDouble(getAttribute(gameNode, "width"));
@@ -115,36 +154,48 @@ public class SaveManager {
         Planets.startGame(1, 1);
         Game game = Planets.game;
 
+        // Get all usefull containers
         Node galaxyNode = gameNode.getChildNodes().item(0);
-
-        double borderMargin = Double.parseDouble(getAttribute(galaxyNode, "borderMargin"));
-
         Node players = gameNode.getChildNodes().item(1);
         Node planets = gameNode.getChildNodes().item(2);
         Node missions = gameNode.getChildNodes().item(3);
 
+        double borderMargin = Double.parseDouble(getAttribute(galaxyNode, "borderMargin"));
+
+        // Prepare the new Galaxy's entities collections
         ArrayList<Player> playersArrayList = new ArrayList<>();
         ArrayList<Planet> planetsArrayList = new ArrayList<>();
 
+        // Parse all players from the associated container
         Map<String, Player> playersList = new HashMap<>();
         for (Node p : new IteratableNodeList(players.getChildNodes())) {
-            boolean active = getAttribute(p, "active").equals("1");
-            Player pl = new Player(
-                    getAttribute(p, "shipType"),
-                    getAttribute(p, "mainPlayer").equals("1"),
-                    Double.parseDouble(getAttribute(p, "effectivesPercent")),
-                    active ? Color.web(getAttribute(p, "color")) : Color.GREY,
-                    active);
+            Player pl;
 
+            // If this player is an AI, use its AI type instead
             if (!"0".equals(p.getAttributes().getNamedItem("AI").getTextContent())) {
                 pl = new BaseAI(Color.web(getAttribute(p, "color")));
+            } else {
+                // Otherwise, create an usual player.
+                boolean active = getAttribute(p, "active").equals("1");
+                pl = new Player(
+                        getAttribute(p, "shipType"),
+                        getAttribute(p, "mainPlayer").equals("1"),
+                        Double.parseDouble(getAttribute(p, "effectivesPercent")),
+                        active ? Color.web(getAttribute(p, "color")) : Color.GREY,
+                        active);
+
             }
+            // Set its it so that we can associate him with his belongings later on
             pl.setId(Integer.parseInt(getAttribute(p, "id")));
 
+            // Add the reference to both an indexed array and the final reference.
+            // We use a HashMap to be able to get by index while parsing, but in the end
+            // only the collection will be needed by the game.
             playersList.put(Integer.toString(pl.getId()), pl);
             playersArrayList.add(pl);
         }
 
+        // This bloc is very similar to the previous one, but for Planets
         Map<String, Planet> planetsList = new HashMap<>();
         for (Node p : new IteratableNodeList(planets.getChildNodes())) {
             String t = getAttribute(p, "type");
@@ -177,6 +228,7 @@ public class SaveManager {
             planetsArrayList.add(pl);
         }
 
+        // Again, but for missions and its contents
         ArrayList<Mission> missionsList = new ArrayList<>();
         for (Node m : new IteratableNodeList(missions.getChildNodes())) {
 
@@ -217,23 +269,45 @@ public class SaveManager {
             missionsList.add(mi);
         }
 
-        System.out.println("-- Loading --");
+        // Call the galaxy constructor with the parsed elements
         Galaxy galaxy = new Galaxy(width, height, planetsArrayList, playersArrayList, borderMargin);
 
+        // Call game.load to start a prepared game
         game.load(galaxy, missionsList);
+        
+        // Unfreeze the game, ready to go.
         Game.toggleFreeze();
     }
 
+    /**
+     * This method is only useful for preventing code duplication.
+     * 
+     * @param name Name of the new attribute
+     * @param value Value of the new attribute
+     * @param node The Node receiving the new attribute
+     */
     private static void addAttribute(String name, String value, Element node) {
         Attr attr = doc.createAttribute(name);
         attr.setValue(value);
         node.setAttributeNode(attr);
     }
 
+    /**
+     * This method is only useful for preventing code duplication.
+     * 
+     * @param m The source Node
+     * @param name The searched attributes' name
+     * @return 
+     */
     private static String getAttribute(Node m, String name) {
         return m.getAttributes().getNamedItem(name).getTextContent();
     }
 
+    /**
+     * Add all players' nodes with their attributes to the given node
+     * 
+     * @param players The node to add players to
+     */
     private static void addPlayers(Element players) {
         for (Player p : Galaxy.getPlayers()) {
             Element player = doc.createElement("Player");
@@ -255,6 +329,11 @@ public class SaveManager {
         }
     }
 
+    /**
+     * Add all planets' nodes with their attributes to the given node
+     * 
+     * @param planets The node to add planets to
+     */
     private static void addPlanets(Element planets) {
         for (Planet p : Galaxy.getPlanets()) {
             Element planet = doc.createElement("Planet");
@@ -274,6 +353,11 @@ public class SaveManager {
         }
     }
 
+    /**
+     * Add all missions' nodes with their attributes to the given node
+     * 
+     * @param planets The node to add missions to
+     */
     private static void addMissions(Element missions) {
         for (Mission m : Game.missions) {
             Element mission = doc.createElement("Mission" + m.getId());
@@ -292,6 +376,12 @@ public class SaveManager {
         }
     }
 
+
+    /**
+     * Add all squads' nodes with their attributes to the given node
+     * 
+     * @param planets The node to add squads to
+     */
     private static void addSquads(Element squads, Mission m) {
         for (Squad s : m.getSquads()) {
             Element squad = doc.createElement("Squad" + m.getId());
@@ -303,6 +393,12 @@ public class SaveManager {
         }
     }
 
+    
+    /**
+     * Add all ships' nodes with their attributes to the given node
+     * 
+     * @param planets The node to add ships to
+     */
     private static void addShips(Element ships, ArrayList<Ship> shipsList) {
         for (Ship s : shipsList) {
             Element ship = doc.createElement("Ship");
@@ -315,20 +411,30 @@ public class SaveManager {
         }
     }
 
+    /**
+     * Returns the name of a file whose extention matches SaveManager.SAVE_EXT
+     * 
+     * @param f The file to return the name from
+     * @return The file name
+     */
     public static String getSaveName(File f) {
         String name = f.getName();
-        return name.substring(0, name.length() - save_ext.length());
+        return name.substring(0, name.length() - SAVE_EXT.length());
     }
 
+    /**
+     * Get all Files whose extention matches SaveManager.SAVE_EXT in the directory SaveManager.SAVE_FOLDER
+     * @return A list of savefiles
+     */
     public static ArrayList<File> getSaveFiles() {
         ArrayList<File> files = new ArrayList<>();
-        if(!checkSaveFolder()) {
-        	return files;
+        if (!checkSaveFolder()) {
+            return files;
         }
-        File saveFolder = new File(SaveManager.save_folder);
+        File saveFolder = new File(SaveManager.SAVE_FOLDER);
         for (File f : saveFolder.listFiles()) {
             String name = f.getName();
-            if (name.substring(name.length() - (save_ext.length())).equals(save_ext)) {
+            if (name.substring(name.length() - (SAVE_EXT.length())).equals(SAVE_EXT)) {
                 System.out.println("Added button " + SaveManager.getSaveName(f));
                 files.add(f);
             }
@@ -336,12 +442,16 @@ public class SaveManager {
 
         return files;
     }
-    
+
+    /**
+     * Checks whether the save folder exists, if not, creates it.
+     * @return whether the savefolder is ready or not.
+     */
     public static boolean checkSaveFolder() {
-    	File dir = new File(SaveManager.save_folder);
-    	if(!dir.exists()) {
-    		dir.mkdirs();
-    	}
-    	return dir.exists() && dir.isDirectory();
+        File dir = new File(SaveManager.SAVE_FOLDER);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        return dir.exists() && dir.isDirectory();
     }
 }

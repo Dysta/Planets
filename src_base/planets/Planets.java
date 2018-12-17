@@ -16,13 +16,12 @@ import planets.windows.Load;
  * The main class for the application.
  * Handles screens and periodic calls
  * 
- * @author Adri & Dysta
+ * @author Adri and Dysta
  */
 public class Planets extends Application {
 
     /**
-     * Can only be change in the source code.
-     * Enables more logs.
+     * Can only be changed in the source code, enables more logs.
      */
     public final static boolean DEBUG = false;
 
@@ -82,12 +81,12 @@ public class Planets extends Application {
     private static ArrayList<Long> ticks;
 
     /**
-     * The Stage window.
+     * The main Stage, containing displayed elements.
      */
     public static Stage stage;
 
     /**
-     * The Menu window.
+     * The Menu window : Offers to start a new game, see the Load menu, and quit.
      */
     public static Menu menu;
 
@@ -97,14 +96,14 @@ public class Planets extends Application {
     public static Game game;
 
     /**
-     * The Load window.
+     * The Load window : Lists the savegames to load.
      */
     public static Load load;
 
     /**
-     * Starts the application
+     * Starts the application.
      * 
-     * @param args 
+     * @param args Default console arguments passed to Application.launch
      */
     public static void main(String[] args) {
         launch(args);
