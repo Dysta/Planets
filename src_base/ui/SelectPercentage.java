@@ -3,13 +3,17 @@ package ui;
 import javafx.scene.Group;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import planets.Planets;
 import planets.entities.Player;
 import planets.windows.Game;
 
+/**
+ * UI element displaying the current percentage of sent ships for each mission.
+ * 
+ * @author Adri
+ */
 public class SelectPercentage {
 
 	private final GraphicsContext gc;

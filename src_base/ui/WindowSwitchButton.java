@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import planets.windows.Menu;
 
 /**
+ * A button used to switch the current Window
  *
  * @author Adri
  */

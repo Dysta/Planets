@@ -2,7 +2,11 @@ package ui;
 
 import javafx.scene.control.TextField;
 
-// https://stackoverflow.com/a/18959399
+/**
+ * A TextField that accepts only numeric characters
+ * 
+ * @author Adri and https://stackoverflow.com/a/18959399
+ */
 public class NumericField extends TextField
 {
     

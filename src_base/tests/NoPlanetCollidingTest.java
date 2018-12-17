@@ -4,6 +4,7 @@ import planets.entities.Galaxy;
 import planets.entities.planet.Planet;
 
 /**
+ * Test for checking the Colliding Test for planets works as expected
  *
  * @author Adri
  */
