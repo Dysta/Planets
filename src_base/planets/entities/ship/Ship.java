@@ -1,7 +1,6 @@
 package planets.entities.ship;
 
 import java.util.ArrayList;
-import javafx.scene.paint.Color;
 import planets.entities.Galaxy;
 import planets.entities.planet.Planet;
 import planets.ResourcesManager;
@@ -10,23 +9,78 @@ import planets.entities.Player;
 import planets.utils.GameUtils;
 import planets.utils.Point;
 
+/**
+ * An entity capable of traveling between planets and destroying other Ships alike
+ * 
+ * @author Adri
+ */
 public abstract class Ship extends Sprite {
-    
+
+    /**
+     * Used to give a unique incremental ship ID.
+     */
     private static int last_id = 0;
+    /**
+     * This ship's ID.
+     */
     private int id;
 
+    /**
+     * The owner of this ship, used for coloring.
+     */
     private Player owner;
+    
+    /**
+     * The current velocity of the ship.
+     */
     protected double currentSpeed;
+    
+    /**
+     * The acceleration metric of this ship.
+     */
     protected double acceleration;
+    
+    /**
+     * The maximum velocity it can handle.
+     */
     protected double speedCap;
     
+    /**
+     * The amount of damage per round.
+     */
     protected int power;
+    
+    /**
+     * The amount of damage it can hold.
+     */
     protected int shield;
 
+    /**
+     * The number of times it won't check again before going forward when moving.
+     */
     private double blindForward;
+    
+    /**
+     * The last known direction it was pointing to.
+     */
     private double lastDir;
+    
+    /**
+     * Whether this ship can go in a straight line to go to its destination.
+     */
     private boolean straightLine;
 
+    /**
+     * Instanciate this ship and its characteristics.
+     * 
+     * @param s The reference Sprite
+     * @param posX The top-left x position
+     * @param posY The top-left y position
+     * @param speedCap The maximum velocity allowed for this ship
+     * @param acceleration The amount of velocity it gains when speeding up
+     * @param power The power characteristc
+     * @param shield The shield characteristc
+     */
     public Ship(Sprite s, double posX, double posY, double speedCap, double acceleration, int power, int shield) {
         super(s);
         Ship.last_id++;
@@ -42,45 +96,78 @@ public abstract class Ship extends Sprite {
         this.straightLine = false;
     }
 
+    /**
+     * Returns its own class name.
+     * @return its own class name
+     */
     @Override
     public String assetReference() {
         return "baseShip";
     }
 
+    /**
+     * Switch this ship's owner.
+     * @param owner new owner
+     */
     public void changeOwner(Player owner) {
         this.owner = owner;
     }
 
+    /**
+     * Move the ship in a direction and rotate the sprite accordingly.
+     * @param x the amount of x to add
+     * @param y the amount of y to add
+     */
     public void move(double x, double y) {
         double dir = Math.atan2(y, x);
         this.getImageView().setRotate(90 + Math.toDegrees(dir));
         this.setPosition(this.getPosX() + x, this.getPosY() + y);
     }
 
+    /**
+     * just dies.
+     */
     public void die() {
         this.destroy();
     }
 
+    /**
+     * Makes the ship visible.
+     * @param origin The starting planet
+     */
     public void start(Planet origin) {
         this.initRender();
         this.getImageView().setVisible(true);
         ResourcesManager.colorImage(this, origin.getOwner().getColor());
     }
 
+    /**
+     * Returns the current ship's velocity.
+     * @return the current ship's velocity
+     */
     public double getVelocity() {
         return this.currentSpeed;
     }
 
+    /**
+     * Completely removes the velocity of the ship.
+     */
     public void stop() {
         this.currentSpeed = 0;
     }
 
+    /**
+     * Makes the ship go quicker according to its abilities.
+     */
     public void gaz() {
         if (this.currentSpeed < this.speedCap) {
             this.currentSpeed += this.acceleration;
         }
     }
 
+    /**
+     * Reverse gaz();
+     */
     public void slowdown() {
 
         if (this.currentSpeed > 0) {
@@ -92,64 +179,106 @@ public abstract class Ship extends Sprite {
         }
     }
 
+    /**
+     * Get the remaining amount of ticks before reprocessing the collisions.
+     * @return the remaining amount of ticks before reprocessing the collisions.
+     */
     public double getBlindForward() {
         return this.blindForward;
     }
 
+    /**
+     * set the remaining amount of ticks before reprocessing the collisions.
+     * @param n the next amount
+     */
     public void setBlindForward(double n) {
         this.blindForward = n;
     }
 
+    /**
+     * Updates the last facing direction.
+     * @param d the last facing direction
+     */
     public void setLastDir(double d) {
         this.lastDir = d;
     }
 
+    /**
+     * Returns the last facing direction.
+     * @return the last facing direction.
+     */
     public double getLastDir() {
         return this.lastDir;
     }
 
+    /**
+     * Whether this ship can go in a straight line without collision to arive to its destination. Skips collision processing.
+     * @return true if it can
+     */
     public boolean goesInStraightLine() {
         return this.straightLine;
     }
 
+    /**
+     * Indicates to the ship if he can go in a straight line
+     * @param t the state
+     */
     public void setStraightLine(boolean t) {
         this.straightLine = t;
     }
     
+    /**
+     * Removes shield depending on damage.
+     * @param d the damage to take
+     */
     public void takeDamage(int d) {
         this.shield -= d;
     }
     
+    /**
+     * Whether this ship is dead or not.
+     * @return true if dead
+     */
     public boolean isDead() {
         return this.shield <= 0;
     }
     
+    /**
+     * Inflict damage to another ship.
+     * @param s the ship to aim at
+     */
     public void attack(Ship s) {
         s.takeDamage(this.power);
     }
 
-    public void correctTrajectory(Ship s, Planet destination, Point dir, double angle) {
+    /**
+     * Reprocesses the best direction to avoid collisions while going to a destination planet
+     * @param destination The destination planet
+     * @param dir The direction to output
+     * @param angle The angle at which the destination is at
+     */
+    public void correctTrajectory(Planet destination, Point dir, double angle) {
         double sec_angle = angle;
         double sec_dir_x = dir.x;
         double sec_dir_y = dir.y;
 
         ArrayList<Planet> intersections = new ArrayList<Planet>();
         for (Planet p : Galaxy.getPlanets()) {
-            if (p != destination && GameUtils.lineCrossingCircle(s.getPosXMiddle(), s.getPosYMiddle(), p.getPosXMiddle(), p.getPosYMiddle(), p.getPosXMiddle(), p.getPosYMiddle(), Galaxy.planetInfluenceZone)) {
+            if (p != destination && GameUtils.lineCrossingCircle(this.getPosXMiddle(), this.getPosYMiddle(), p.getPosXMiddle(), p.getPosYMiddle(), p.getPosXMiddle(), p.getPosYMiddle(), Galaxy.planetInfluenceZone)) {
                 intersections.add(p);
             }
         }
 
         if (intersections.size() > 0) {
-            if (s.getBlindForward() <= 0) {
+            if (this.getBlindForward() <= 0) {
                 for (Planet p : intersections) {
                     if (p != destination) {
                         double FoV = Galaxy.planetSecurityZone;
                         boolean found = false;
                         while (!found) {
                             int tries = 0;
-                            while (p.inOrbit(s.getPosXMiddle() + dir.x * FoV, s.getPosYMiddle() + dir.y * FoV)
-                                    && p.inOrbit(s.getPosXMiddle() + sec_dir_x * FoV, s.getPosYMiddle() + sec_dir_y * FoV) && tries < 200) {
+                            while (p.inOrbit(this.getPosXMiddle() + dir.x * FoV, this.getPosYMiddle() + dir.y * FoV)
+                                    && p.inOrbit(this.getPosXMiddle() + sec_dir_x * FoV, this.getPosYMiddle() + sec_dir_y * FoV) && tries < 200) {
                                 angle += 0.1;
                                 sec_angle -= 0.1;
 
@@ -161,55 +290,79 @@ public abstract class Ship extends Sprite {
                                 tries++;
                             }
 
-                            if (p.inOrbit(s.getPosXMiddle() + dir.x * FoV, s.getPosYMiddle() + dir.y * FoV)) {
+                            if (p.inOrbit(this.getPosXMiddle() + dir.x * FoV, this.getPosYMiddle() + dir.y * FoV)) {
                                 dir.x = sec_dir_x;
                                 dir.y = sec_dir_y;
                                 angle = sec_angle;
                             }
 
-                            if (!p.inOrbit(s.getPosXMiddle() + dir.x * FoV, s.getPosYMiddle() + dir.y * FoV)) {
+                            if (!p.inOrbit(this.getPosXMiddle() + dir.x * FoV, this.getPosYMiddle() + dir.y * FoV)) {
                                 found = true;
                             } else {
                                 FoV += 10;
                             }
                         }
-                        s.setLastDir(angle);
+                        this.setLastDir(angle);
                     }
                 }
-                //s.setBlindForward(Galaxy.planetSecurityZone / 4 + 1);
+                //this.setBlindForward(Galaxy.planetSecurityZone / 4 + 1);
             } else {
-                angle = s.getLastDir();
+                angle = this.getLastDir();
                 dir.x = Math.sin(angle);
                 dir.y = Math.cos(angle);
             }
-            s.setBlindForward(s.getBlindForward() - 1);
+            this.setBlindForward(this.getBlindForward() - 1);
         } else {
-            s.setStraightLine(true);
+            this.setStraightLine(true);
         }
 
     }
     
+    /**
+     * Returns the current velocity of the ship.
+     * @return the current velocity of the ship.
+     */
     public double getCurrentSpeed() {
         return this.currentSpeed;
     }
     
+    /**
+     * Changes the current velocity.
+     * @param s the new velocity
+     */
     public void setCurrentSpeed(double s) {
         this.currentSpeed = s;
     }
     
+    /**
+     * Returns the current power of the ship.
+     * @return the current power of the ship.
+     */
     public int getPower() {
         return this.power;
     }
     
+    /**
+     * Returns the current shield of the ship.
+     * @return the current shield of the ship.
+     */
     public int getShield() {
         return this.shield;
     }
     
+    /**
+     * Returns its own asset reference.
+     * @return its own asset reference
+     */
     @Override
     public String toString() {
         return this.assetReference();
     }
     
+    /**
+     * Returns its unique ID.
+     * @return its unique ID
+     */
     public int getId() {
         return this.id;
     }

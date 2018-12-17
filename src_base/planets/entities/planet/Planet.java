@@ -25,11 +25,11 @@ import planets.entities.ship.Ship;
 public abstract class Planet extends Sprite {
 
     /**
-     * Used to give a unique incremental mission ID.
+     * Used to give a unique incremental Planet ID.
      */
     private static int last_id = 0;
     /**
-     * This player's ID.
+     * This planet's ID.
      */
     private int id;
 
@@ -61,17 +61,17 @@ public abstract class Planet extends Sprite {
     /**
      * The maximum amount of ships for this planet.
      */
-    private int shipCapacity;
+    protected int shipCapacity;
     
     /**
      * The amount of ships produced at every game tick.
      */
-    private double shipsPerTick;
+    protected double shipsPerTick;
     
     /**
      * The number of ships that should be produced on this tick.
      */
-    private double productionProgression;
+    protected double productionProgression;
     
     /**
      * The type of ship to produce.

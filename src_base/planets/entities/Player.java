@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 public class Player {
 
     /**
-     * Used to give a unique incremental mission ID.
+     * Used to give a unique incremental player ID.
      */
     private static int last_id = 0;
     /**

@@ -65,7 +65,7 @@ public class Squad {
             Point p = new Point(Math.sin(angle), Math.cos(angle));
             
             if (!s.goesInStraightLine()) {
-                s.correctTrajectory(s, this.destination, p, angle);
+                s.correctTrajectory(this.destination, p, angle);
             }
 
             s.gaz();
