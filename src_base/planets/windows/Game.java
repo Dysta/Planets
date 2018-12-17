@@ -145,7 +145,7 @@ public class Game extends Window {
 
         for (Squad s : squads) {
             s.reaffectSquad(r);
-            r.addQuad(s);
+            r.addSquad(s);
         }
 
         Game.missions.add(r);
