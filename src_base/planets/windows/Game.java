@@ -167,8 +167,12 @@ public class Game extends Window {
         }
     }
 
+    public static void setFreeze(boolean b) {
+        Game.freeze = b;
+    }
+
     public static void toggleFreeze() {
-        Game.freeze = !Game.freeze;
+    	setFreeze(!Game.freeze);
     }
 
     public static void setSelectSquad(Squad s, boolean state) {

@@ -96,7 +96,7 @@ public class SaveManager {
     }
 
     public static void load(String save_name) throws ParserConfigurationException, SAXException, IOException, NoSuchMethodException, ClassNotFoundException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        Game.toggleFreeze();
+        Game.setFreeze(true);
         if(!checkSaveFolder()) {
         	return;
         }

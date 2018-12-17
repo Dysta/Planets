@@ -91,6 +91,7 @@ public class Planets extends Application {
                         if (nbPlayers >= 1 && nbPlanets >= nbPlayers) {
                             menu.clear();
                             Planets.startGame(menu.getNbPlayers(), menu.getNbPlanets());
+                            Game.setFreeze(false);
                         }
                         break;
                     case Window.LOAD:
