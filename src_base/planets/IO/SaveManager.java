@@ -35,7 +35,6 @@ import planets.entities.planet.Planet;
 import planets.entities.ship.Ship;
 import planets.utils.IteratableNodeList;
 import planets.windows.Game;
-import static planets.windows.Window.root;
 import ui.SelectPercentage;
 
 /**
@@ -111,10 +110,7 @@ public class SaveManager {
             StreamResult result = new StreamResult(new File(SaveManager.SAVE_FOLDER + savename + SAVE_EXT));
 
             transformer.transform(source, result);
-        } catch (ParserConfigurationException pce) {
-            pce.printStackTrace();
-        } catch (TransformerException tfe) {
-            tfe.printStackTrace();
+        } catch (ParserConfigurationException | TransformerException pce) {
         }
     }
 

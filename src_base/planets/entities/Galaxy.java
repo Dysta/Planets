@@ -1,6 +1,5 @@
 package planets.entities;
 
-import planets.entities.AIs.AI;
 import planets.entities.planet.Planet;
 import java.util.ArrayList;
 import java.util.Random;
@@ -10,22 +9,68 @@ import planets.utils.GameUtils;
 import planets.ResourcesManager;
 import planets.entities.AIs.BaseAI;
 import planets.entities.planet.BasePlanet;
-import planets.entities.ship.Ship;
 
+/**
+ * The Galaxy contains the Game's entities and defines basic physics rules.
+ * 
+ * @author Adri
+ */
 public class Galaxy {
 
-    // Background : image
+    /**
+     * Any entity within this diameter is within orbit range.
+     */
     public static double planetInfluenceZone;
+    
+    /**
+     * No enemy entity can enter this diameter.
+     */
     public static double planetSecurityZone;
+    
+    /**
+     * The minimum diameter for a planet.
+     */
     public static double minimumPlanetSize;
+    
+    /**
+     * The maximum diameter for a planet.
+     */
     public static double maximumPlanetSize;
+    
+    /**
+     * No entity can spawn within this margin from the Galaxy's borders.
+     */
     public static double borderMargin;
 
-    private double width, height;
+    /**
+     * The Galaxy width in pixels.
+     */
+    private double width;
 
+    /**
+     * The Galaxy height in pixels.
+     */
+    private double height;
+
+    /**
+     * The planets contained by the Galaxy.
+     */
     private static ArrayList<Planet> planets;
+
+    /**
+     * The players who are part of this Galaxy.
+     */
     private static ArrayList<Player> players;
 
+    /**
+     * Generates a random Galaxy with its entities according to the parameters.
+     * 
+     * @param width The Galaxy width in pixels.
+     * @param height The Galaxy height in pixels.
+     * @param nbPlanets The maximum number of planets to generate
+     * @param nbPlayers The maximum number of players
+     * @param borderMargin The margin in which no planet can spawn
+     */
     public Galaxy(double width, double height, int nbPlanets, int nbPlayers, double borderMargin) {
         Random r = new Random();
 
@@ -92,6 +137,15 @@ public class Galaxy {
         }
     }
     
+    /**
+     * Creates a Galaxy object with already defined Entities
+     * 
+     * @param width The Galaxy width in pixels.
+     * @param height The Galaxy height in pixels.
+     * @param planets A collection of planets that will replace the current one
+     * @param players A collection of players that will replace the current one
+     * @param borderMargin The margin in which no planet can spawn
+     */
     public Galaxy(double width, double height, ArrayList<Planet> planets, ArrayList<Player> players, double borderMargin) {
         Galaxy.planets = planets;
         Galaxy.players = players;
@@ -105,6 +159,12 @@ public class Galaxy {
         Galaxy.borderMargin = borderMargin;
     }
 
+    /**
+     * Checks whether a planet collides with any existing one.
+     * 
+     * @param planet The planet to check
+     * @return whether the planet is colliding with another one or not
+     */
     public boolean isColliding(Planet planet) {
         boolean colliding = false;
         for (Planet p : Galaxy.planets) {
@@ -116,18 +176,39 @@ public class Galaxy {
         return colliding;
     }
     
+    /**
+     * Fetch this Galaxy's planets
+     * 
+     * @return a reference to this Galaxy's planets collection
+     */
     public static ArrayList<Planet> getPlanets() {
         return Galaxy.planets;
     }
 
+    
+    /**
+     * Fetch this Galaxy's players
+     * 
+     * @return a reference to this Galaxy's players collection
+     */
     public static ArrayList<Player> getPlayers() {
         return Galaxy.players;
     }
 
+    /**
+     * Replaces ths current planets collection by the one given in parameter
+     * 
+     * @param planets The collection replacing the current one
+     */
     public static void setPlanets(ArrayList<Planet> planets) {
         Galaxy.planets = planets;
     }
 
+    /**
+     * Replaces ths current players collection by the one given in parameter
+     * 
+     * @param players The collection replacing the current one
+     */
     public static void setPlayers(ArrayList<Player> players) {
         Galaxy.players = players;
     }
