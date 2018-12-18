@@ -14,10 +14,12 @@ public class ResourcesManager {
     public static Image background;
     public static Image menuBackground;
     public static Image gameOverBackground;
+    public static Image loadBackground;
 
     public final static String BG_PATH = "images/animated-background.gif";
     public final static String MENUBG_PATH = "images/menu-background.png";
     public final static String GAME_OVER_BG_PATH = "images/game-over.png";
+    public final static String LOAD_BG_PATH = "images/load-background.png";
 
     // Common Sprites
     public static Map<String, Sprite> assets;
@@ -37,6 +39,7 @@ public class ResourcesManager {
     public static void initGlobalAssets(double width, double height) {
         ResourcesManager.menuBackground = new Image(getRessourcePathByName(MENUBG_PATH), width, height, false, false);
         ResourcesManager.gameOverBackground = new Image(getRessourcePathByName(GAME_OVER_BG_PATH), width, height, false, false);
+        ResourcesManager.loadBackground = new Image(getRessourcePathByName(LOAD_BG_PATH), width, height, false, false);
     }
 
     /* ====== GAME ASSETS ====== */

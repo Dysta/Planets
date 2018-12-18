@@ -71,7 +71,7 @@ public class Load extends Window {
         gc.setLineWidth(1);
 
         this.initLoad();
-        gc.drawImage(ResourcesManager.menuBackground, 0, 0);
+        gc.drawImage(ResourcesManager.loadBackground, 0, 0);
 
         stage.setScene(scene);
         stage.show();
