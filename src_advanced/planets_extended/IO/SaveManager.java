@@ -52,7 +52,12 @@ public class SaveManager {
     /**
      * The savegame's file extension.
      */
-    private final static String SAVE_EXT = ".planets";
+    private final static String SAVE_EXT = ".planets_extended";
+
+    /**
+     * Legacy savegame file extension.
+     */
+    private final static String SAVE_EXT_LEGACY = ".planets";
 
     /**
      * The current working Document object to generate XML.
@@ -136,6 +141,9 @@ public class SaveManager {
         }
         // Fetch the desired savefile
         File file = new File(SaveManager.SAVE_FOLDER + save_name + SAVE_EXT);
+        if(!file.exists()) {
+            file = new File(SaveManager.SAVE_FOLDER + save_name + SAVE_EXT_LEGACY);
+        }
 
         // Create a Document Factory to parse the XML formatted file.
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -422,11 +430,21 @@ public class SaveManager {
      */
     public static String getSaveName(File f) {
         String name = f.getName();
-        return name.substring(0, name.length() - SAVE_EXT.length());
+        String ret = name.substring(0, name.length() - SAVE_EXT.length());
+        if(ret.length() > 0) {
+            return ret;
+        } else {
+            ret = name.substring(0, name.length() - SAVE_EXT_LEGACY.length());
+            if(ret.length() > 0) {
+                return ret;
+            } else {
+                return "Unrecognized file";
+            }
+        }
     }
 
     /**
-     * Get all Files whose extention matches SaveManager.SAVE_EXT in the directory SaveManager.SAVE_FOLDER
+     * Get all Files whose extention matches SaveManager.SAVE_EXT in the directory SaveManager.SAVE_FOLDER. It also supports legacy save files from the base version.
      * @return A list of savefiles
      */
     public static ArrayList<File> getSaveFiles() {
@@ -437,7 +455,7 @@ public class SaveManager {
         File saveFolder = new File(SaveManager.SAVE_FOLDER);
         for (File f : saveFolder.listFiles()) {
             String name = f.getName();
-            if (name.substring(name.length() - (SAVE_EXT.length())).equals(SAVE_EXT)) {
+            if (name.substring(name.length() - (SAVE_EXT.length())).equals(SAVE_EXT) || name.substring(name.length() - (SAVE_EXT_LEGACY.length())).equals(SAVE_EXT_LEGACY)) {
                 files.add(f);
             }
         }
