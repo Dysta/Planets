@@ -88,23 +88,28 @@ public abstract class Planet extends Sprite {
      * 
      * @param s The reference Sprite
      * @param owner The owner of this planet
-     * @param posX The top-left x position
-     * @param posY The top-left x=y position
-     * @param size This planet's diameter
+     * @param productionProgression This planets base amount of ships
+     * @param shipsPerTick This planets production speed
+     * @param shipCapacity This planets maximum amount of ships 
      */
-    public Planet(Sprite s, Player owner, double posX, double posY, double size) {
+    public Planet(Sprite s, Player owner, double productionProgression, double shipsPerTick, int shipCapacity) {
         super(s);
         Planet.last_id++;
         this.id = Planet.last_id;
         this.s = s;
         this.owner = owner;
+        Random r = new Random();
+        size = Galaxy.minimumPlanetSize + (Galaxy.maximumPlanetSize - Galaxy.minimumPlanetSize) * r.nextDouble();
+        double posX = (Galaxy.width - 2 * Galaxy.borderMargin - size) * r.nextDouble() + Galaxy.borderMargin;
+        double posY = (Galaxy.height - 2 * Galaxy.borderMargin - size) * r.nextDouble() + Galaxy.borderMargin;
         this.setPosition(posX, posY);
         this.updateDimensions(ResourcesManager.PLANET_PATH, size, size);
-        this.size = size;
         this.ships = new ArrayList<>();
-        this.productionProgression = 20; // Base ships on any planet (will produce those ships instantly)
-        this.shipsPerTick = 0.02; // Minimum production
-        this.shipCapacity = 50; // Minimum storage
+        this.productionProgression = productionProgression; // Base ships on any planet (will produce those ships instantly)
+        this.shipsPerTick = shipsPerTick; // Minimum production
+        this.shipCapacity = shipCapacity; // Minimum storage
+        
+        initPlanet();
 
         // Components displaying current ships capacity
         this.text = new Text();
@@ -112,32 +117,15 @@ public abstract class Planet extends Sprite {
     }
 
     /**
-     * Creates a random planet according to some rules.
-     * 
-     * @param s The reference Sprite
-     * @param owner This planet's owner
-     * @param boundaryX The maximum x coordinate
-     * @param boundaryY The maximum y coordinate
-     * @param minSize The minimum diameter
-     * @param maxSize The maximum diameter
-     * @param borderMargin The size of this galaxy's margin
+     * Creates a planet according to its characteristics.
      */
-    public Planet(Sprite s, Player owner, double boundaryX, double boundaryY, double minSize, double maxSize, double borderMargin) {
-        this(s, owner, 0, 0, 0);
-
-        Random r = new Random();
-        double size = minSize + (maxSize - minSize) * r.nextDouble();
-        double posX = (boundaryX - 2 * borderMargin - size) * r.nextDouble() + borderMargin;
-        double posY = (boundaryY - 2 * borderMargin - size) * r.nextDouble() + borderMargin;
+    public final void initPlanet() {
         
-        this.shipsPerTick *= 1 + (size / (Galaxy.maximumPlanetSize * 2)); // The biggest planets_extended can produce up to 50% more than smallest ones
-        this.shipCapacity *= 1 + (size / (Galaxy.maximumPlanetSize * 1.2)); // The biggest planets_extended can store up to 83% more than smallest ones
+        this.shipsPerTick *= 1 + (size / (Galaxy.maximumPlanetSize * 2)); // The biggest planets can produce up to 50% more than smallest ones
+        this.shipCapacity *= 1 + (size / (Galaxy.maximumPlanetSize * 1.2)); // The biggest planets can store up to 83% more than smallest ones
         
         this.shipType = this.owner.getShipType();
-
-        this.setPosition(posX, posY);
         this.updateDimensions(ResourcesManager.PLANET_PATH, size, size);
-        this.size = size;
     }
     
     /**
@@ -172,16 +160,6 @@ public abstract class Planet extends Sprite {
      */
     public void setShipType(String type) {
         this.shipType = type;
-    }
-
-    /**
-     * Duplicate a planet
-     * 
-     * @param s the planet to duplicate
-     */
-    public Planet(Planet s) {
-        this(s.getSprite(), s.getOwner(), s.getPosX(), s.getPosY(), s.getSize());
-        this.ships = s.getShips();
     }
 
     /**

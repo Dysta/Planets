@@ -19,7 +19,7 @@ import planets.entities.ship.Ship;
 
 /**
  * An entity holding and producting ships, owned by a Player.
- * 
+ *
  * @author Adri
  */
 public abstract class Planet extends Sprite {
@@ -37,22 +37,22 @@ public abstract class Planet extends Sprite {
      * The original sprite associated with the planet.
      */
     private Sprite s;
-    
+
     /**
      * The player owning this planet
      */
     private Player owner;
-    
+
     /**
      * The diameter of this planet.
      */
     private double size;
-    
+
     /**
      * Used to display the current ships stock.
      */
     private Text text;
-    
+
     /**
      * Used to apply an effect on the current ships stock text.
      */
@@ -62,17 +62,17 @@ public abstract class Planet extends Sprite {
      * The maximum amount of ships for this planet.
      */
     protected int shipCapacity;
-    
+
     /**
      * The amount of ships produced at every game tick.
      */
     protected double shipsPerTick;
-    
+
     /**
      * The number of ships that should be produced on this tick.
      */
     protected double productionProgression;
-    
+
     /**
      * The type of ship to produce.
      */
@@ -85,26 +85,31 @@ public abstract class Planet extends Sprite {
 
     /**
      * Sets the base stats of any planet.
-     * 
+     *
      * @param s The reference Sprite
      * @param owner The owner of this planet
-     * @param posX The top-left x position
-     * @param posY The top-left x=y position
-     * @param size This planet's diameter
+     * @param productionProgression This planets base amount of ships
+     * @param shipsPerTick This planets production speed
+     * @param shipCapacity This planets maximum amount of ships
      */
-    public Planet(Sprite s, Player owner, double posX, double posY, double size) {
+    public Planet(Sprite s, Player owner, double productionProgression, double shipsPerTick, int shipCapacity) {
         super(s);
         Planet.last_id++;
         this.id = Planet.last_id;
         this.s = s;
         this.owner = owner;
+        Random r = new Random();
+        size = Galaxy.minimumPlanetSize + (Galaxy.maximumPlanetSize - Galaxy.minimumPlanetSize) * r.nextDouble();
+        double posX = (Galaxy.width - 2 * Galaxy.borderMargin - size) * r.nextDouble() + Galaxy.borderMargin;
+        double posY = (Galaxy.height - 2 * Galaxy.borderMargin - size) * r.nextDouble() + Galaxy.borderMargin;
         this.setPosition(posX, posY);
         this.updateDimensions(ResourcesManager.PLANET_PATH, size, size);
-        this.size = size;
         this.ships = new ArrayList<>();
-        this.productionProgression = 20; // Base ships on any planet (will produce those ships instantly)
-        this.shipsPerTick = 0.02; // Minimum production
-        this.shipCapacity = 50; // Minimum storage
+        this.productionProgression = productionProgression; // Base ships on any planet (will produce those ships instantly)
+        this.shipsPerTick = shipsPerTick; // Minimum production
+        this.shipCapacity = shipCapacity; // Minimum storage
+
+        initPlanet();
 
         // Components displaying current ships capacity
         this.text = new Text();
@@ -112,37 +117,20 @@ public abstract class Planet extends Sprite {
     }
 
     /**
-     * Creates a random planet according to some rules.
-     * 
-     * @param s The reference Sprite
-     * @param owner This planet's owner
-     * @param boundaryX The maximum x coordinate
-     * @param boundaryY The maximum y coordinate
-     * @param minSize The minimum diameter
-     * @param maxSize The maximum diameter
-     * @param borderMargin The size of this galaxy's margin
+     * Creates a planet according to its characteristics.
      */
-    public Planet(Sprite s, Player owner, double boundaryX, double boundaryY, double minSize, double maxSize, double borderMargin) {
-        this(s, owner, 0, 0, 0);
+    public final void initPlanet() {
 
-        Random r = new Random();
-        double size = minSize + (maxSize - minSize) * r.nextDouble();
-        double posX = (boundaryX - 2 * borderMargin - size) * r.nextDouble() + borderMargin;
-        double posY = (boundaryY - 2 * borderMargin - size) * r.nextDouble() + borderMargin;
-        
         this.shipsPerTick *= 1 + (size / (Galaxy.maximumPlanetSize * 2)); // The biggest planets can produce up to 50% more than smallest ones
         this.shipCapacity *= 1 + (size / (Galaxy.maximumPlanetSize * 1.2)); // The biggest planets can store up to 83% more than smallest ones
-        
-        this.shipType = this.owner.getShipType();
 
-        this.setPosition(posX, posY);
+        this.shipType = this.owner.getShipType();
         this.updateDimensions(ResourcesManager.PLANET_PATH, size, size);
-        this.size = size;
     }
-    
+
     /**
      * Updates this planet with given parameters
-     * 
+     *
      * @param shipType The type of ships to produce
      * @param shipPerTick The number of ships produced each game tick
      * @param shipsCount The number of ships previously on this planet
@@ -155,19 +143,20 @@ public abstract class Planet extends Sprite {
         this.shipCapacity = shipCapacity;
         this.productionProgression = productionProgression + shipsCount;
     }
-    
+
     /**
      * Returns its own class name
+     *
      * @return its own class name
      */
     @Override
     public String assetReference() {
         return "basePlanet";
     }
-    
+
     /**
      * Get the type of the produced ships
-     * 
+     *
      * @param type a ship class name
      */
     public void setShipType(String type) {
@@ -175,20 +164,11 @@ public abstract class Planet extends Sprite {
     }
 
     /**
-     * Duplicate a planet
-     * 
-     * @param s the planet to duplicate
-     */
-    public Planet(Planet s) {
-        this(s.getSprite(), s.getOwner(), s.getPosX(), s.getPosY(), s.getSize());
-        this.ships = s.getShips();
-    }
-
-    /**
-     * Creates a new ship according to shipType and gives it a random position in orbit (hidden).
+     * Creates a new ship according to shipType and gives it a random position
+     * in orbit (hidden).
      */
     private void produceShip() {
-        String s = "planets.entities.ship." + Character.toLowerCase(this.shipType.charAt(0)) + this.shipType.substring(1) ;
+        String s = "planets.entities.ship." + Character.toUpperCase(this.shipType.charAt(0)) + this.shipType.substring(1);
         double angle = Math.random() * Math.PI * 2;
         double radius = (this.size + (Galaxy.planetInfluenceZone - this.size) / 2);
         double x = ((this.getPosX() + this.getSize() / 2) + Math.cos(angle) * radius);
@@ -199,12 +179,13 @@ public abstract class Planet extends Sprite {
             ship.setPosition(ship.getPosX() - ship.width() / 2, ship.getPosY() - ship.height() / 2);
             this.ships.add(ship);
         } catch (Exception e) {
-            System.err.println("Error during ship ("+Character.toLowerCase(s.charAt(0)) + s.substring(1)+") initialization : " + e);
+            System.err.println("Error during ship (" + Character.toLowerCase(s.charAt(0)) + s.substring(1) + ") initialization : " + e);
         }
     }
 
     /**
      * Returns the owner of this planet
+     *
      * @return a Player reference
      */
     public Player getOwner() {
@@ -213,6 +194,7 @@ public abstract class Planet extends Sprite {
 
     /**
      * Changes the owner of this planet, and updating the images in consequence.
+     *
      * @param owner The new owner
      */
     public void setOwner(Player owner) {
@@ -223,7 +205,7 @@ public abstract class Planet extends Sprite {
 
     /**
      * Displays the current amount of ships stored in the planet
-     * 
+     *
      * @param gc The context to get style rules from
      * @param root The root in which to add the elements
      */
@@ -244,28 +226,28 @@ public abstract class Planet extends Sprite {
 
     /**
      * Counts the number of ships in stock.
-     * 
+     *
      * @return the number of ships
      */
     public int getNbShip() {
         return this.ships.size();
     }
-    
+
     /**
      * Computes the maximum number of shipsthat can be sent with each squad.
-     * 
+     *
      * @return the amoung of ships to send to fill a squad
      */
     public int getMaxLaunchShips() {
-        if(this.ships.isEmpty()) {
+        if (this.ships.isEmpty()) {
             return 0;
         }
-        return (int) ((this.size)*Math.PI / this.ships.get(0).width());
+        return (int) ((this.size) * Math.PI / this.ships.get(0).width());
     }
 
     /**
      * Get this planet's diameter.
-     * 
+     *
      * @return this planet's diameter
      */
     public double getSize() {
@@ -274,7 +256,7 @@ public abstract class Planet extends Sprite {
 
     /**
      * Change the size of this planet.
-     * 
+     *
      * @param size the new size
      */
     public void setSize(double size) {
@@ -283,7 +265,7 @@ public abstract class Planet extends Sprite {
 
     /**
      * Get a collection of the currently stored ships in this planet.
-     * 
+     *
      * @return a ship collection reference
      */
     public ArrayList<Ship> getShips() {
@@ -292,7 +274,7 @@ public abstract class Planet extends Sprite {
 
     /**
      * Get the reference sprite for this object.
-     * 
+     *
      * @return a Sprite object
      */
     public Sprite getSprite() {
@@ -315,7 +297,7 @@ public abstract class Planet extends Sprite {
 
     /**
      * Checks whether a point is on this planet.
-     * 
+     *
      * @param x the point's x coordinate
      * @param y the point's y coordinate
      * @return true if the point is on this planet
@@ -327,7 +309,7 @@ public abstract class Planet extends Sprite {
 
     /**
      * Checks whether a point is in the orbit zone of this planet
-     * 
+     *
      * @param x the point's x coordinate
      * @param y the point's y coordinate
      * @return true if the point is on this planet's orbit zone
@@ -338,17 +320,17 @@ public abstract class Planet extends Sprite {
 
     /**
      * Checks whether a Ship is in the orbit zone of this planet
-     * 
+     *
      * @param s the Ship
      * @return true if the ship is on this planet's orbit zone
      */
     public boolean inOrbit(Ship s) {
         return this.inOrbit(s.getPosXMiddle(), s.getPosYMiddle());
     }
-    
+
     /**
      * Checks whether a point is in the security zone of this planet
-     * 
+     *
      * @param x the point's x coordinate
      * @param y the point's y coordinate
      * @return true if the point is on this planet's security zone
@@ -358,13 +340,14 @@ public abstract class Planet extends Sprite {
     }
 
     /**
-     * Defends itself against a collection of attacker Ships, according each Ship's characteristics.
-     * 
+     * Defends itself against a collection of attacker Ships, according each
+     * Ship's characteristics.
+     *
      * @param attackers the attacking ships
      * @return true if the defense failed
      */
     public boolean defend(ArrayList<Ship> attackers) {
-        while(attackers.size() > 0 && this.ships.size() > 0) {
+        while (attackers.size() > 0 && this.ships.size() > 0) {
             int c = 0;
             int a = attackers.size();
             int d = this.ships.size();
@@ -375,11 +358,11 @@ public abstract class Planet extends Sprite {
                 attacker.attack(defender);
                 defender.attack(attacker);
 
-                if(defender.isDead()) {
+                if (defender.isDead()) {
                     defender.die();
                     this.ships.remove(defender);
                 }
-                if(attacker.isDead()) {
+                if (attacker.isDead()) {
                     attacker.die();
                     attackers.remove(attacker);
                 }
@@ -387,38 +370,38 @@ public abstract class Planet extends Sprite {
                 c++;
             }
         }
-        
-        if(attackers.size() > 0) {
+
+        if (attackers.size() > 0) {
             this.landShips(attackers);
         }
-        
+
         return attackers.size() > 0;
     }
-    
+
     /**
      * Get the total power of this planet's ships.
-     * 
+     *
      * @return a sum of the ships' power
      */
     public int getPower() {
         int t = 0;
-        for(Ship s : this.ships) {
+        for (Ship s : this.ships) {
             t += s.getPower();
         }
         return t;
     }
-    
+
     /**
      * Checks whether it is possible to send a new squad.
-     * 
+     *
      * @return true if nothing is on the way
      */
     public boolean freeToLaunch() {
         boolean free = true;
-        for(Mission m : Game.missions) {
-            if(m.getOriginPlanet() == this) {
-                for(Squad sq : m.getSquads()) {
-                    if(!sq.isGone()) {
+        for (Mission m : Game.missions) {
+            if (m.getOriginPlanet() == this) {
+                for (Squad sq : m.getSquads()) {
+                    if (!sq.isGone()) {
                         free = false;
                     }
                 }
@@ -429,7 +412,7 @@ public abstract class Planet extends Sprite {
 
     /**
      * Receives a collection of ships and stores them in its ships stock.
-     * 
+     *
      * @param ships the ships to welcome
      */
     public void landShips(ArrayList<Ship> ships) {
@@ -450,8 +433,10 @@ public abstract class Planet extends Sprite {
     }
 
     /**
-     * Removes a number of ships from its stock and returns them so they can be handled by anything. If there are not enough ships, the maximum will be sent.
-     * 
+     * Removes a number of ships from its stock and returns them so they can be
+     * handled by anything. If there are not enough ships, the maximum will be
+     * sent.
+     *
      * @param effectives The number of ships to fly
      * @return The ships that are ready
      */
@@ -473,57 +458,57 @@ public abstract class Planet extends Sprite {
             calledShip.start(this);
         }
 
-        return mobilized; 
+        return mobilized;
     }
-    
+
     /**
      * Get the number of ships stored in this planet.
-     * 
+     *
      * @return the number of ships stored in this planet
      */
     public int getShipCapacity() {
         return this.shipCapacity;
     }
-    
+
     /**
      * Get the number of ships produced every game tick.
-     * 
+     *
      * @return the number of ships produced every game tick
      */
     public double getShipsPerTick() {
         return this.shipsPerTick;
     }
-    
+
     /**
      * Get the current progresstion of this planet's ship production.
-     * 
-     * @return the current progresstion of this planet's ship production 
+     *
+     * @return the current progresstion of this planet's ship production
      */
     public double getProductionProgression() {
         return this.productionProgression;
     }
-    
+
     /**
      * Get the type of ships produced by this planet.
-     * 
+     *
      * @return the type of ships produced by this planet
      */
     public String getShipType() {
         return this.shipType;
     }
-    
+
     /**
      * Get this planet's unique id.
-     * 
+     *
      * @return a unique id
      */
     public int getId() {
         return this.id;
     }
-    
+
     /**
      * Changes this planet's ID
-     * 
+     *
      * @param id the new ID
      */
     public void setId(int id) {

@@ -26,6 +26,7 @@ public class ResourcesManager {
 
     // Planets
     public final static String PLANET_PATH = "images/planets/BasePlanet.png";
+    public final static String ADVANCED_PLANET_PATH = "images/planets/AdvancedPlanet.png";
 
     // Ships        
     public final static String BASESHIP_PATH = "images/ships/BaseShip.png";
@@ -48,6 +49,7 @@ public class ResourcesManager {
         ResourcesManager.background = new Image(getRessourcePathByName(BG_PATH), width, height, false, false);
 
         ResourcesManager.loadSprite("basePlanet", PLANET_PATH, 1600, 1600);
+        ResourcesManager.loadSprite("advancedPlanet", ADVANCED_PLANET_PATH, 1600, 1600);
 
         // Ships
         ResourcesManager.loadSprite("baseShip", BASESHIP_PATH, 20, 20);

@@ -45,12 +45,12 @@ public class Galaxy {
     /**
      * The Galaxy width in pixels.
      */
-    private double width;
+    public static double width;
 
     /**
      * The Galaxy height in pixels.
      */
-    private double height;
+    public static double height;
 
     /**
      * The planets_extended contained by the Galaxy.
@@ -93,7 +93,7 @@ public class Galaxy {
             int tries = 0;
 
             do {
-                n = new BasePlanet(ResourcesManager.assets.get("basePlanet"), p, this.width, this.height, Galaxy.minimumPlanetSize, Galaxy.maximumPlanetSize, Galaxy.borderMargin);
+                n = new BasePlanet(ResourcesManager.assets.get("basePlanet"), p);
                 tries++;
             } while ((tries < 10 && isColliding(n)));
 
