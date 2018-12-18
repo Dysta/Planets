@@ -1,12 +1,12 @@
-package input;
+package planets_extended.input;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import planets.windows.Game;
-import planets.entities.Mission;
-import planets.entities.planet.Planet;
-import planets.entities.Squad;
-import planets.entities.ship.Ship;
+import planets_extended.windows.Game;
+import planets_extended.entities.Mission;
+import planets_extended.entities.planet.Planet;
+import planets_extended.entities.Squad;
+import planets_extended.entities.ship.Ship;
 
 /**
  * Handles any mouse related event from the user related to the Application.
@@ -131,7 +131,7 @@ public class MouseHandler implements EventHandler<MouseEvent> {
             } else {
                 // Enemy planet
                 if (!Game.selectedPlanets.isEmpty()) {
-                    // Send ships from the selected planets
+                    // Send ships from the selected planets_extended
                     for (Planet o : Game.selectedPlanets) {
                         Game.startAttack(o, p);
                     }

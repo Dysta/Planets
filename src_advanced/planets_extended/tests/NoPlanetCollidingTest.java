@@ -1,10 +1,10 @@
-package tests;
+package planets_extended.tests;
 
-import planets.entities.Galaxy;
-import planets.entities.planet.Planet;
+import planets_extended.entities.Galaxy;
+import planets_extended.entities.planet.Planet;
 
 /**
- * Test for checking the Colliding Test for planets works as expected
+ * Test for checking the Colliding Test for planets_extended works as expected
  *
  * @author Adri
  */

@@ -1,4 +1,4 @@
-package tests;
+package planets.tests;
 
 /**
  * Custom test model

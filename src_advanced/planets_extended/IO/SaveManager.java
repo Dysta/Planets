@@ -1,4 +1,4 @@
-package planets.IO;
+package planets_extended.IO;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,21 +21,21 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
-import planets.Planets;
-import planets.ResourcesManager;
-import planets.Sprite;
-import planets.entities.AIs.AI;
-import planets.entities.AIs.BaseAI;
-import planets.entities.Galaxy;
-import planets.entities.Mission;
+import planets_extended.Planets;
+import planets_extended.ResourcesManager;
+import planets_extended.Sprite;
+import planets_extended.entities.AIs.AI;
+import planets_extended.entities.AIs.BaseAI;
+import planets_extended.entities.Galaxy;
+import planets_extended.entities.Mission;
 
-import planets.entities.Player;
-import planets.entities.Squad;
-import planets.entities.planet.Planet;
-import planets.entities.ship.Ship;
-import planets.utils.IteratableNodeList;
-import planets.windows.Game;
-import planets.ui.SelectPercentage;
+import planets_extended.entities.Player;
+import planets_extended.entities.Squad;
+import planets_extended.entities.planet.Planet;
+import planets_extended.entities.ship.Ship;
+import planets_extended.utils.IteratableNodeList;
+import planets_extended.windows.Game;
+import planets_extended.ui.SelectPercentage;
 
 /**
  * Manage savegames : Save and Load as XML.
@@ -93,10 +93,10 @@ public class SaveManager {
             rootElement.appendChild(players);
             addPlayers(players);
 
-            // Add the planets in Game
-            Element planets = doc.createElement("Planets");
-            rootElement.appendChild(planets);
-            addPlanets(planets);
+            // Add the planets_extended in Game
+            Element planets_extended = doc.createElement("Planets");
+            rootElement.appendChild(planets_extended);
+            addPlanets(planets_extended);
 
             // Add the missions in Game
             Element missions = doc.createElement("Missions");
@@ -155,14 +155,14 @@ public class SaveManager {
         // Get all usefull containers
         Node galaxyNode = gameNode.getChildNodes().item(0);
         Node players = gameNode.getChildNodes().item(1);
-        Node planets = gameNode.getChildNodes().item(2);
+        Node planets_extended = gameNode.getChildNodes().item(2);
         Node missions = gameNode.getChildNodes().item(3);
 
         double borderMargin = Double.parseDouble(getAttribute(galaxyNode, "borderMargin"));
 
         // Prepare the new Galaxy's entities collections
         ArrayList<Player> playersArrayList = new ArrayList<>();
-        ArrayList<Planet> planetsArrayList = new ArrayList<>();
+        ArrayList<Planet> planets_extendedArrayList = new ArrayList<>();
 
         // Parse all players from the associated container
         Map<String, Player> playersList = new HashMap<>();
@@ -198,11 +198,11 @@ public class SaveManager {
         }
 
         // This bloc is very similar to the previous one, but for Planets
-        Map<String, Planet> planetsList = new HashMap<>();
-        for (Node p : new IteratableNodeList(planets.getChildNodes())) {
+        Map<String, Planet> planets_extendedList = new HashMap<>();
+        for (Node p : new IteratableNodeList(planets_extended.getChildNodes())) {
             String t = getAttribute(p, "type");
 
-            String classRef = "planets.entities.planet." + Character.toUpperCase(t.charAt(0)) + t.substring(1);
+            String classRef = "planets_extended.entities.planet." + Character.toUpperCase(t.charAt(0)) + t.substring(1);
 
             Player owner = playersList.get(getAttribute(p, "ownerId"));
 
@@ -226,16 +226,16 @@ public class SaveManager {
                     Integer.parseInt(getAttribute(p, "shipCapacity")),
                     Double.parseDouble(getAttribute(p, "productionProgression")));
 
-            planetsList.put(Integer.toString(pl.getId()), pl);
-            planetsArrayList.add(pl);
+            planets_extendedList.put(Integer.toString(pl.getId()), pl);
+            planets_extendedArrayList.add(pl);
         }
 
         // Again, but for missions and its contents
         ArrayList<Mission> missionsList = new ArrayList<>();
         for (Node m : new IteratableNodeList(missions.getChildNodes())) {
 
-            Planet origin = planetsList.get(getAttribute(m, "origin"));
-            Planet destination = planetsList.get(getAttribute(m, "destination"));
+            Planet origin = planets_extendedList.get(getAttribute(m, "origin"));
+            Planet destination = planets_extendedList.get(getAttribute(m, "destination"));
 
             Mission mi = new Mission(
                     origin,
@@ -272,7 +272,7 @@ public class SaveManager {
         }
 
         // Call the galaxy constructor with the parsed elements
-        Galaxy galaxy = new Galaxy(width, height, planetsArrayList, playersArrayList, borderMargin);
+        Galaxy galaxy = new Galaxy(width, height, planets_extendedArrayList, playersArrayList, borderMargin);
 
         // Call game.load to start a prepared game
         game.load(galaxy, missionsList);
@@ -333,14 +333,14 @@ public class SaveManager {
     }
 
     /**
-     * Add all planets' nodes with their attributes to the given node
+     * Add all planets_extended' nodes with their attributes to the given node
      * 
-     * @param planets The node to add planets to
+     * @param planets_extended The node to add planets_extended to
      */
-    private static void addPlanets(Element planets) {
+    private static void addPlanets(Element planets_extended) {
         for (Planet p : Galaxy.getPlanets()) {
             Element planet = doc.createElement("Planet");
-            planets.appendChild(planet);
+            planets_extended.appendChild(planet);
 
             addAttribute("type", p.assetReference(), planet);
             addAttribute("id", Integer.toString(p.getId()), planet);
@@ -359,7 +359,7 @@ public class SaveManager {
     /**
      * Add all missions' nodes with their attributes to the given node
      * 
-     * @param planets The node to add missions to
+     * @param planets_extended The node to add missions to
      */
     private static void addMissions(Element missions) {
         for (Mission m : Game.missions) {
@@ -383,7 +383,7 @@ public class SaveManager {
     /**
      * Add all squads' nodes with their attributes to the given node
      * 
-     * @param planets The node to add squads to
+     * @param planets_extended The node to add squads to
      */
     private static void addSquads(Element squads, Mission m) {
         for (Squad s : m.getSquads()) {
@@ -400,7 +400,7 @@ public class SaveManager {
     /**
      * Add all ships' nodes with their attributes to the given node
      * 
-     * @param planets The node to add ships to
+     * @param planets_extended The node to add ships to
      */
     private static void addShips(Element ships, ArrayList<Ship> shipsList) {
         for (Ship s : shipsList) {
@@ -408,7 +408,7 @@ public class SaveManager {
             ships.appendChild(ship);
 
             addAttribute("currentSpeed", Double.toString(s.getCurrentSpeed()), ship);
-            addAttribute("type", "planets.entities.ship." + Character.toUpperCase(s.assetReference().charAt(0)) + s.assetReference().substring(1), ship);
+            addAttribute("type", "planets_extended.entities.ship." + Character.toUpperCase(s.assetReference().charAt(0)) + s.assetReference().substring(1), ship);
             addAttribute("x", Double.toString(s.getPosX()), ship);
             addAttribute("y", Double.toString(s.getPosY()), ship);
         }

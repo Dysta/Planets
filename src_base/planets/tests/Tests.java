@@ -1,4 +1,4 @@
-package tests;
+package planets.tests;
 
 import java.util.ArrayList;
 import javafx.application.Application;

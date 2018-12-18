@@ -1,4 +1,4 @@
-package planets.entities;
+package planets_extended.entities;
 
 import javafx.scene.paint.Color;
 
@@ -35,7 +35,7 @@ public class Player {
     
     /**
      * The preferred type of Ships for this player.
-     * @see planets.entities.ship.
+     * @see planets_extended.entities.ship.
      */
     private String shipType;
 
@@ -112,7 +112,7 @@ public class Player {
     /**
      * Sets the classpath of this player's preffered ship type.
      * 
-     * @param shipType a ship class name from planets.entities.ship.
+     * @param shipType a ship class name from planets_extended.entities.ship.
      */
     public void setShipType(String shipType) {
         this.shipType = shipType;
@@ -121,7 +121,7 @@ public class Player {
     /**
      * Returns the full classpath for this player's preffered ship type.
      * 
-     * @return a ship classpath from planets.entities.ship.
+     * @return a ship classpath from planets_extended.entities.ship.
      */
     public String getShipType() {
         return this.shipType;

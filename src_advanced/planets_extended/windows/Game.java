@@ -1,11 +1,11 @@
-package planets.windows;
+package planets_extended.windows;
 
-import planets.input.KeyEventHandler;
-import planets.input.MouseHandler;
-import planets.input.MouseReleaseHandler;
-import planets.input.ScrollEventHandler;
 import java.util.ArrayList;
 
+import planets_extended.input.KeyEventHandler;
+import planets_extended.input.MouseHandler;
+import planets_extended.input.MouseReleaseHandler;
+import planets_extended.input.ScrollEventHandler;
 import javafx.scene.CacheHint;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -13,16 +13,16 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import planets.Planets;
-import planets.ResourcesManager;
-import planets.Sprite;
-import planets.entities.Galaxy;
-import planets.entities.planet.Planet;
-import planets.entities.Player;
-import planets.entities.Mission;
-import planets.entities.Squad;
-import planets.ui.SelectPercentage;
-import planets.entities.ship.Ship;
+import planets_extended.Planets;
+import planets_extended.ResourcesManager;
+import planets_extended.Sprite;
+import planets_extended.entities.Galaxy;
+import planets_extended.entities.planet.Planet;
+import planets_extended.entities.Player;
+import planets_extended.entities.Mission;
+import planets_extended.entities.Squad;
+import planets_extended.ui.SelectPercentage;
+import planets_extended.entities.ship.Ship;
 
 /**
  * The actual Game window, with every entity in it. It handles the game and events related to it.
@@ -59,7 +59,7 @@ public class Game extends Window {
      */
     public static boolean freeze = false;
     /**
-     * The currently selected planets.
+     * The currently selected planets_extended.
      */
     public static ArrayList<Planet> selectedPlanets;
     /**
@@ -131,7 +131,7 @@ public class Game extends Window {
      * Creates a random game from given parameters
      * 
      * @param nbPlayers the maximum number of players
-     * @param nbPlanets the maximum number of planets
+     * @param nbPlanets the maximum number of planets_extended
      */
     public void initGame(int nbPlayers, int nbPlanets) {
         double borderMargin = 50;

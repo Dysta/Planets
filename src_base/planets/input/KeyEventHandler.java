@@ -1,4 +1,4 @@
-package input;
+package planets.input;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;

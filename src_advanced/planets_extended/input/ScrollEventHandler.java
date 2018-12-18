@@ -1,8 +1,8 @@
-package input;
+package planets_extended.input;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.ScrollEvent;
-import planets.windows.Game;
+import planets_extended.windows.Game;
 
 /**
  * Handles any scroll related event from the user related to the Application.

@@ -1,4 +1,4 @@
-package planets.entities.planet;
+package planets_extended.entities.planet;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -8,14 +8,14 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
-import planets.windows.Game;
-import planets.ResourcesManager;
-import planets.Sprite;
-import planets.entities.Galaxy;
-import planets.entities.Mission;
-import planets.entities.Player;
-import planets.entities.Squad;
-import planets.entities.ship.Ship;
+import planets_extended.windows.Game;
+import planets_extended.ResourcesManager;
+import planets_extended.Sprite;
+import planets_extended.entities.Galaxy;
+import planets_extended.entities.Mission;
+import planets_extended.entities.Player;
+import planets_extended.entities.Squad;
+import planets_extended.entities.ship.Ship;
 
 /**
  * An entity holding and producting ships, owned by a Player.
@@ -130,8 +130,8 @@ public abstract class Planet extends Sprite {
         double posX = (boundaryX - 2 * borderMargin - size) * r.nextDouble() + borderMargin;
         double posY = (boundaryY - 2 * borderMargin - size) * r.nextDouble() + borderMargin;
         
-        this.shipsPerTick *= 1 + (size / (Galaxy.maximumPlanetSize * 2)); // The biggest planets can produce up to 50% more than smallest ones
-        this.shipCapacity *= 1 + (size / (Galaxy.maximumPlanetSize * 1.2)); // The biggest planets can store up to 83% more than smallest ones
+        this.shipsPerTick *= 1 + (size / (Galaxy.maximumPlanetSize * 2)); // The biggest planets_extended can produce up to 50% more than smallest ones
+        this.shipCapacity *= 1 + (size / (Galaxy.maximumPlanetSize * 1.2)); // The biggest planets_extended can store up to 83% more than smallest ones
         
         this.shipType = this.owner.getShipType();
 
@@ -188,7 +188,7 @@ public abstract class Planet extends Sprite {
      * Creates a new ship according to shipType and gives it a random position in orbit (hidden).
      */
     private void produceShip() {
-        String s = "planets.entities.ship." + Character.toLowerCase(this.shipType.charAt(0)) + this.shipType.substring(1) ;
+        String s = "planets_extended.entities.ship." + this.shipType ;
         double angle = Math.random() * Math.PI * 2;
         double radius = (this.size + (Galaxy.planetInfluenceZone - this.size) / 2);
         double x = ((this.getPosX() + this.getSize() / 2) + Math.cos(angle) * radius);

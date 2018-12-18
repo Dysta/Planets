@@ -1,4 +1,4 @@
-package planets.windows;
+package planets_extended.windows;
 
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -9,9 +9,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import planets.ResourcesManager;
-import planets.ui.NumericField;
-import planets.ui.WindowSwitchButton;
+import planets_extended.ResourcesManager;
+import planets_extended.ui.NumericField;
+import planets_extended.ui.WindowSwitchButton;
 
 /**
  *  The main menu window
@@ -25,9 +25,9 @@ public class Menu extends Window {
      */
     private static NumericField playersField;
     /**
-     * Asks the user for a number of planets before generating the game.
+     * Asks the user for a number of planets_extended before generating the game.
      */
-    private static NumericField planetsField;
+    private static NumericField planets_extendedField;
 
     /**
      * Keeps track of what menu we need to switch to.
@@ -76,7 +76,7 @@ public class Menu extends Window {
         grid.setHgap(15);
 
         playersField = addNumericTextField(grid, "Max. Players", 0, 0, 2);
-        planetsField = addNumericTextField(grid, "Max. Planets", 0, 1, 7);
+        planets_extendedField = addNumericTextField(grid, "Max. Planets", 0, 1, 7);
         
 
         // Play
@@ -153,10 +153,10 @@ public class Menu extends Window {
     }
 
     /**
-     * Get the number of planets, input by the user.
-     * @return number of planets input by the user.
+     * Get the number of planets_extended, input by the user.
+     * @return number of planets_extended input by the user.
      */
     public int getNbPlanets() {
-        return Integer.valueOf(Menu.planetsField.getText());
+        return Integer.valueOf(Menu.planets_extendedField.getText());
     }
 }

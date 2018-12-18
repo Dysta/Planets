@@ -1,4 +1,9 @@
-package planets.windows;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package planets_extended.windows;
 
 import java.io.File;
 import java.util.logging.Level;
@@ -15,9 +20,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import planets.IO.SaveManager;
-import planets.ResourcesManager;
-import planets.ui.WindowSwitchButton;
+import planets_extended.IO.SaveManager;
+import planets_extended.ResourcesManager;
+import planets_extended.ui.WindowSwitchButton;
 
 /**
  *  The Load window, displaying playable savegames.

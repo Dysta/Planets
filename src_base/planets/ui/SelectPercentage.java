@@ -1,4 +1,4 @@
-package ui;
+package planets.ui;
 
 import javafx.scene.Group;
 import javafx.scene.canvas.GraphicsContext;
