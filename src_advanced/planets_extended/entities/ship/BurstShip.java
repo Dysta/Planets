@@ -16,6 +16,7 @@ public class BurstShip extends Ship {
     public BurstShip(double posX, double posY) {
         // Ship , posX, posY, capSpeed, acceleration, power, shield, cost
         super(posX, posY, 20, 20, 25, 0.07, 0.4, 1, 0.2);
+        this.affectSize(0.8);
     }
     
     /**

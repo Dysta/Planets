@@ -44,12 +44,12 @@ public class Sprite {
     /**
      * The width of the sprite. Should correspond to the Image.
      */
-    private double width;
+    public double width;
     
     /**
      * The height of the sprite. Should correspond to the Image.
      */
-    private double height;
+    public double height;
 
     /**
      * 

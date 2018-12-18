@@ -265,6 +265,21 @@ public abstract class Ship extends Sprite {
     public void attack(Ship s) {
         s.takeDamage(this.power);
     }
+    
+
+    /**
+     * Allows the a sublass to change the ship's size. Does not take into
+     * account the Galaxy's rules on purpose.
+     *
+     * @param percentage reduce by 50% = 0.5
+     */
+    protected void affectSize(double percentage) {
+        if (percentage >= 0) {
+            this.width *= percentage;
+            this.height *= percentage;
+            updateDimensions(getImagePath(), this.width, this.height);
+        }
+    }
 
     /**
      * Reprocesses the best direction to avoid collisions while going to a destination planet

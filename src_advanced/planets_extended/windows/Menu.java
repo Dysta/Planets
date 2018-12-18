@@ -42,8 +42,8 @@ public class Menu extends Window {
         grid.setVgap(15);
         grid.setHgap(15);
 
-        playersField = addNumericTextField(grid, "Max. Players", 0, 0, 2);
-        planetsField = addNumericTextField(grid, "Max. Planets", 0, 1, 7);
+        playersField = addNumericTextField(grid, "Max. Players", 0, 0, 5);
+        planetsField = addNumericTextField(grid, "Max. Planets", 0, 1, 35);
         
 
         // Play
