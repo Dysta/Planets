@@ -1,14 +1,7 @@
 package planets_extended.windows;
 
-import javafx.scene.CacheHint;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import planets_extended.Planets;
 import planets_extended.ResourcesManager;
 

@@ -16,10 +16,12 @@ import planets_extended.entities.Mission;
 import planets_extended.entities.Squad;
 import planets_extended.ui.SelectPercentage;
 import planets_extended.entities.ship.Ship;
+import planets_extended.ui.SelectedCount;
 
 /**
- * The actual Game window, with every entity in it. It handles the game and events related to it.
- * 
+ * The actual Game window, with every entity in it. It handles the game and
+ * events related to it.
+ *
  * @author Adri
  */
 public class Game extends Window {
@@ -82,6 +84,11 @@ public class Game extends Window {
      * The indicator showing the current percentage of selected ships.
      */
     public static SelectPercentage selectP;
+    /**
+     * The indicator showing the current number of selected ships and their
+     * estimated power.
+     */
+    public static SelectedCount selectedS;
 
     /**
      * The preffered constructor for a Game
@@ -110,7 +117,7 @@ public class Game extends Window {
 
         if (!reloading) {
             double borderMargin = 50;
-            
+
             missions = new ArrayList<>();
             galaxy = new Galaxy(this.WIDTH, this.HEIGHT, nbPlanets, nbPlayers, borderMargin);
             for (Planet p : Galaxy.getPlanets()) {
@@ -122,17 +129,23 @@ public class Game extends Window {
             selectedSquads = new ArrayList<>();
             primaryHeld = false;
             ctrlHeld = false;
-            
-            // init UI
-            selectP = new SelectPercentage(this.WIDTH, this.HEIGHT);
-        }
 
+            initUI();
+        }
 
         for (Planet p : Galaxy.getPlanets()) {
             p.initRender();
         }
 
         initEvents();
+    }
+
+    /**
+     * Prepares the User Interface.
+     */
+    public void initUI() {
+        selectP = new SelectPercentage(this.WIDTH, this.HEIGHT);
+        selectedS = new SelectedCount(0, 0);
     }
 
     /**
@@ -354,6 +367,8 @@ public class Game extends Window {
             }
 
             Game.missions.removeIf((Mission r) -> r.isEmpty());
+
+            updateUI();
         }
     }
 
@@ -367,6 +382,7 @@ public class Game extends Window {
             }
 
             this.selectP.update();
+            this.selectedS.update();
         }
     }
 

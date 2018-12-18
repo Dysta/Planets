@@ -27,12 +27,9 @@ public class SelectPercentage {
 	private final Text text;
 	private final TextFlow tf;
 	
-	private final Player p;
-	
 	public SelectPercentage(double bottomLeftX, double bottomLeftY) {
 		this.text = new Text();
 		this.tf = new TextFlow();
-		this.p = Game.mainPlayer;
 		this.gc = Planets.game.gc;
 		this.root = Game.root;
 		this.bottomLeftX = bottomLeftX;
@@ -43,7 +40,7 @@ public class SelectPercentage {
     public void update() {
         text.setFont(gc.getFont());
         text.setFill(Color.WHITE);
-        text.setText(((int) p.getEffectivesPercent()) + " %");
+        text.setText(((int) Game.mainPlayer.getEffectivesPercent()) + " %");
 
         width = text.getLayoutBounds().getWidth();
         height = text.getLayoutBounds().getHeight();

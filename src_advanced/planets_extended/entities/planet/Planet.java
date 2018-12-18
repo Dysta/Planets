@@ -129,6 +129,18 @@ public abstract class Planet extends Sprite {
         this.shipType = this.owner.getShipType();
         this.updateDimensions(getImagePath(), size, size);
     }
+    
+    /**
+     * Allows the a sublass to change the planet's size. Does not take into account the Galaxy's rules on purpose.
+     * 
+     * @param percentage reduce by 50% = 0.5
+     */
+    protected void affectSize(double percentage) {
+        if(percentage >= 0) {
+            this.size *= percentage;
+            updateDimensions(getImagePath(),this.size,this.size);
+        }
+    }
 
     /**
      * Updates this planet with given parameters

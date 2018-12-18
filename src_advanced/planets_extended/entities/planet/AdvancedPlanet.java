@@ -1,7 +1,5 @@
 package planets_extended.entities.planet;
 
-import planets_extended.ResourcesManager;
-import planets_extended.Sprite;
 import planets_extended.entities.Player;
 
 /**
@@ -18,6 +16,7 @@ public class AdvancedPlanet extends Planet {
      */
     public AdvancedPlanet(Player owner) {
         super(owner, 900, 900, 25, 0.03, 70);
+        affectSize(1.2);
     }
     
     /**

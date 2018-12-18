@@ -2,10 +2,6 @@ package planets_extended.windows;
 
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.scene.CacheHint;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
