@@ -11,15 +11,9 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.CacheHint;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import planets_extended.IO.SaveManager;
 import planets_extended.ResourcesManager;
 import planets_extended.ui.WindowSwitchButton;
@@ -45,42 +39,10 @@ public class Load extends Window {
     }
 
     /**
-     * Creates the Load window 
-     * @param WIDTH the load menu width
-     * @param HEIGHT the load menu height
-     */
-    @Override
-    public void init(double WIDTH, double HEIGHT) {
-        this.WIDTH = WIDTH;
-        this.HEIGHT = HEIGHT;
-
-        Group root = new Group();
-        Scene scene = new Scene(root);
-        canvas = new Canvas(WIDTH, HEIGHT);
-        root.getChildren().add(canvas);
-
-        root.setCache(true);
-        root.setCacheHint(CacheHint.SPEED);
-        Menu.root = root;
-
-        // Events
-        gc = canvas.getGraphicsContext2D();
-        gc.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
-        gc.setFill(Color.BISQUE);
-        gc.setStroke(Color.RED);
-        gc.setLineWidth(1);
-
-        this.initLoad();
-        gc.drawImage(ResourcesManager.loadBackground, 0, 0);
-
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    /**
      * Creates the actual menu of saves
      */
-    public void initLoad() {
+    @Override
+    public void initAfter() {
 
         // Container
         GridPane grid = new GridPane();
@@ -151,4 +113,10 @@ public class Load extends Window {
         return button;
     }
 
+    @Override
+    public void setBackground() {
+        this.background = ResourcesManager.getImageAsset("gameBackground", "images/animated-background.gif", WIDTH, HEIGHT, true);
+    }
+
 }
+

@@ -1,36 +1,17 @@
 package planets;
 
 import planets.windows.Game;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import javafx.scene.effect.Blend;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.ColorAdjust;
-import javafx.scene.effect.ColorInput;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 
 public class ResourcesManager {
-
-    // Common
-    public static Image background;
-    public static Image menuBackground;
-    public static Image gameOverBackground;
-
-    public final static String BG_PATH = "images/animated-background.gif";
-    public final static String MENUBG_PATH = "images/menu-background.png";
-    public final static String GAME_OVER_BG_PATH = "images/game-over.png";
-
     // Common Sprites
-    public static Map<String, Sprite> assets;
-
-    // Planets
-    public final static String PLANET_PATH = "images/planets/BasePlanet.png";
-
-    // Ships        
-    public final static String BASESHIP_PATH = "images/ships/BaseShip.png";
+    public static Map<String, Sprite> spriteAssets;
+    public static Map<String, Image> imageAssets;
 
     /* =================== */
     public static String getRessourcePathByName(String name) {
@@ -39,23 +20,34 @@ public class ResourcesManager {
 
     /* ====== GAME ASSETS ====== */
     public static void initGlobalAssets(double width, double height) {
-        ResourcesManager.menuBackground = new Image(getRessourcePathByName(MENUBG_PATH), width, height, false, false);
-        ResourcesManager.gameOverBackground = new Image(getRessourcePathByName(GAME_OVER_BG_PATH), width, height, false, false);
+        ResourcesManager.imageAssets = new HashMap<>();
     }
 
     /* ====== GAME ASSETS ====== */
     public static void initGameAssets(double width, double height) {
-        ResourcesManager.assets = new HashMap<String, Sprite>();
-        ResourcesManager.background = new Image(getRessourcePathByName(BG_PATH), width, height, false, false);
-
-        ResourcesManager.loadSprite("basePlanet", PLANET_PATH, 1600, 1600);
-
-        // Ships
-        ResourcesManager.loadSprite("baseShip", BASESHIP_PATH, 20, 20);
+        ResourcesManager.spriteAssets = new HashMap<>();
+    }
+    
+    public static Image getImageAsset(String name, String path, double width, double height, boolean recalc) {
+        Image ret = imageAssets.get(name);
+        if(ret == null || recalc) {
+            imageAssets.put(name, new Image(getRessourcePathByName(path), width, height, false, false));
+            ret = imageAssets.get(name);
+        }
+        return ret;
+    }
+    
+    public static Image getImageAsset(String name, String path, double width, double height) {
+        return ResourcesManager.getImageAsset(name,path,width,height,false);
     }
 
-    private static void loadSprite(String name, String path, int width, int height) {
-        ResourcesManager.assets.put(name, new Sprite(getRessourcePathByName(path), width, height));
+    public static Sprite getSpriteAsset(String name, String path, int width, int height) {
+        Sprite ret = spriteAssets.get(name);
+        if(ret == null) {
+            spriteAssets.put(name, new Sprite(getRessourcePathByName(path), width, height));
+            ret = spriteAssets.get(name);
+        }
+        return ret;
     }
 
     public static void colorImage(Sprite sprite, Color color) {

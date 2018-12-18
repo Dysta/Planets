@@ -48,12 +48,17 @@ public abstract class Ship extends Sprite {
     /**
      * The amount of damage per round.
      */
-    protected int power;
+    protected double power;
     
     /**
      * The amount of damage it can hold.
      */
-    protected int shield;
+    protected double shield;
+    
+    /**
+     * The amount of time it takes to produce this ship.
+     */
+    protected double complexity;
 
     /**
      * The number of times it won't check again before going forward when moving.
@@ -73,16 +78,17 @@ public abstract class Ship extends Sprite {
     /**
      * Instanciate this ship and its characteristics.
      * 
-     * @param s The reference Sprite
      * @param posX The top-left x position
      * @param posY The top-left y position
+     * @param width The image width
+     * @param height The image height
      * @param speedCap The maximum velocity allowed for this ship
      * @param acceleration The amount of velocity it gains when speeding up
      * @param power The power characteristc
      * @param shield The shield characteristc
      */
-    public Ship(Sprite s, double posX, double posY, double speedCap, double acceleration, int power, int shield) {
-        super(s);
+    public Ship(double posX, double posY, int width, int height, double speedCap, double acceleration, double power, double shield, double complexity) {
+        super(ResourcesManager.getSpriteAsset("BaseShip", "images/ships/BaseShip.png",width,height));
         Ship.last_id++;
         this.id = Ship.last_id;
         this.setPosition(posX, posY);
@@ -90,10 +96,12 @@ public abstract class Ship extends Sprite {
         this.acceleration = acceleration;
         this.power = power;
         this.shield = shield;
+        this.complexity = complexity;
         this.currentSpeed = 0;
         this.blindForward = 0;
         this.lastDir = 0;
         this.straightLine = false;
+        this.getImageView().setImage(ResourcesManager.getSpriteAsset(assetReference(),getImagePath(),width,height).getImage());
     }
 
     /**
@@ -101,8 +109,15 @@ public abstract class Ship extends Sprite {
      * @return its own class name
      */
     @Override
-    public String assetReference() {
-        return "baseShip";
+    abstract public String assetReference();
+    
+    
+    /**
+     * Returns this Sprite's image path
+     * @return this Sprite's image path
+     */
+    public String getImagePath() {
+        return "images/ships/"+assetReference()+".png";
     }
 
     /**
@@ -231,7 +246,7 @@ public abstract class Ship extends Sprite {
      * Removes shield depending on damage.
      * @param d the damage to take
      */
-    public void takeDamage(int d) {
+    public void takeDamage(double d) {
         this.shield -= d;
     }
     
@@ -338,7 +353,7 @@ public abstract class Ship extends Sprite {
      * Returns the current power of the ship.
      * @return the current power of the ship.
      */
-    public int getPower() {
+    public double getPower() {
         return this.power;
     }
     
@@ -346,7 +361,7 @@ public abstract class Ship extends Sprite {
      * Returns the current shield of the ship.
      * @return the current shield of the ship.
      */
-    public int getShield() {
+    public double getShield() {
         return this.shield;
     }
     

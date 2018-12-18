@@ -87,12 +87,14 @@ public abstract class Planet extends Sprite {
      * Sets the base stats of any planet.
      *
      * @param owner The owner of this planet
+     * @param width The image width
+     * @param height The image height
      * @param productionProgression This planets base amount of ships
      * @param shipsPerTick This planets production speed
      * @param shipCapacity This planets maximum amount of ships
      */
-    public Planet(Player owner, double productionProgression, double shipsPerTick, int shipCapacity) {
-        super(ResourcesManager.assets.get("basePlanet"));
+    public Planet(Player owner,int width, int height, double productionProgression, double shipsPerTick, int shipCapacity) {
+        super(ResourcesManager.getSpriteAsset("BasePlanet","images/planets/BasePlanet.png",width,height));
         Planet.last_id++;
         this.id = Planet.last_id;
         this.s = s;
@@ -102,11 +104,13 @@ public abstract class Planet extends Sprite {
         double posX = (Galaxy.width - 2 * Galaxy.borderMargin - size) * r.nextDouble() + Galaxy.borderMargin;
         double posY = (Galaxy.height - 2 * Galaxy.borderMargin - size) * r.nextDouble() + Galaxy.borderMargin;
         this.setPosition(posX, posY);
-        this.updateDimensions(ResourcesManager.PLANET_PATH, size, size);
+        this.updateDimensions(getImagePath(), size, size);
         this.ships = new ArrayList<>();
         this.productionProgression = productionProgression; // Base ships on any planet (will produce those ships instantly)
         this.shipsPerTick = shipsPerTick; // Minimum production
         this.shipCapacity = shipCapacity; // Minimum storage
+        
+        this.getImageView().setImage(ResourcesManager.getSpriteAsset(assetReference(),getImagePath(),width,height).getImage());
         
         initPlanet();
 
@@ -124,7 +128,7 @@ public abstract class Planet extends Sprite {
         this.shipCapacity *= 1 + (size / (Galaxy.maximumPlanetSize * 1.2)); // The biggest planets can store up to 83% more than smallest ones
 
         this.shipType = this.owner.getShipType();
-        this.updateDimensions(ResourcesManager.PLANET_PATH, size, size);
+        this.updateDimensions(getImagePath(), size, size);
     }
 
     /**
@@ -136,11 +140,14 @@ public abstract class Planet extends Sprite {
      * @param shipCapacity The amount of ships this planet can handle at a time
      * @param productionProgression The current production status
      */
-    public void loadPlanet(String shipType, double shipPerTick, int shipsCount, int shipCapacity, double productionProgression) {
+    public void loadPlanet(double x, double y,String shipType, double shipPerTick, int shipsCount, int shipCapacity, double productionProgression, double size) {
+        this.setPosition(x, y);
         this.shipType = shipType;
         this.shipsPerTick = shipPerTick;
         this.shipCapacity = shipCapacity;
         this.productionProgression = productionProgression + shipsCount;
+        this.size = size;
+        this.updateDimensions(getImagePath(), size, size);
     }
 
     /**
@@ -149,10 +156,16 @@ public abstract class Planet extends Sprite {
      * @return its own class name
      */
     @Override
-    public String assetReference() {
-        return "basePlanet";
-    }
+    abstract public String assetReference();
 
+    /**
+     * Returns this Sprite's image path
+     * @return this Sprite's image path
+     */
+    public String getImagePath() {
+        return "images/planets/"+assetReference()+".png";
+    }
+    
     /**
      * Get the type of the produced ships
      *
@@ -173,7 +186,7 @@ public abstract class Planet extends Sprite {
         double x = ((this.getPosX() + this.getSize() / 2) + Math.cos(angle) * radius);
         double y = (this.getPosY() + this.getSize() / 2) + Math.sin(angle) * radius;
         try {
-            Ship ship = (Ship) Class.forName(s).getConstructor(Sprite.class, double.class, double.class).newInstance(ResourcesManager.assets.get("baseShip"), x, y);
+            Ship ship = (Ship) Class.forName(s).getConstructor(double.class, double.class).newInstance(x, y);
             ship.changeOwner(this.owner);
             ship.setPosition(ship.getPosX() - ship.width() / 2, ship.getPosY() - ship.height() / 2);
             this.ships.add(ship);

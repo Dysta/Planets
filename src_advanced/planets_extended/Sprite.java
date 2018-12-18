@@ -147,7 +147,9 @@ public class Sprite {
         this.iv.setY(this.y);
         this.iv.setFitHeight(this.height);
         this.iv.setFitWidth(this.width);
-        Game.root.getChildren().add(this.iv);
+        if(Game.root.getChildren().indexOf(this.iv) == -1) {
+            Game.root.getChildren().add(this.iv);
+        }
     }
 
     /**

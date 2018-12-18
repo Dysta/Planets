@@ -139,9 +139,10 @@ public class SaveManager {
         if (!checkSaveFolder()) {
             return;
         }
+
         // Fetch the desired savefile
         File file = new File(SaveManager.SAVE_FOLDER + save_name + SAVE_EXT);
-        if(!file.exists()) {
+        if (!file.exists()) {
             file = new File(SaveManager.SAVE_FOLDER + save_name + SAVE_EXT_LEGACY);
         }
 
@@ -157,20 +158,21 @@ public class SaveManager {
         double height = Double.parseDouble(getAttribute(gameNode, "height"));
 
         // Create new game
-        Planets.startGame(1, 1);
-        Game game = Planets.game;
+        Planets.startGame(2, 3);
+        Planets.game.setStage(Planets.stage, save_name);
+        Planets.game.init(width, height);
 
         // Get all usefull containers
         Node galaxyNode = gameNode.getChildNodes().item(0);
         Node players = gameNode.getChildNodes().item(1);
-        Node planets_extended = gameNode.getChildNodes().item(2);
+        Node planets = gameNode.getChildNodes().item(2);
         Node missions = gameNode.getChildNodes().item(3);
 
         double borderMargin = Double.parseDouble(getAttribute(galaxyNode, "borderMargin"));
 
         // Prepare the new Galaxy's entities collections
         ArrayList<Player> playersArrayList = new ArrayList<>();
-        ArrayList<Planet> planets_extendedArrayList = new ArrayList<>();
+        ArrayList<Planet> planetsArrayList = new ArrayList<>();
 
         // Parse all players from the associated container
         Map<String, Player> playersList = new HashMap<>();
@@ -191,7 +193,7 @@ public class SaveManager {
                         active ? Color.web(getAttribute(p, "color")) : Color.GREY,
                         active);
 
-                if(mainplayer) {
+                if (mainplayer) {
                     Game.mainPlayer = pl;
                 }
             }
@@ -206,44 +208,42 @@ public class SaveManager {
         }
 
         // This bloc is very similar to the previous one, but for Planets
-        Map<String, Planet> planets_extendedList = new HashMap<>();
-        for (Node p : new IteratableNodeList(planets_extended.getChildNodes())) {
+        Map<String, Planet> planetsList = new HashMap<>();
+        for (Node p : new IteratableNodeList(planets.getChildNodes())) {
             String t = getAttribute(p, "type");
 
-            String classRef = "planets_extended.entities.planet." + Character.toUpperCase(t.charAt(0)) + t.substring(1);
+            String classRef = "planets_extended.entities.planet." + t;
 
             Player owner = playersList.get(getAttribute(p, "ownerId"));
 
             Planet pl = (Planet) Class.forName(classRef)
-                    .getConstructor(Sprite.class, Player.class, double.class, double.class, double.class)
-                    .newInstance(ResourcesManager.assets.get("basePlanet"),
-                            owner,
-                            Double.parseDouble(getAttribute(p, "x")),
-                            Double.parseDouble(getAttribute(p, "y")),
-                            Double.parseDouble(getAttribute(p, "size"))
-                    );
+                    .getConstructor(Player.class)
+                    .newInstance(owner);
 
             pl.setId(Integer.parseInt(p.getAttributes().getNamedItem("id").getTextContent()));
             if (owner.isActive()) {
                 pl.setOwner(owner);
             }
             pl.loadPlanet(
+                    Double.parseDouble(getAttribute(p, "x")),
+                    Double.parseDouble(getAttribute(p, "y")),
                     getAttribute(p, "shipType"),
                     Double.parseDouble(getAttribute(p, "shipsPerTick")),
                     Integer.parseInt(getAttribute(p, "shipsCount")),
                     Integer.parseInt(getAttribute(p, "shipCapacity")),
-                    Double.parseDouble(getAttribute(p, "productionProgression")));
+                    Double.parseDouble(getAttribute(p, "productionProgression")),
+                    Double.parseDouble(getAttribute(p, "size")));
 
-            planets_extendedList.put(Integer.toString(pl.getId()), pl);
-            planets_extendedArrayList.add(pl);
+            planetsList.put(Integer.toString(pl.getId()), pl);
+            planetsArrayList.add(pl);
         }
 
         // Again, but for missions and its contents
         ArrayList<Mission> missionsList = new ArrayList<>();
         for (Node m : new IteratableNodeList(missions.getChildNodes())) {
 
-            Planet origin = planets_extendedList.get(getAttribute(m, "origin"));
-            Planet destination = planets_extendedList.get(getAttribute(m, "destination"));
+            Planet origin = planetsList.get(getAttribute(m, "origin"));
+            Planet destination = planetsList.get(getAttribute(m, "destination"));
 
             Mission mi = new Mission(
                     origin,
@@ -262,8 +262,8 @@ public class SaveManager {
                     // Squad's ships
 
                     Ship sh = (Ship) Class.forName(getAttribute(ship, "type"))
-                            .getConstructor(Sprite.class, double.class, double.class)
-                            .newInstance(ResourcesManager.assets.get("baseShip"),
+                            .getConstructor(double.class, double.class)
+                            .newInstance(
                                     Double.parseDouble(getAttribute(ship, "x")),
                                     Double.parseDouble(getAttribute(ship, "y")));
 
@@ -280,19 +280,19 @@ public class SaveManager {
         }
 
         // Call the galaxy constructor with the parsed elements
-        Galaxy galaxy = new Galaxy(width, height, planets_extendedArrayList, playersArrayList, borderMargin);
+        Galaxy galaxy = new Galaxy(width, height, planetsArrayList, playersArrayList, borderMargin);
 
-        // Call game.load to start a prepared game
-        game.load(galaxy, missionsList);
-        Game.selectP = new SelectPercentage(width,height);
-        
+        // Start the prepared game
+        Planets.game.load(galaxy, missionsList);
+        Game.selectP = new SelectPercentage(width, height);
+
         // Unfreeze the game, ready to go.
         Game.toggleFreeze();
     }
 
     /**
      * This method is only useful for preventing code duplication.
-     * 
+     *
      * @param name Name of the new attribute
      * @param value Value of the new attribute
      * @param node The Node receiving the new attribute
@@ -305,10 +305,10 @@ public class SaveManager {
 
     /**
      * This method is only useful for preventing code duplication.
-     * 
+     *
      * @param m The source Node
      * @param name The searched attributes' name
-     * @return 
+     * @return
      */
     private static String getAttribute(Node m, String name) {
         return m.getAttributes().getNamedItem(name).getTextContent();
@@ -316,7 +316,7 @@ public class SaveManager {
 
     /**
      * Add all players' nodes with their attributes to the given node
-     * 
+     *
      * @param players The node to add players to
      */
     private static void addPlayers(Element players) {
@@ -342,7 +342,7 @@ public class SaveManager {
 
     /**
      * Add all planets_extended' nodes with their attributes to the given node
-     * 
+     *
      * @param planets_extended The node to add planets_extended to
      */
     private static void addPlanets(Element planets_extended) {
@@ -366,7 +366,7 @@ public class SaveManager {
 
     /**
      * Add all missions' nodes with their attributes to the given node
-     * 
+     *
      * @param planets_extended The node to add missions to
      */
     private static void addMissions(Element missions) {
@@ -387,10 +387,9 @@ public class SaveManager {
         }
     }
 
-
     /**
      * Add all squads' nodes with their attributes to the given node
-     * 
+     *
      * @param planets_extended The node to add squads to
      */
     private static void addSquads(Element squads, Mission m) {
@@ -404,10 +403,9 @@ public class SaveManager {
         }
     }
 
-    
     /**
      * Add all ships' nodes with their attributes to the given node
-     * 
+     *
      * @param planets_extended The node to add ships to
      */
     private static void addShips(Element ships, ArrayList<Ship> shipsList) {
@@ -424,18 +422,18 @@ public class SaveManager {
 
     /**
      * Returns the name of a file whose extention matches SaveManager.SAVE_EXT
-     * 
+     *
      * @param f The file to return the name from
      * @return The file name
      */
     public static String getSaveName(File f) {
         String name = f.getName();
         String ret = name.substring(0, name.length() - SAVE_EXT.length());
-        if(ret.length() > 0) {
+        if (ret.length() > 0) {
             return ret;
         } else {
             ret = name.substring(0, name.length() - SAVE_EXT_LEGACY.length());
-            if(ret.length() > 0) {
+            if (ret.length() > 0) {
                 return ret;
             } else {
                 return "Unrecognized file";
@@ -444,7 +442,10 @@ public class SaveManager {
     }
 
     /**
-     * Get all Files whose extention matches SaveManager.SAVE_EXT in the directory SaveManager.SAVE_FOLDER. It also supports legacy save files from the base version.
+     * Get all Files whose extention matches SaveManager.SAVE_EXT in the
+     * directory SaveManager.SAVE_FOLDER. It also supports legacy save files
+     * from the base version.
+     *
      * @return A list of savefiles
      */
     public static ArrayList<File> getSaveFiles() {
@@ -465,6 +466,7 @@ public class SaveManager {
 
     /**
      * Checks whether the save folder exists, if not, creates it.
+     *
      * @return whether the savefolder is ready or not.
      */
     public static boolean checkSaveFolder() {

@@ -12,13 +12,12 @@ import planets_extended.entities.Player;
 public class BasePlanet extends Planet {
     
     /**
-     * Usual constructor with a custom Image for this class
+     * Create a basic planet
      * 
      * @param owner The planet's owner
      */
     public BasePlanet(Player owner) {
-        super(owner, 20, 0.02, 50);
-        this.getImageView().setImage(ResourcesManager.assets.get("basePlanet").getImage());
+        super(owner, 900, 900, 20, 0.02, 50);
     }
     
     /**
@@ -28,7 +27,7 @@ public class BasePlanet extends Planet {
      */
     @Override
     public String assetReference() {
-        return "basePlanet";
+        return "BasePlanet";
     }
     
 }

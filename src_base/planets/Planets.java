@@ -220,11 +220,10 @@ public class Planets extends Application {
         }
 
         // Create Game and start it
-        game = new Game();
+        game = new Game(nbPlayers, nbPlanets);
 
         game.setStage(stage, "Planets");
         game.init(WIDTH, HEIGHT);
-        game.initGame(nbPlayers, nbPlanets);
 
         Planets.ticks = new ArrayList<>();
         for (int i = 60; i > 0; i--) {

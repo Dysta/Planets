@@ -5,9 +5,15 @@
  */
 package planets_extended.windows;
 
+import javafx.scene.CacheHint;
 import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 /**
@@ -25,6 +31,11 @@ abstract public class Window {
      * The windows' height
      */
     public double HEIGHT = 720;
+    
+    /**
+     * The background of this window
+     */
+    public Image background;
     
     /**
      * This state means nothing has to be done at the moment
@@ -60,6 +71,10 @@ abstract public class Window {
      */
     public Stage stage;
     /**
+     * The windows' scene
+     */
+    public Scene scene;
+    /**
      * The windows' graphics context
      */
     public GraphicsContext gc;
@@ -86,12 +101,48 @@ abstract public class Window {
     }
     
     /**
-     * Should be implemented by all windows even though the behavior can be similar : it is not in most cases.
+     * Create a basic window
      * @param WIDTH
      * @param HEIGHT 
      */
-    abstract public void init(double WIDTH, double HEIGHT);
+    final public void init(double WIDTH, double HEIGHT) {
+        this.WIDTH = WIDTH;
+        this.HEIGHT = HEIGHT;
+
+        Game.root = new Group();
+        scene = new Scene(root);
+        canvas = new Canvas(WIDTH, HEIGHT);
+        root.getChildren().add(canvas);
+
+        root.setCache(true);
+        root.setCacheHint(CacheHint.SPEED);
+
+        // Events
+        gc = canvas.getGraphicsContext2D();
+        gc.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
+        gc.setFill(Color.BISQUE);
+        gc.setStroke(Color.RED);
+        gc.setLineWidth(1);
+        
+        this.setBackground();
+        
+        stage.setScene(scene);
+        stage.centerOnScreen();
+        
+        this.initAfter();
+        gc.drawImage(this.background, 0, 0);
+        stage.show();
+    }
     
+    /**
+     * The specific behavior to be implemented by any window
+     */
+    abstract public void initAfter();
+    
+    /**
+     * Forces the window to set its background image
+     */
+    abstract public void setBackground();
     
     /**
      * Do not display this window but keep its status.

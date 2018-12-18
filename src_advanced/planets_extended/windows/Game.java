@@ -6,13 +6,6 @@ import planets_extended.input.KeyEventHandler;
 import planets_extended.input.MouseHandler;
 import planets_extended.input.MouseReleaseHandler;
 import planets_extended.input.ScrollEventHandler;
-import javafx.scene.CacheHint;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import planets_extended.Planets;
 import planets_extended.ResourcesManager;
 import planets_extended.Sprite;
@@ -31,7 +24,16 @@ import planets_extended.entities.ship.Ship;
  */
 public class Game extends Window {
 
-    
+    /**
+     * Max number of players
+     */
+    public static int nbPlayers;
+
+    /**
+     * Max number of planets
+     */
+    public static int nbPlanets;
+
     /**
      * The galaxy containing entities.
      */
@@ -59,7 +61,7 @@ public class Game extends Window {
      */
     public static boolean freeze = false;
     /**
-     * The currently selected planets_extended.
+     * The currently selected planets.
      */
     public static ArrayList<Planet> selectedPlanets;
     /**
@@ -70,6 +72,10 @@ public class Game extends Window {
      * An array of ticks to compute tickrate.
      */
     public static int ticks;
+    /**
+     * Whether the game is in a reloading state
+     */
+    public boolean reloading;
 
     // UI Elements
     /**
@@ -78,43 +84,61 @@ public class Game extends Window {
     public static SelectPercentage selectP;
 
     /**
-     * Creates an empty game and defines input events.
-     * 
-     * @param WIDTH the width of the window
-     * @param HEIGHT the height of the window
+     * The preffered constructor for a Game
+     *
+     * @param nbPlayers Maximum number of players to generate
+     * @param nbPlanets Maximum number of planets to generate
+     */
+    public Game(int nbPlayers, int nbPlanets) {
+        reloading = false;
+        Game.nbPlanets = nbPlanets;
+        Game.nbPlayers = nbPlayers;
+    }
+
+    /**
+     * Creates a basic game for two players
+     */
+    public Game() {
+        this(2, 7);
+    }
+
+    /**
+     * Creates a random game from given rules of max players and max planets
      */
     @Override
-    public void init(double WIDTH, double HEIGHT) {
-        this.WIDTH = WIDTH;
-        this.HEIGHT = HEIGHT;
+    public void initAfter() {
 
-        Game.root = new Group();
-        Scene scene = new Scene(root);
-        canvas = new Canvas(WIDTH, HEIGHT);
-        root.getChildren().add(canvas);
+        if (!reloading) {
+            double borderMargin = 50;
+            
+            missions = new ArrayList<>();
+            galaxy = new Galaxy(this.WIDTH, this.HEIGHT, nbPlanets, nbPlayers, borderMargin);
+            for (Planet p : Galaxy.getPlanets()) {
+                if (p.getOwner().isMainPlayer()) {
+                    Game.mainPlayer = p.getOwner();
+                }
+            }
+            selectedPlanets = new ArrayList<>();
+            selectedSquads = new ArrayList<>();
+            primaryHeld = false;
+            ctrlHeld = false;
+            
+            // init UI
+            selectP = new SelectPercentage(this.WIDTH, this.HEIGHT);
+        }
 
-        root.setCache(true);
-        root.setCacheHint(CacheHint.SPEED);
 
-        // Events
-        gc = canvas.getGraphicsContext2D();
-        gc.setFont(Font.font("Helvetica", FontWeight.BOLD, 24));
-        gc.setFill(Color.BISQUE);
-        gc.setStroke(Color.RED);
-        gc.setLineWidth(1);
-        gc.drawImage(ResourcesManager.background, 0, 0);
+        for (Planet p : Galaxy.getPlanets()) {
+            p.initRender();
+        }
 
-        stage.setScene(scene);
-        this.initEvents(scene);
-        stage.centerOnScreen();
-        stage.show();
+        initEvents();
     }
 
     /**
      * Prepares every needed event.
-     * @param scene the scene listening to event
      */
-    private void initEvents(Scene scene) {
+    public void initEvents() {
         MouseHandler mouseHandler = new MouseHandler();
         MouseReleaseHandler mouseReleaseHandler = new MouseReleaseHandler();
         KeyEventHandler keyEventHandler = new KeyEventHandler();
@@ -127,47 +151,25 @@ public class Game extends Window {
         scene.setOnScroll(scrollEventHandler);
     }
 
-    /**
-     * Creates a random game from given parameters
-     * 
-     * @param nbPlayers the maximum number of players
-     * @param nbPlanets the maximum number of planets_extended
-     */
-    public void initGame(int nbPlayers, int nbPlanets) {
-        double borderMargin = 70;
-
-        Game.missions = new ArrayList<>();
-        Game.galaxy = new Galaxy(this.WIDTH, this.HEIGHT, nbPlanets, nbPlayers, borderMargin);
-        for (Planet p : Game.galaxy.getPlanets()) {
-            if (p.getOwner().isMainPlayer()) {
-                Game.mainPlayer = p.getOwner();
-            }
-        }
-        Game.selectedPlanets = new ArrayList<>();
-        Game.selectedSquads = new ArrayList<>();
-        Game.primaryHeld = false;
-        Game.ctrlHeld = false;
-
-        // init UI
-        Game.selectP = new SelectPercentage(this.WIDTH, this.HEIGHT);
-
-        for (Planet p : Galaxy.getPlanets()) {
-            p.initRender();
-        }
+    @Override
+    public void setBackground() {
+        this.background = ResourcesManager.getImageAsset("gameBackground", "images/animated-background.gif", WIDTH, HEIGHT, true);
     }
 
     /**
      * Update the current game to match given arguments
-     * 
+     *
      * @param galaxy the new galaxy reference
      * @param missions the new missions reference
      */
     public void load(Galaxy galaxy, ArrayList<Mission> missions) {
-        Game.root.getChildren().clear();
+        reloading = true;
+        this.clear();
+        this.init(WIDTH, HEIGHT);
+        System.out.println("Loading game");
+
         Game.galaxy = galaxy;
         Game.missions = missions;
-
-        this.init(WIDTH, HEIGHT);
 
         for (Planet p : Galaxy.getPlanets()) {
             p.initRender();
@@ -181,11 +183,12 @@ public class Game extends Window {
                 }
             }
         }
+        reloading = false;
     }
-    
+
     /**
      * Starts a new mission
-     * 
+     *
      * @param origin The origin planet
      * @param destination The destination planet
      * @param effectives The amount of ships to send
@@ -199,7 +202,7 @@ public class Game extends Window {
 
     /**
      * Changes a squad's mission while they wer eperforming another.
-     * 
+     *
      * @param squads the squad in question
      * @param destination the new destination
      * @param newOrder the new goal
@@ -217,7 +220,7 @@ public class Game extends Window {
 
     /**
      * Sets any element selected in a matching list.
-     * 
+     *
      * @param list the select list corresponding to the element
      * @param element the element
      * @param state whether it's selected or not
@@ -233,7 +236,8 @@ public class Game extends Window {
 
     /**
      * Removes every element from a selection list.
-     * @param list 
+     *
+     * @param list
      */
     public static void deselect(ArrayList list) {
         int c = 0;
@@ -246,6 +250,7 @@ public class Game extends Window {
 
     /**
      * Change the game freeze status.
+     *
      * @param b new status
      */
     public static void setFreeze(boolean b) {
@@ -256,12 +261,12 @@ public class Game extends Window {
      * Reverts the current game freeze status.
      */
     public static void toggleFreeze() {
-    	setFreeze(!Game.freeze);
+        setFreeze(!Game.freeze);
     }
 
     /**
-     * Toggles selection on a squad 
-     * 
+     * Toggles selection on a squad
+     *
      * @param s the squad
      * @param state the new state
      */
@@ -291,7 +296,7 @@ public class Game extends Window {
 
     /**
      * Creates a convoy mission.
-     * 
+     *
      * @param target The target planet
      */
     public static void startConvoy(Planet target) {
@@ -301,10 +306,9 @@ public class Game extends Window {
         Game.deselect(Game.selectedPlanets);
     }
 
-
     /**
      * Creates an attack mission.
-     * 
+     *
      * @param o The origin planet
      * @param target The target planet
      */
@@ -314,11 +318,11 @@ public class Game extends Window {
 
     /**
      * Terminate all missions for a planet.
-     * 
+     *
      * @param p the planet to clear
      */
     public static void endPlanetMissions(Planet p) {
-        if(Game.missions != null) {
+        if (Game.missions != null) {
             for (Mission m : Game.missions) {
                 if (m.getOriginPlanet() == p) {
                     m.clearQueue();
@@ -329,16 +333,16 @@ public class Game extends Window {
 
     /**
      * Handles every game tick's behavior.
-     * 
+     *
      * @param arg0 unused but provided by Application
      */
     public void handle(long arg0) {
         if (!Game.freeze) {
-            if(isGameOver()) {
+            if (isGameOver()) {
                 Planets.menu.setSelectedWindow(Window.RESULT_SCREEN);
                 Game.setFreeze(true);
             }
-            
+
             Game.ticks++;
 
             for (Mission r : Game.missions) {
@@ -376,7 +380,7 @@ public class Game extends Window {
             }
         }
     }
-    
+
     /**
      * Clear every element from the Game window.
      */
@@ -388,25 +392,28 @@ public class Game extends Window {
 
     /**
      * Checks whether a game is over or not.
+     *
      * @return true if the game is over.
      */
     public boolean isGameOver() {
         boolean hasEnemy = false;
         boolean hasMainPlayer = false;
-        
-        if(!Game.missions.isEmpty()) return false;
-        
-        for(Planet p : Galaxy.getPlanets()) {
-            if(p.getOwner().isAI()) {
+
+        if (!Game.missions.isEmpty()) {
+            return false;
+        }
+
+        for (Planet p : Galaxy.getPlanets()) {
+            if (p.getOwner().isAI()) {
                 hasEnemy = true;
             } else {
-                if(p.getOwner() == Game.mainPlayer) {
+                if (p.getOwner() == Game.mainPlayer) {
                     hasMainPlayer = true;
                 }
             }
         }
-        
+
         return !hasEnemy || !hasMainPlayer;
     }
-    
+
 }

@@ -149,8 +149,9 @@ public class SaveManager {
         double height = Double.parseDouble(getAttribute(gameNode, "height"));
 
         // Create new game
-        Planets.startGame(1, 1);
-        Game game = Planets.game;
+        Planets.startGame(2, 3);
+        Planets.game.setStage(Planets.stage, save_name);
+        Planets.game.init(width, height);
 
         // Get all usefull containers
         Node galaxyNode = gameNode.getChildNodes().item(0);
@@ -207,24 +208,22 @@ public class SaveManager {
             Player owner = playersList.get(getAttribute(p, "ownerId"));
 
             Planet pl = (Planet) Class.forName(classRef)
-                    .getConstructor(Sprite.class, Player.class, double.class, double.class, double.class)
-                    .newInstance(ResourcesManager.assets.get("basePlanet"),
-                            owner,
-                            Double.parseDouble(getAttribute(p, "x")),
-                            Double.parseDouble(getAttribute(p, "y")),
-                            Double.parseDouble(getAttribute(p, "size"))
-                    );
+                    .getConstructor(Player.class)
+                    .newInstance(owner);
 
             pl.setId(Integer.parseInt(p.getAttributes().getNamedItem("id").getTextContent()));
             if (owner.isActive()) {
                 pl.setOwner(owner);
             }
             pl.loadPlanet(
+                    Double.parseDouble(getAttribute(p, "x")),
+                    Double.parseDouble(getAttribute(p, "y")),
                     getAttribute(p, "shipType"),
                     Double.parseDouble(getAttribute(p, "shipsPerTick")),
                     Integer.parseInt(getAttribute(p, "shipsCount")),
                     Integer.parseInt(getAttribute(p, "shipCapacity")),
-                    Double.parseDouble(getAttribute(p, "productionProgression")));
+                    Double.parseDouble(getAttribute(p, "productionProgression")),
+                    Double.parseDouble(getAttribute(p, "size")));
 
             planetsList.put(Integer.toString(pl.getId()), pl);
             planetsArrayList.add(pl);
@@ -254,8 +253,8 @@ public class SaveManager {
                     // Squad's ships
 
                     Ship sh = (Ship) Class.forName(getAttribute(ship, "type"))
-                            .getConstructor(Sprite.class, double.class, double.class)
-                            .newInstance(ResourcesManager.assets.get("baseShip"),
+                            .getConstructor(double.class, double.class)
+                            .newInstance(
                                     Double.parseDouble(getAttribute(ship, "x")),
                                     Double.parseDouble(getAttribute(ship, "y")));
 
@@ -274,8 +273,8 @@ public class SaveManager {
         // Call the galaxy constructor with the parsed elements
         Galaxy galaxy = new Galaxy(width, height, planetsArrayList, playersArrayList, borderMargin);
 
-        // Call game.load to start a prepared game
-        game.load(galaxy, missionsList);
+        // Start the prepared game
+        Planets.game.load(galaxy, missionsList);
         Game.selectP = new SelectPercentage(width,height);
         
         // Unfreeze the game, ready to go.

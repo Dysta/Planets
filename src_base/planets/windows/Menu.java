@@ -2,10 +2,6 @@ package planets.windows;
 
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.scene.CacheHint;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -35,39 +31,10 @@ public class Menu extends Window {
     private int selectedMenu;
 
     /**
-     * Initializes the application window 
-     * 
-     * @param WIDTH the width of the window
-     * @param HEIGHT the height of the window
-     */
-    @Override
-    public void init(double WIDTH, double HEIGHT) {
-        this.WIDTH = WIDTH;
-        this.HEIGHT = HEIGHT;
-
-        Group root = new Group();
-        Scene scene = new Scene(root);
-        canvas = new Canvas(WIDTH, HEIGHT);
-        root.getChildren().add(canvas);
-
-        root.setCache(true);
-        root.setCacheHint(CacheHint.SPEED);
-        Menu.root = root;
-
-        // Events
-        gc = canvas.getGraphicsContext2D();
-
-        this.initMenu();
-        gc.drawImage(ResourcesManager.menuBackground, 0, 0);
-
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    /**
      * Adds the needed elements to the window.
      */
-    public void initMenu() {
+    @Override
+    public void initAfter() {
         this.selectedMenu = Window.STANDBY;
         // Container
         GridPane grid = new GridPane();
@@ -158,5 +125,10 @@ public class Menu extends Window {
      */
     public int getNbPlanets() {
         return Integer.valueOf(Menu.planetsField.getText());
+    }
+
+    @Override
+    public void setBackground() {
+        this.background = ResourcesManager.getImageAsset("mainMenuBackground", "images/menu-background.png", WIDTH, HEIGHT);
     }
 }

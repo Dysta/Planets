@@ -13,14 +13,12 @@ public class BaseShip extends Ship {
     /**
      * Weak but quick ship
      * 
-     * @param s The reference Sprite
      * @param posX The top-left x position 
      * @param posY The top-left y position 
      */
-    public BaseShip(Sprite s, double posX, double posY) {
+    public BaseShip(double posX, double posY) {
         // Ship , posX, posY, capSpeed, acceleration, power, shield
-        super(s, posX, posY, 7, 0.04, 1, 1);
-        this.getImageView().setImage(ResourcesManager.assets.get("baseShip").getImage());
+        super(posX, posY, 20, 20, 6, 0.03, 1, 1, 0.7);
     }
     
     /**
@@ -29,6 +27,6 @@ public class BaseShip extends Ship {
      */
     @Override
     public String assetReference() {
-        return "baseShip";
+        return "BaseShip";
     }
 }
