@@ -14,11 +14,10 @@ public class BasePlanet extends Planet {
     /**
      * Duplicator constructor with a custom Image for this class
      * 
-     * @param s The Sprite object for a planet
      * @param owner The planet's owner
      */
-    public BasePlanet(Sprite s, Player owner) {
-        super(s, owner, 20, 0.02, 50);
+    public BasePlanet(Player owner) {
+        super(owner, 20, 0.02, 50);
         this.getImageView().setImage(ResourcesManager.assets.get("basePlanet").getImage());
     }
     

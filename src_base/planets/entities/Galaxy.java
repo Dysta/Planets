@@ -93,7 +93,7 @@ public class Galaxy {
             int tries = 0;
 
             do {
-                n = new BasePlanet(ResourcesManager.assets.get("basePlanet"), p);
+                n = new BasePlanet(p);
                 tries++;
             } while ((tries < 10 && isColliding(n)));
 
