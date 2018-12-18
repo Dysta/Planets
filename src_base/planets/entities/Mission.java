@@ -100,8 +100,7 @@ public class Mission {
      * If possible, creates a new squad and launches it.
      */
     public void send_squad() {
-        int squadsCount = this.squads.size();
-        if (squadsCount == 0 || this.origin.freeToLaunch()) {
+        if (this.origin.freeToLaunch()) {
             if (this.addQueue > 0) {
                 int mobilize = this.squadSize;
 
