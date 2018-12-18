@@ -93,11 +93,10 @@ public abstract class Planet extends Sprite {
      * @param shipsPerTick This planets production speed
      * @param shipCapacity This planets maximum amount of ships
      */
-    public Planet(Player owner,int width, int height, double productionProgression, double shipsPerTick, int shipCapacity) {
-        super(ResourcesManager.getSpriteAsset("BasePlanet","images/planets/BasePlanet.png",width,height));
+    public Planet(Player owner, int width, int height, double productionProgression, double shipsPerTick, int shipCapacity) {
+        super(ResourcesManager.getSpriteAsset("BasePlanet", "images/planets/BasePlanet.png", width, height));
         Planet.last_id++;
         this.id = Planet.last_id;
-        this.s = s;
         this.owner = owner;
         Random r = new Random();
         size = Galaxy.minimumPlanetSize + (Galaxy.maximumPlanetSize - Galaxy.minimumPlanetSize) * r.nextDouble();
@@ -109,9 +108,9 @@ public abstract class Planet extends Sprite {
         this.productionProgression = productionProgression; // Base ships on any planet (will produce those ships instantly)
         this.shipsPerTick = shipsPerTick; // Minimum production
         this.shipCapacity = shipCapacity; // Minimum storage
-        
-        this.getImageView().setImage(ResourcesManager.getSpriteAsset(assetReference(),getImagePath(),width,height).getImage());
-        
+
+        this.getImageView().setImage(ResourcesManager.getSpriteAsset(assetReference(), getImagePath(), width, height).getImage());
+
         initPlanet();
 
         // Components displaying current ships capacity
@@ -132,15 +131,31 @@ public abstract class Planet extends Sprite {
     }
 
     /**
+     * Allows the a sublass to change the planet's size. Does not take into
+     * account the Galaxy's rules on purpose.
+     *
+     * @param percentage reduce by 50% = 0.5
+     */
+    protected void affectSize(double percentage) {
+        if (percentage >= 0) {
+            this.size *= percentage;
+            updateDimensions(getImagePath(), this.size, this.size);
+        }
+    }
+
+    /**
      * Updates this planet with given parameters
      *
+     * @param x The top-left x position
+     * @param y The top-left y position
      * @param shipType The type of ships to produce
      * @param shipPerTick The number of ships produced each game tick
      * @param shipsCount The number of ships previously on this planet
      * @param shipCapacity The amount of ships this planet can handle at a time
      * @param productionProgression The current production status
+     * @param size The diameter of the planet
      */
-    public void loadPlanet(double x, double y,String shipType, double shipPerTick, int shipsCount, int shipCapacity, double productionProgression, double size) {
+    public void loadPlanet(double x, double y, String shipType, double shipPerTick, int shipsCount, int shipCapacity, double productionProgression, double size) {
         this.setPosition(x, y);
         this.shipType = shipType;
         this.shipsPerTick = shipPerTick;
@@ -160,12 +175,13 @@ public abstract class Planet extends Sprite {
 
     /**
      * Returns this Sprite's image path
+     *
      * @return this Sprite's image path
      */
     public String getImagePath() {
-        return "images/planets/"+assetReference()+".png";
+        return "images/planets/" + assetReference() + ".png";
     }
-    
+
     /**
      * Get the type of the produced ships
      *
@@ -178,21 +194,26 @@ public abstract class Planet extends Sprite {
     /**
      * Creates a new ship according to shipType and gives it a random position
      * in orbit (hidden).
+     *
+     * @return if the production can continue
      */
-    private void produceShip() {
-        String s = "planets.entities.ship." + Character.toUpperCase(this.shipType.charAt(0)) + this.shipType.substring(1);
+    private boolean produceShip() throws Exception {
+        String shipClass = "planets.entities.ship." + Character.toUpperCase(this.shipType.charAt(0)) + this.shipType.substring(1);
         double angle = Math.random() * Math.PI * 2;
         double radius = (this.size + (Galaxy.planetInfluenceZone - this.size) / 2);
         double x = ((this.getPosX() + this.getSize() / 2) + Math.cos(angle) * radius);
         double y = (this.getPosY() + this.getSize() / 2) + Math.sin(angle) * radius;
-        try {
-            Ship ship = (Ship) Class.forName(s).getConstructor(double.class, double.class).newInstance(x, y);
+
+        Ship ship = (Ship) Class.forName(shipClass).getConstructor(double.class, double.class).newInstance(x, y);
+        
+        if(this.productionProgression >= ship.getCost()) {
             ship.changeOwner(this.owner);
             ship.setPosition(ship.getPosX() - ship.width() / 2, ship.getPosY() - ship.height() / 2);
+            this.productionProgression -= ship.getCost();
             this.ships.add(ship);
-        } catch (Exception e) {
-            System.err.println("Error during ship (" + Character.toLowerCase(s.charAt(0)) + s.substring(1) + ") initialization : " + e);
         }
+
+        return this.productionProgression >= ship.getCost();
     }
 
     /**
@@ -296,14 +317,16 @@ public abstract class Planet extends Sprite {
     /**
      * Handles the production of this planet at each game tick.
      */
+    @SuppressWarnings("empty-statement")
     public void productionTick() {
         if (this.owner.isActive() && this.shipCapacity > this.getNbShip()) {
             this.productionProgression += this.shipsPerTick;
         }
 
-        while (this.productionProgression >= 1) {
-            this.produceShip();
-            this.productionProgression -= 1;
+        try {
+            while (this.produceShip());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -395,10 +418,10 @@ public abstract class Planet extends Sprite {
      *
      * @return a sum of the ships' power
      */
-    public int getPower() {
-        int t = 0;
-        for (Ship s : this.ships) {
-            t += s.getPower();
+    public double getPower() {
+        double t = 0;
+        for (Ship ship : this.ships) {
+            t += ship.getPower();
         }
         return t;
     }

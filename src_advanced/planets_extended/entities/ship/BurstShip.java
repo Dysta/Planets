@@ -5,17 +5,17 @@ package planets_extended.entities.ship;
  * 
  * @author Adri
  */
-public class BaseShip extends Ship {
+public class BurstShip extends Ship {
 
     /**
-     * Weak but quick ship
+     * Quick and cheap but weak
      * 
      * @param posX The top-left x position 
      * @param posY The top-left y position 
      */
-    public BaseShip(double posX, double posY) {
+    public BurstShip(double posX, double posY) {
         // Ship , posX, posY, capSpeed, acceleration, power, shield, cost
-        super(posX, posY, 20, 20, 6, 0.03, 1, 1, 0.7);
+        super(posX, posY, 20, 20, 25, 0.07, 0.4, 1, 0.2);
     }
     
     /**
@@ -24,6 +24,6 @@ public class BaseShip extends Ship {
      */
     @Override
     public String assetReference() {
-        return "BaseShip";
+        return "BurstShip";
     }
 }

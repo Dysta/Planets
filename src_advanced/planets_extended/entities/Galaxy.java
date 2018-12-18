@@ -127,6 +127,7 @@ public class Galaxy {
             if (found) {
                 if(main) {
                     p.setMainPlayer(main);
+                    p.setShipType("BurstShip");
                     main = false;
                 }
                 Galaxy.players.add(p);

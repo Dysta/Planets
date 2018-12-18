@@ -366,6 +366,14 @@ public abstract class Ship extends Sprite {
     }
     
     /**
+     * Returns the amount of production this ship needs to be produced
+     * @return the complexity, or cost
+     */
+    public double getCost() {
+        return this.complexity;
+    }
+    
+    /**
      * Returns its own asset reference.
      * @return its own asset reference
      */

@@ -49,7 +49,7 @@ public class SelectedCount {
             power += pl.getPower() * Game.mainPlayer.getEffectivesPercent()/100;
         }
 
-        text.setText("Selected : "+total+" (est. power: "+power+")");
+        text.setText("Selected : "+total+" (est. power: "+Math.round(power)+")");
 
         tf.setLayoutX(getPosXMiddle());
         tf.setLayoutY(getPosYMiddle());
