@@ -16,7 +16,7 @@ public class ResourcesManager {
     public static Image gameOverBackground;
     public static Image loadBackground;
 
-    public final static String BG_PATH = "images/animated-background.gif";
+    public final static String BG_PATH = "images/background.jpg";
     public final static String MENUBG_PATH = "images/menu-background.png";
     public final static String GAME_OVER_BG_PATH = "images/game-over.png";
     public final static String LOAD_BG_PATH = "images/load-background.png";
@@ -62,7 +62,7 @@ public class ResourcesManager {
     public static void colorImage(Sprite sprite, Color color) {
         ImageView iv = sprite.getImageView();
         ColorAdjust effect = sprite.getColorAdjust();
-        effect.setSaturation(1);
+        effect.setSaturation(0.7);
         double hue = color.getHue();
         if (hue > 180) {
             hue = -(360 - hue);

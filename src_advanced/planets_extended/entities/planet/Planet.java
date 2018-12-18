@@ -86,14 +86,13 @@ public abstract class Planet extends Sprite {
     /**
      * Sets the base stats of any planet.
      * 
-     * @param s The reference Sprite
      * @param owner The owner of this planet
      * @param productionProgression This planets base amount of ships
      * @param shipsPerTick This planets production speed
      * @param shipCapacity This planets maximum amount of ships 
      */
-    public Planet(Sprite s, Player owner, double productionProgression, double shipsPerTick, int shipCapacity) {
-        super(s);
+    public Planet(Player owner, double productionProgression, double shipsPerTick, int shipCapacity) {
+        super(ResourcesManager.assets.get("basePlanet"));
         Planet.last_id++;
         this.id = Planet.last_id;
         this.s = s;

@@ -134,7 +134,7 @@ public class Game extends Window {
      * @param nbPlanets the maximum number of planets_extended
      */
     public void initGame(int nbPlayers, int nbPlanets) {
-        double borderMargin = 50;
+        double borderMargin = 70;
 
         Game.missions = new ArrayList<>();
         Game.galaxy = new Galaxy(this.WIDTH, this.HEIGHT, nbPlanets, nbPlayers, borderMargin);

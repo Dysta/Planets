@@ -12,13 +12,12 @@ import planets_extended.entities.Player;
 public class AdvancedPlanet extends Planet {
     
     /**
-     * Duplicator constructor with a custom Image for this class
+     * Usual constructor with a custom Image for this class
      * 
-     * @param s The Sprite object for a planet
      * @param owner The planet's owner
      */
-    public AdvancedPlanet(Sprite s, Player owner) {
-        super(s, owner, 20, 0.02, 50);
+    public AdvancedPlanet(Player owner) {
+        super(owner, 25, 0.03, 70);
         this.getImageView().setImage(ResourcesManager.assets.get("advancedPlanet").getImage());
     }
     

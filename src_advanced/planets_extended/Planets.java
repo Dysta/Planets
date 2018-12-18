@@ -34,7 +34,7 @@ public class Planets extends Application {
     /**
      * The allowed height for this application.
      */
-    private final static double HEIGHT = 720;
+    private final static double HEIGHT = 1000;
 
     /**
      * The preffered width for this application.

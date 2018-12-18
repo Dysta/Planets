@@ -8,6 +8,7 @@ import javafx.scene.paint.Color;
 import planets_extended.utils.GameUtils;
 import planets_extended.ResourcesManager;
 import planets_extended.entities.AIs.BaseAI;
+import planets_extended.entities.planet.AdvancedPlanet;
 import planets_extended.entities.planet.BasePlanet;
 
 /**
@@ -55,7 +56,7 @@ public class Galaxy {
     /**
      * The planets_extended contained by the Galaxy.
      */
-    private static ArrayList<Planet> planets_extended;
+    private static ArrayList<Planet> planets;
 
     /**
      * The players who are part of this Galaxy.
@@ -74,10 +75,10 @@ public class Galaxy {
     public Galaxy(double width, double height, int nbPlanets, int nbPlayers, double borderMargin) {
         Random r = new Random();
 
-        Galaxy.planets_extended = new ArrayList<Planet>();
+        Galaxy.planets = new ArrayList<Planet>();
         Galaxy.players = new ArrayList<Player>();
-        this.width = width;
-        this.height = height;
+        Galaxy.width = width;
+        Galaxy.height = height;
 
         Galaxy.maximumPlanetSize = Math.sqrt(((width-2*borderMargin)*(height-2*borderMargin))/nbPlanets/Math.PI)/1.5;
         Galaxy.minimumPlanetSize = Galaxy.maximumPlanetSize * 0.7;
@@ -93,12 +94,12 @@ public class Galaxy {
             int tries = 0;
 
             do {
-                n = new BasePlanet(ResourcesManager.assets.get("basePlanet"), p);
+                n = new BasePlanet(p);
                 tries++;
             } while ((tries < 10 && isColliding(n)));
 
             if (tries < 10) {
-                Galaxy.planets_extended.add(n);
+                Galaxy.planets.add(n);
             }
         }
 
@@ -116,9 +117,9 @@ public class Galaxy {
             Planet target = null;
             int tries = 0;
             int rInt = 0;
-            while (tries < Galaxy.planets_extended.size() * 10 && !found) {
-                rInt = GameUtils.getRandomIntegerBetweenRange(0, this.planets_extended.size() - 1);
-                target = Galaxy.planets_extended.get(rInt);
+            while (tries < Galaxy.planets.size() * 10 && !found) {
+                rInt = GameUtils.getRandomIntegerBetweenRange(0, this.planets.size() - 1);
+                target = Galaxy.planets.get(rInt);
                 found = !target.getOwner().isActive();
                 tries++;
             }
@@ -130,7 +131,11 @@ public class Galaxy {
                 }
                 Galaxy.players.add(p);
                 Galaxy.players.remove(target.getOwner());
-                target.setOwner(p);
+                Planet nPlanet = new AdvancedPlanet(p);
+                nPlanet.setPosition(target.getPosX(), target.getPosY());
+                nPlanet.setOwner(p);
+                Galaxy.planets.remove(target);
+                Galaxy.planets.add(nPlanet);
             } else {
                 System.out.println("Could not find a free planet for the player " + i + ".");
             }
@@ -147,7 +152,7 @@ public class Galaxy {
      * @param borderMargin The margin in which no planet can spawn
      */
     public Galaxy(double width, double height, ArrayList<Planet> planets_extended, ArrayList<Player> players, double borderMargin) {
-        Galaxy.planets_extended = planets_extended;
+        Galaxy.planets = planets_extended;
         Galaxy.players = players;
         this.width = width;
         this.height = height;
@@ -167,7 +172,7 @@ public class Galaxy {
      */
     public boolean isColliding(Planet planet) {
         boolean colliding = false;
-        for (Planet p : Galaxy.planets_extended) {
+        for (Planet p : Galaxy.planets) {
             if (Math.sqrt(Math.pow(p.getPosXMiddle() - planet.getPosXMiddle(), 2) + Math.pow(p.getPosYMiddle() - planet.getPosYMiddle(), 2)) < (Galaxy.planetSecurityZone + p.getSize() + planet.getSize())) {
                 colliding = true;
             }
@@ -182,7 +187,7 @@ public class Galaxy {
      * @return a reference to this Galaxy's planets_extended collection
      */
     public static ArrayList<Planet> getPlanets() {
-        return Galaxy.planets_extended;
+        return Galaxy.planets;
     }
 
     
@@ -201,7 +206,7 @@ public class Galaxy {
      * @param planets_extended The collection replacing the current one
      */
     public static void setPlanets(ArrayList<Planet> planets_extended) {
-        Galaxy.planets_extended = planets_extended;
+        Galaxy.planets = planets_extended;
     }
 
     /**
