@@ -25,5 +25,10 @@ By default, all ships stored in the selected planets will be assigned to the giv
 
 When the mission has started, squads of optimal size (related to the planet's actual size) will be sent in waves. You can select one or more squads with `Left Click` and `CTRL + Left Click` to change their destination.
 
-## Getting started
+## Compiling
 
+First of all, you need a working installation of [JavaFX](https://docs.oracle.com/javafx/2/installation/jfxpub-installation.htm). Without going into details, the recommended IDEs are Eclipse Oxygen and NetBeans.
+
+After opening the project in your favorite IDE, you will need to add `resources` as a Source Package, as well as either `src_base` and/or `src_advanced` depending on the version you want to test if it is not already added.
+
+You can run the `Tests` of the desired version if you really want to make sure you are using a stable state of the game. If the tests are failing, please checkout a tagged commit.
