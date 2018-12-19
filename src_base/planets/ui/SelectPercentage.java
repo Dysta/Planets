@@ -56,19 +56,34 @@ public class SelectPercentage {
         root.getChildren().add(tf);
     }
 
-
+    /**
+     * return the x position
+     * @return x position
+     */
     public double getPosX() {
         return this.bottomLeftX - this.width;
     }
 
+    /**
+     * return the y position
+     * @return y position
+     */
     public double getPosY() {
         return this.bottomLeftY - this.height;
     }
 
+    /**
+     * return the middle of x position
+     * @return middle x position
+     */
     public double getPosXMiddle() {
         return this.getPosX() + (this.width / 2);
     }
-
+    
+    /**
+     * return the middle of y position
+     * @return middle y position
+     */
     public double getPosYMiddle() {
         return this.getPosY() + (this.height / 2);
     }

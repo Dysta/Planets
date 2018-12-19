@@ -18,6 +18,12 @@ public class NumericField extends TextField
         this(1);
     }
 
+    /**
+     * replace the current text
+     * @param start the start indice of the box
+     * @param end the end indice of the box
+     * @param text the text to set
+     */
     @Override
     public void replaceText(int start, int end, String text)
     {
@@ -27,6 +33,10 @@ public class NumericField extends TextField
         }
     }
 
+    /**
+     * replace the selection by a gived text
+     * @param text the new text
+     */
     @Override
     public void replaceSelection(String text)
     {
@@ -36,6 +46,11 @@ public class NumericField extends TextField
         }
     }
 
+    /**
+     * check if a gived text is valide (only numeric field)
+     * @param text the text to check
+     * @return true if is valide, false otherwise
+     */
     private boolean validate(String text)
     {
         return text.matches("[0-9]*");

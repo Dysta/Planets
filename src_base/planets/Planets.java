@@ -166,7 +166,7 @@ public class Planets extends Application {
                         int nbPlayers = menu.getNbPlayers();
                         int nbPlanets = menu.getNbPlanets();
 
-                        if (nbPlayers >= 1 && nbPlanets >= nbPlayers) {
+                        if (nbPlayers >= 1 && nbPlayers <= 10 && nbPlanets >= nbPlayers && nbPlanets <= 60) {
                             menu.clear();
                             Planets.startGame(menu.getNbPlayers(), menu.getNbPlanets());
                             Game.setFreeze(false);
