@@ -76,8 +76,10 @@ public class Galaxy {
     public Galaxy(double width, double height, int nbPlanets, int nbPlayers, double borderMargin) {
         Random r = new Random();
 
-        Galaxy.planets = new ArrayList<Planet>();
-        Galaxy.players = new ArrayList<Player>();
+        // Initialise
+        
+        Galaxy.planets = new ArrayList<>();
+        Galaxy.players = new ArrayList<>();
         Galaxy.width = width;
         Galaxy.height = height;
 
@@ -87,8 +89,10 @@ public class Galaxy {
         Galaxy.planetSecurityZone = Galaxy.maximumPlanetSize * 0.5;
         Galaxy.borderMargin = borderMargin;
         
+        // Sets the default color for the main player. Could be in a config file
         Color mainPlayerColor = Color.color(0.3,0.7,1);
 
+        // First, generate all planets as possible
         Planet n;
         for (int i = 0; i < nbPlanets; i++) {
             Player p = new Player();
@@ -106,6 +110,7 @@ public class Galaxy {
             }
         }
 
+        // Then create all players and assign a planet to each one
         boolean main = true;
         for (int i = 0; i < nbPlayers; i++) {
             
@@ -121,6 +126,8 @@ public class Galaxy {
             Planet target = null;
             int tries = 0;
             int rInt = 0;
+            
+            // Will try to find a random planet that isn't already owned
             while (tries < Galaxy.planets.size() * 10 && !found) {
                 rInt = GameUtils.getRandomIntegerBetweenRange(0, Galaxy.planets.size() - 1);
                 target = Galaxy.planets.get(rInt);
@@ -136,10 +143,12 @@ public class Galaxy {
                 }
                 Galaxy.players.add(p);
                 Galaxy.players.remove(target.getOwner());
+                
+                // In this version, players have advanced planets
                 Planet nPlanet = new AdvancedPlanet(p);
                 nPlanet.setPosition(target.getPosX(), target.getPosY());
                 nPlanet.setOwner(p);
-                p.setShipType(Ship.getRandomShipType());
+                nPlanet.setShipType(Ship.getRandomShipType());
                 Galaxy.planets.remove(target);
                 Galaxy.planets.add(nPlanet);
             } else {
