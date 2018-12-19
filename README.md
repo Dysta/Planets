@@ -14,7 +14,7 @@ This project is a small open source student project game built with the JavaFX l
 
 ## How to play
 
-At the start of the game, you and other players are assigned a random color. You can use the control `CTRL+A` (used to select every owned planet) to find which one is yours.
+At the start of the game, you and other players are assigned a random color. Your default color is light blue, and you can find which one is your planet by using `CTRL+A` which will select it.
 
 To select one or more planets, the controls are :
 - Left click - Selects the clicked planet
@@ -28,6 +28,13 @@ When you have selected one or more planets, you can left click another planet to
 By default, all ships stored in the selected planets will be assigned to the given mission, but you can change the percentage either with the scroll wheel or with the UP and DOWN arrows.
 
 When the mission has started, squads of optimal size (related to the planet's display size) will be sent in waves. You can select one or more squads with `Left Click` and `CTRL + Left Click` to change their destination.
+
+There are several ship types :
+- The basic ship, fast and reliable.
+- The burst ship, very fast but quite weak.
+- The mother ship, expensive and powerful but slow.
+
+Each planet has its own storage space and its own production type. The hangars can be used for any ship type as convenience but each ship will take one, whatever its size might be.
 
 ## Compiling
 
