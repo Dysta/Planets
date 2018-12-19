@@ -24,7 +24,7 @@ When you have selected one or more planets, you can left click another planet to
 
 By default, all ships stored in the selected planets will be assigned to the given mission, but you can change the percentage either with the scroll wheel or with the UP and DOWN arrows.
 
-When the mission has started, squads of optimal size (related to the planet's actual size) will be sent in waves. You can select one or more squads with `Left Click` and `CTRL + Left Click` to change their destination.
+When the mission has started, squads of optimal size (related to the planet's display size) will be sent in waves. You can select one or more squads with `Left Click` and `CTRL + Left Click` to change their destination.
 
 ## Compiling
 
