@@ -1,6 +1,7 @@
 # Planets
 
 Please read this document before playing. It is preferred to read it at [the github page](https://github.com/Dysta/Java-Project/blob/master/README.md).
+This is a licensed project, any reuse of our code should include a citation.
 
 ## Intro
 
