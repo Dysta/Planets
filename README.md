@@ -1,6 +1,6 @@
 # Planets
 
-Please read this document before playing. It is preferred to read it at <link to github>.
+Please read this document before playing. It is preferred to read it at [the github page](https://github.com/Dysta/Java-Project/blob/master/README.md).
 
 ## Intro
 
