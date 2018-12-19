@@ -198,7 +198,7 @@ public abstract class Planet extends Sprite {
      * @return if the production can continue
      */
     private boolean produceShip() throws Exception {
-        String shipClass = "planets_extended.entities.ship." + Character.toUpperCase(this.shipType.charAt(0)) + this.shipType.substring(1);
+        String shipClass = "planets_extended.entities.ship." + this.shipType;
         double angle = Math.random() * Math.PI * 2;
         double radius = (this.size + (Galaxy.planetInfluenceZone - this.size) / 2);
         double x = ((this.getPosX() + this.getSize() / 2) + Math.cos(angle) * radius);

@@ -10,6 +10,7 @@ import planets_extended.ResourcesManager;
 import planets_extended.entities.AIs.BaseAI;
 import planets_extended.entities.planet.AdvancedPlanet;
 import planets_extended.entities.planet.BasePlanet;
+import planets_extended.entities.ship.Ship;
 
 /**
  * The Galaxy contains the Game's entities and defines basic physics rules.
@@ -85,6 +86,8 @@ public class Galaxy {
         Galaxy.planetInfluenceZone = Galaxy.maximumPlanetSize * 0.3;
         Galaxy.planetSecurityZone = Galaxy.maximumPlanetSize * 0.5;
         Galaxy.borderMargin = borderMargin;
+        
+        Color mainPlayerColor = Color.color(0.3,0.7,1);
 
         Planet n;
         for (int i = 0; i < nbPlanets; i++) {
@@ -107,10 +110,11 @@ public class Galaxy {
         for (int i = 0; i < nbPlayers; i++) {
             
             Player p;
+            Color thisColor = GameUtils.getDifferentColor(mainPlayerColor);
             if(main) {
-                p = new Player(Color.color(Math.random(), Math.random(), Math.random()), true);
+                p = new Player(thisColor, true);
             } else {
-                p = new BaseAI(Color.color(Math.random(), Math.random(), Math.random()));
+                p = new BaseAI(thisColor);
             }
 
             boolean found = false;
@@ -118,7 +122,7 @@ public class Galaxy {
             int tries = 0;
             int rInt = 0;
             while (tries < Galaxy.planets.size() * 10 && !found) {
-                rInt = GameUtils.getRandomIntegerBetweenRange(0, this.planets.size() - 1);
+                rInt = GameUtils.getRandomIntegerBetweenRange(0, Galaxy.planets.size() - 1);
                 target = Galaxy.planets.get(rInt);
                 found = !target.getOwner().isActive();
                 tries++;
@@ -126,8 +130,8 @@ public class Galaxy {
 
             if (found) {
                 if(main) {
+                    p.setColor(mainPlayerColor);
                     p.setMainPlayer(main);
-                    p.setShipType("BurstShip");
                     main = false;
                 }
                 Galaxy.players.add(p);
@@ -135,6 +139,7 @@ public class Galaxy {
                 Planet nPlanet = new AdvancedPlanet(p);
                 nPlanet.setPosition(target.getPosX(), target.getPosY());
                 nPlanet.setOwner(p);
+                p.setShipType(Ship.getRandomShipType());
                 Galaxy.planets.remove(target);
                 Galaxy.planets.add(nPlanet);
             } else {

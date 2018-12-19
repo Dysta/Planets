@@ -1,6 +1,7 @@
 package planets_extended.entities.ship;
 
 import java.util.ArrayList;
+import java.util.Random;
 import planets_extended.entities.Galaxy;
 import planets_extended.entities.planet.Planet;
 import planets_extended.ResourcesManager;
@@ -403,5 +404,22 @@ public abstract class Ship extends Sprite {
      */
     public int getId() {
         return this.id;
+    }
+    
+    /**
+     * Get a random ship type
+     * @return a random ship asset reference
+     */
+    public static String getRandomShipType() {
+        Random r = new Random();
+        ArrayList<String> shipTypes = new ArrayList<>();
+        
+        shipTypes.add("BaseShip");
+        shipTypes.add("BurstShip");
+        shipTypes.add("MotherShip");
+        
+        String found = shipTypes.get(r.nextInt(shipTypes.size()));
+        System.out.println(found);
+        return found;
     }
 }

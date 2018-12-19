@@ -183,6 +183,14 @@ public class Player {
     }
     
     /**
+     * Changes this player's color
+     * @param c the new color
+     */
+    public void setColor(Color c) {
+        this.color = c;
+    }
+    
+    /**
      * Get this Player's unique ID.
      * @return this player's id
      */
