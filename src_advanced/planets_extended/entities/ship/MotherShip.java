@@ -15,7 +15,7 @@ public class MotherShip extends Ship {
      */
     public MotherShip(double posX, double posY) {
         // Ship , posX, posY, capSpeed, acceleration, power, shield, cost
-        super(posX, posY, 20, 20, 5, 0.01, 4, 3, 3);
+        super(posX, posY, 20, 20, 6, 0.013, 4.5, 3, 2.5);
         this.affectSize(1.3);
     }
     
