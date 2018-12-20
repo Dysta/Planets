@@ -119,14 +119,14 @@ public class Game extends Window {
             double borderMargin = 50;
 
             missions = new ArrayList<>();
+            selectedPlanets = new ArrayList<>();
+            selectedSquads = new ArrayList<>();
             galaxy = new Galaxy(this.WIDTH, this.HEIGHT, nbPlanets, nbPlayers, borderMargin);
             for (Planet p : Galaxy.getPlanets()) {
                 if (p.getOwner().isMainPlayer()) {
                     Game.mainPlayer = p.getOwner();
                 }
             }
-            selectedPlanets = new ArrayList<>();
-            selectedSquads = new ArrayList<>();
             primaryHeld = false;
             ctrlHeld = false;
 

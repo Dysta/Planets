@@ -232,6 +232,9 @@ public abstract class Planet extends Sprite {
      */
     public void setOwner(Player owner) {
         this.owner = owner;
+        if(Game.selectedPlanets.contains(this)) {
+            Game.selectedPlanets.remove(this);
+        }
         Game.endPlanetMissions(this);
         ResourcesManager.colorImage(this, owner.getColor());
     }
