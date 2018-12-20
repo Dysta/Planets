@@ -52,7 +52,9 @@ public class GameUtils {
      * @return
      */
     public static boolean similarTo(Color b, Color c, int intolerance) {
-        return Math.pow((c.getRed() - b.getRed()), 2) + Math.pow((c.getGreen() - b.getGreen()), 2) + Math.pow((c.getBlue() - b.getBlue()), 2) > intolerance;
+        double diff = Math.pow((c.getRed() - b.getRed()), 2) + Math.pow((c.getGreen() - b.getGreen()), 2) + Math.pow((c.getBlue() - b.getBlue()), 2);
+        System.out.println(diff);
+        return diff < intolerance;
     }
     
     /**
@@ -64,7 +66,7 @@ public class GameUtils {
         Color ret;
         do {
             ret = Color.color(Math.random(), Math.random(), Math.random());
-        } while(similarTo(base,ret,50));
+        } while(similarTo(base,ret,1));
         return ret;
     }
 }
