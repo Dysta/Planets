@@ -12,6 +12,12 @@ Planets is a Real-Time Strategy game (RTS) based in a randomly generated solar s
 
 This project is a small open source student project game built with the JavaFX library.
 
+## Downloads
+
+You can download any version of the game on the website.
+- Advanced version : https://planets.rhythmgamers.net/advanced/
+- Base version : https://planets.rhythmgamers.net/base/
+
 ## How to play
 
 At the start of the game, you and other players are assigned a random color. Your default color is light blue, and you can find which one is your planet by using `CTRL+A` which will select it.
