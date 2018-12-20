@@ -45,6 +45,6 @@ public class DebugUtils {
      * @return the tickrate
      */
     public static double tickRate(ArrayList<Long> ticks) {
-        return (ticks.get(ticks.size()-1) - ticks.get(0)) / ticks.size();
+        return 1000 / ((ticks.get(ticks.size()-1) - ticks.get(0)) / ticks.size());
     }
 }
