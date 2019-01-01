@@ -42,6 +42,8 @@ There are several ship types :
 
 Each planet has its own storage space and its own production type. The hangars can be used for any ship type as convenience but each ship will take one, whatever its size might be.
 
+You can perform a quicksave at any time with `CTRL+S` and load it with `CTRL+D`, the latest quicksave will be available in the Load menu. 
+
 ## Compiling
 
 First of all, you need a working installation of [JavaFX](https://docs.oracle.com/javafx/2/installation/jfxpub-installation.htm). Without going into details, the recommended IDEs are Eclipse Oxygen and NetBeans.
